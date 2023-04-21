@@ -32,7 +32,8 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 include("../functions/functions.general.php");
-include("../classes/class.user.php");		
+include("../classes/class.user.php");
 include("../classes/class.database.php");		
+include("../classes/class.general.php");		
 
 ?>

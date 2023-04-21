@@ -18,6 +18,11 @@ switch ($GLOBALS['url_loc'][1])
         $PAGE_TITLE = "Log In";
         $BACKEND = "login";
         $FRONTEND = "login";
+        break;
+    case "getstarted":
+        $PAGE_TITLE = "Getting started";
+        $BACKEND = "getstarted";
+        $FRONTEND = "getstarted";        
     break;
     case "logout":
         $BACKEND = "logout";
