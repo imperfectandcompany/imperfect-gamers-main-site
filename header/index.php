@@ -1,4 +1,4 @@
-<header class="default-header">
+<header class="default-header hidden md:block">
    <div id="undefined-sticky-wrapper" class="sticky-wrapper" style="height: 51px;">
       <div class="sticky-header">
          <div class="container">

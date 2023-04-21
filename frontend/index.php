@@ -7,7 +7,18 @@
 </div>
  
 <div class="banner-content text-center">
-<a href="https://prototype.imperfectgamers.org/login" class="primary-btn banner-btn animate__animated animate__fadeInUp"></i>Log In</a>
+<a 
+href="https://prototype.imperfectgamers.org/<?php if ($loggedIn): ?>
+logout
+<?php else: ?>
+login
+<?php endif; ?>" class="primary-btn banner-btn animate__animated animate__fadeInUp">
+<?php if ($loggedIn): ?>
+Log out 
+<?php else: ?>
+Log in
+<?php endif; ?>
+</a>
 </div>
 </div>
 </section>

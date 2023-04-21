@@ -3,30 +3,26 @@
     <div class="container">
         <div class="flex flex-col mt-20 fullscreen justify-content-center align-items-center">
             <div class="mb-8 mt-4 text-center animate__animated animate__fadeIn animate__delay-1s ">
-                <h1 class="text-white text-6xl font-bold">Login<br /></h1>
+                <h1 class="text-white text-6xl font-bold"><?php echo (!isset($success)) ? "Login" : "Welcome back";?><br /></h1>
                 <div class="">
 
-<?php if (isset($success)): ?>
-    <div class="pt-8">
-   <div class="bg-green-200 border-l-4 border-green-300 text-green-800 p-4">
-<p class="font-bold">Success!</p>
-<p>You have logged in.</p>
-<p>Loading...<?php header('Refresh: 0;'); ?></p>
-</div>
-</div>
-<?php endif; ?>
+                    <?php if (isset($success)): ?>
+                        <p>
+                            <?php header('Refresh: 2;'); ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
 
             </div>
 
 
-<div class="mb-4 flex">
-<?php
-/*Call our notification handling*/include("../frontend/sitenotif.php");
-?>
-</div>
+            <div class="mb-4 flex">
+                <?php
+                /*Call our notification handling*/include("../frontend/sitenotif.php");
+                ?>
+            </div>
 
-
+            <?php if (!isset($success)): ?>
             <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
                 <form method="POST">
                     <div class="flex flex-col space-y-8">
@@ -59,22 +55,14 @@ bg-red-900 bg-opacity-40 shadow-xl px-3 py-3 text-base focus:outline-none pb-3 w
 
                 </form>
             </div>
-
-
-
-
             <div class="banner-content text-center">
-
-
-
                 <a href="https://prototype.imperfectgamers.org/"
                     class="flex space-x-4 mt-12 banner-btn text-white font-bold text-lg items-center animate__animated animate__fadeInUp">
-                    <span class="material-icons">arrow_back_ios_new</span> <div>Go back</div>
-
-
+                    <span class="material-icons">arrow_back_ios_new</span>
+                    <div>Go back</div>
                 </a>
-
-
             </div>
+            <?php endif; ?>
+
         </div>
 </section>
