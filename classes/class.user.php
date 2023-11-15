@@ -47,22 +47,25 @@ public static function isAdmin($id)
 
 public static function getUsername($id)
 {
-	//check to see if the username is set then using the given $id. else return false.
-	if(DatabaseConnector::query('SELECT username FROM users WHERE id=:id', array(':id'=>$id))[0]['username']){
-	//return username
-	return DatabaseConnector::query('SELECT username FROM users WHERE id=:id', array(':id'=>$id))[0]['username'];
-	}
-	else {
-	return false;
-	}
+    $result = DatabaseConnector::query('SELECT username FROM profiles WHERE user_id=:id', array(':id'=>$id));
+    
+    if ($result && !empty($result) && isset($result[0]['username'])) {
+
+        // If result is not empty and the username is set, return it
+        return $result[0]['username'];
+    } else {
+
+        // If no result is found, return false
+        return false;
+    }
 }
 
 public static function getUserId($username)
 {
 	//grabs the userid of the given username $id. else return false.
-	if(DatabaseConnector::query('SELECT id FROM users WHERE username=:username', array(':username'=>$username))[0]['id']){
+	if(DatabaseConnector::query('SELECT user_id FROM profiles WHERE username=:username', array(':username'=>$username))[0]['user_id']){
 	//return username
-	return DatabaseConnector::query('SELECT id FROM users WHERE username=:username', array(':username'=>$username))[0]['id'];
+	return DatabaseConnector::query('SELECT user_id FROM profiles WHERE username=:username', array(':username'=>$username))[0]['user_id'];
 	}
 	else {
 	return false;
