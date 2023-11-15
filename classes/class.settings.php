@@ -6,8 +6,8 @@ class Settings
     public static function hasSteam($id)
     {
         //check to see if the user is an admin
-        if (DatabaseConnector::query('SELECT steam_id_64 FROM profiles WHERE user_id=:id', array(':id' => $id))[0]['steam_id_64'] == 1) {
-            return true;
+        if (DatabaseConnector::query('SELECT steam_id_64 FROM profiles WHERE user_id=:id', array(':id' => $id))[0]['steam_id_64']) {
+            return DatabaseConnector::query('SELECT steam_id_64 FROM profiles WHERE user_id=:id', array(':id' => $id))[0]['steam_id_64'];
         } else {
             return false;
         }

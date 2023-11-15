@@ -18,7 +18,10 @@ switch ($GLOBALS['url_loc'][1])
         $PAGE_TITLE = "Settings";
         $BACKEND = "settings";
         $FRONTEND = "settings";
-        break;        
+        break;
+        case "attachSteam":
+            $BACKEND = "attachSteam";
+            break;                    
     case "getstarted":
         $PAGE_TITLE = "Getting started";
         $BACKEND = "getstarted";

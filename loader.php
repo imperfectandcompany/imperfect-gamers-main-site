@@ -6,7 +6,7 @@ $GLOBALS['config']['url_offset'] = 0;
 $GLOBALS['devmode'] = 1; 
 
 
-$GLOBALS['config']['url'] = "https://prototype.imperfectgamers.org/";
+$GLOBALS['config']['url'] = "https://prototype.imperfectgamers.org";
 
 $GLOBALS['db_conf']['db_host'] = "127.0.0.1";
 $GLOBALS['db_conf']['port'] = "3306";
@@ -35,10 +35,10 @@ session_start();
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-include("../functions/functions.general.php");
-include("../classes/class.user.php");
-include("../classes/class.database.php");		
-include("../classes/class.general.php");	
+include_once("../functions/functions.general.php");
+include_once("../classes/class.user.php");
+include_once("../classes/class.database.php");		
+include_once("../classes/class.general.php");	
 include_once("../classes/class.settings.php");	
 
 ?>

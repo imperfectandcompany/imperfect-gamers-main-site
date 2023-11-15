@@ -1,8 +1,9 @@
 <?php
 //first see if the user is logged in
-	if (User::isLoggedIn()){
+$userid = User::isLoggedIn();
+
+	if ($userid){
 	//grab usersid
-	$userid = User::isLoggedIn();
 	//see if the user has a username
 	if(!User::getUsername($userid)){
 

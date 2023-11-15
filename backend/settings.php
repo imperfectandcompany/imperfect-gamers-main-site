@@ -14,9 +14,12 @@ if($_POST && $_SERVER['REQUEST_METHOD'] == 'POST')
         switch($_POST['form_type'])
         {
             case"unhook_steam":
-                $filter_params = array();
-                $filter_params[] = array("value" => $_SESSION['user_id'], "type" => PDO::PARAM_INT);
-                $dbConnection->updateData($GLOBALS['db_conf']['db_db'].".profiles", "steam_id_64 = NULL, steam_id_3 = NULL WHERE id = ?", $filter_params);
+                DatabaseConnector::updateData(
+                    "profiles", 
+                    "steam_id_64 = NULL, steam_id_3 = NULL", 
+                    "user_id = :userid", 
+                    array(':userid' => $userid)
+                );
                 header("location: ".$GLOBALS['config']['url']."/settings");
             break;
             case"adjust_avatar":

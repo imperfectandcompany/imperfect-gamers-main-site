@@ -1,4 +1,3 @@
-
 <section class="banner-area mx-auto">
     <div class="overlay overlay-bg"></div>
     <div class="container">
@@ -9,15 +8,28 @@
                     <div class="form-group">
                         <?php if ($steamId): ?>
                             <form action="" method="POST">
-                                <label for="form_steam_account">Your steam account</label>
-                                <input type="text" class="form-control mt-0" id="form_steam_account"
-                                    value="<?php echo htmlspecialchars($steamId, ENT_QUOTES); ?>" disabled />
+
+                                <div class="flex flex-col space-y-8">
+                                    <div class="selection:bg-red-300 selection:text-red-900">
+                                        <label class=" font-medium text-gray-200 focus:text-gray-100"
+                                            for="form_steam_account">Your steam account</label>
+                                        <input type="username"
+                                            class="bg-red-900 bg-opacity-40 shadow-xl px-3 py-3 text-base focus:outline-none pb-3 w-full rounded-lg my-auto ring-2 ring-offset-2 ring-offset-red-800 ring-red-700 mt-5 cursor-pointer focus:bg-red-900 hover:bg-red-800 focus:bg-opacity-100 transition"
+                                            tabindex="1" id="form_steam_account"
+                                            value="<?php echo htmlspecialchars($steamId, ENT_QUOTES); ?>" autofocus
+                                            disabled />
+                                    </div>
+                                </div>
                                 <input type="hidden" name="form_type" value="unhook_steam" />
-                                <button type="submit" class="btn btn-primary mt-1">Unhook my Steam account</button>
+                                <div class="mt-12">
+                                    <button type="submit" name="changeusername" tabindex="2"
+                                        class="bg-opacity-40 shadow-xl px-3 py-3 focus:outline-none pb-3 w-full rounded-full upper my-auto ring-2 ring-red-700 mt-5 cursor-pointer hover:bg-red-900 hover:bg-opacity-100 transition font-bold text-2xl focus:bg-red-900 focus:bg-opacity-100 transition"
+                                        type="submit">Unhook</button>
+                                </div>
                             </form>
                         <?php else: ?>
                             <label for="form_username">Connect your steam account</label>
-                            <form action="https://prototype.imperfectgamers.org/settings/attachSteam" method="POST"
+                            <form action="<?php echo $GLOBALS['config']['url']; ?>/attachSteam" method="POST"
                                 class="cleanform">
                                 <input type="image" class="align-middle"
                                     src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/sits_small.png"
