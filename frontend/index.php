@@ -19,6 +19,16 @@ Log out
 Log in
 <?php endif; ?>
 </a>
+
+<?php if ($loggedIn): ?>
+<a href="https://prototype.imperfectgamers.org/settings" class="primary-btn banner-btn animate__animated animate__fadeInUp">
+Settings
+</a>
+<?php endif; ?>
+
+
+
+
 </div>
 </div>
 </section>

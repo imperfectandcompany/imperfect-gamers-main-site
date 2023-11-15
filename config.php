@@ -1,11 +1,6 @@
 <?php
 switch ($GLOBALS['url_loc'][1])
 {
-    case "/":
-        $BACKEND = "index";
-        $FRONTEND = "index";
-        $HEADER = "index";
-    break;
     case "":
         $BACKEND = "index";
         $FRONTEND = "index";
@@ -19,6 +14,11 @@ switch ($GLOBALS['url_loc'][1])
         $BACKEND = "login";
         $FRONTEND = "login";
         break;
+    case "settings":
+        $PAGE_TITLE = "Settings";
+        $BACKEND = "settings";
+        $FRONTEND = "settings";
+        break;        
     case "getstarted":
         $PAGE_TITLE = "Getting started";
         $BACKEND = "getstarted";
@@ -27,7 +27,6 @@ switch ($GLOBALS['url_loc'][1])
     case "logout":
         $BACKEND = "logout";
     default:
-
 	break;
 }
 ?>

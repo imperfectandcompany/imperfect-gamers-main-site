@@ -2,8 +2,11 @@
 //This is how we get what page we should be on based on URL.
 $GLOBALS['url_loc'] = explode('/', htmlspecialchars(strtok($_SERVER['REQUEST_URI'], '?'), ENT_QUOTES));
 
-$GLOBALS['config']['url_offset'] = 0; 
+$GLOBALS['config']['url_offset'] = 0;
 $GLOBALS['devmode'] = 1; 
+
+
+$GLOBALS['config']['url'] = "https://prototype.imperfectgamers.org/";
 
 $GLOBALS['db_conf']['db_host'] = "127.0.0.1";
 $GLOBALS['db_conf']['port'] = "3306";
@@ -12,6 +15,7 @@ $GLOBALS['db_conf']['db_user'] = "root";
 $GLOBALS['db_conf']['db_pass'] = "";
 $GLOBALS['db_conf']['db_charset'] = "utf8";
 
+$GLOBALS['config']['private_folder'] = '../../private';
  
 if($GLOBALS['config']['url_offset'] > 0){
     $x = 0; while($x < ($GLOBALS['config']['url_offset'])){ unset($GLOBALS['url_loc'][$x]); $x++; }
@@ -34,6 +38,7 @@ ini_set('display_startup_errors', 1);
 include("../functions/functions.general.php");
 include("../classes/class.user.php");
 include("../classes/class.database.php");		
-include("../classes/class.general.php");		
+include("../classes/class.general.php");	
+include_once("../classes/class.settings.php");	
 
 ?>
