@@ -3,6 +3,7 @@
 //Variables
 
 $steamId = Settings::hasSteam($userid);
+$userProfile = Settings::getUserProfile($userid);
 
 //print_r($settings->user);
 

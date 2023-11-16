@@ -23,7 +23,7 @@ $GLOBALS['config']['avatar_url'] = "https://cdn.postogon.com/assets/img/profile_
  
 //General settings
 $GLOBALS['config']['avatar_max_size'] = '156';
-$GLOBALS['config']['default_avatar'] = 'default.png';
+$GLOBALS['config']['default_avatar'] = 'default.jpeg';
 
 if($GLOBALS['config']['url_offset'] > 0){
     $x = 0; while($x < ($GLOBALS['config']['url_offset'])){ unset($GLOBALS['url_loc'][$x]); $x++; }

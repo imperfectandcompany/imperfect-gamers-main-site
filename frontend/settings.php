@@ -1,14 +1,13 @@
 <section class="banner-area mx-auto">
     <div class="overlay overlay-bg"></div>
     <div class="container">
-        <div class="flex flex-col mt-20 fullscreen justify-content-center align-items-center">
-            <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
-                <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Account settings</h2>
+    <div class="flex flex-col mt-20 fullscreen justify-content-center align-items-center">
+    <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
+                <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">Account settings</h2>
                 <div id="username" class="mt-2">
                     <div class="form-group">
                         <?php if ($steamId): ?>
                             <form action="" method="POST">
-
                                 <div class="flex flex-col space-y-8">
                                     <div class="selection:bg-red-300 selection:text-red-900">
                                         <label class=" font-medium text-gray-200 focus:text-gray-100"
@@ -41,15 +40,29 @@
                         <?php endif; ?>
                     </div>
 
+                <!-- Avatar Section -->
+                <div x-data="{ avatarChanged: false, avatarPreview: '' }" class="mt-12 w-full">
+                    <!-- Current Avatar Display -->
+                    <div class="mb-8">
+                        <img :src="avatarPreview || '<?php echo $userProfile['avatar'] ? $GLOBALS['config']['avatar_url'] . '/' . $userProfile['avatar'] : $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']; ?>'" class="h-32 w-32 rounded-full object-cover mx-auto" alt="Current Avatar">
+                    </div>
 
-                    <form class="form-horizontal" method="post" action="" enctype="multipart/form-data">
-        <div class="form-group">
-            <label class=" font-medium text-gray-200 focus:text-gray-100" for="avatarUpload">Avatar</label>
-            <input type="file" name="avatar" id="avatarUpload" accept="image/*" class="...">
-            <input type="hidden" name="form_type" value="adjust_avatar" />
-            <button type="submit" class="btn btn-primary mt-4">Update Avatar</button>
-        </div>
-    </form>
+                    <!-- Avatar Update Form -->
+                    <form method="POST" action="" enctype="multipart/form-data" class="flex flex-col items-center space-y-4">
+                        <div class="form-group w-full">
+                            <label for="avatarUpload" class="font-medium text-gray-200 focus:text-gray-100 block text-center">Avatar</label>
+                            <input type="file" name="avatar" id="avatarUpload" accept="image/*"
+                                class="bg-red-900 bg-opacity-40 shadow-xl px-3 py-3 text-base focus:outline-none w-full rounded-lg my-auto ring-2 ring-offset-2 ring-offset-red-800 ring-red-700 cursor-pointer focus:bg-red-900 hover:bg-red-800 focus:bg-opacity-100 transition"
+                                @change="avatarChanged = true; avatarPreview = URL.createObjectURL($event.target.files[0])">
+                            <input type="hidden" name="form_type" value="adjust_avatar" />
+                        </div>
+                        <button type="submit" :class="{'cursor-not-allowed opacity-50': !avatarChanged}" :disabled="!avatarChanged"
+                                class="bg-opacity-40 shadow-xl px-3 py-3 focus:outline-none w-full rounded-full my-auto ring-2 ring-red-700 cursor-pointer hover:bg-red-900 hover:bg-opacity-100 transition font-bold text-2xl focus:bg-red-900 focus:bg-opacity-100">
+                            Update Avatar
+                        </button>
+                    </form>
+</div>
+
 
                 </div>
                 <!--
@@ -93,7 +106,7 @@
 
             </div>
 
-            <div class="banner-content text-center">
+            <div class="banner-content text-center mb-12">
                 <a href="https://prototype.imperfectgamers.org/"
                     class="flex space-x-4 mt-12 banner-btn text-white font-bold text-lg items-center animate__animated animate__fadeInUp">
                     <span class="material-icons">arrow_back_ios_new</span>

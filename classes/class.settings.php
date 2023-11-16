@@ -38,6 +38,10 @@ class Settings
         imagedestroy($tmp);
     }
 
+    public static function getUserProfile($userId) {
+        $profileData = DatabaseConnector::query('SELECT * FROM profiles WHERE user_id=:userId', array(':userId' => $userId));
+        return $profileData ? $profileData[0] : null; // Return the first row or null if no data
+    }
 
     public static function updateAvatar($avatar, $userId) {
 
