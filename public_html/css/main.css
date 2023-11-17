@@ -373,6 +373,13 @@ body {
     border-radius: 5px;
 }
 
+.associated-emails small.explanation {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8em;
+    color: #ccc;
+}
+
 
 .user-role, .permanent-packages {
     padding: 10px;

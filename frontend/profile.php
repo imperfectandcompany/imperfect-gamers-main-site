@@ -21,6 +21,19 @@
                         </p>
                     </div>
 
+        <!-- Associated Emails Section -->
+        <div class="profile-section associated-emails">
+            <label>Your associated emails:</label>
+            <ul>
+                <?php foreach ($associatedEmails as $email): ?>
+                    <li><?= htmlspecialchars($email); ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <small class="explanation">
+                *Emails are gathered from various parts of our services where you may have used different emails.
+            </small>
+        </div>                    
+
                     <!-- Titles Section -->
                     <div class="profile-section">
                         <label>Your titles:</label>
