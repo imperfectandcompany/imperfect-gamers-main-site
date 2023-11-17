@@ -19,6 +19,8 @@ $GLOBALS['config']['private_folder'] = '../../private';
 $GLOBALS['config']['avatar_folder'] = "/usr/www/igfastdl/postogon-cdn/assets/img/profile_pictures";
 $GLOBALS['config']['service_folder'] = "/usr/www/igfastdl/postogon-cdn/assets/img/service_logos";
 $GLOBALS['config']['avatar_url'] = "https://cdn.postogon.com/assets/img/profile_pictures";
+$GLOBALS['config']['public_html_folder'] = "/usr/www/igfastdl/imperfectgamers-prototype";
+
 
  
 //General settings
