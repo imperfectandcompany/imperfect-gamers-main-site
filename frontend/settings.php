@@ -56,7 +56,7 @@
     <!-- Avatar Update Form -->
     <form method="POST" action="" enctype="multipart/form-data" class="flex flex-col items-center space-y-4">
         <div class="form-group w-full">
-            <label for="avatarUpload" class="font-medium text-gray-200 focus:text-gray-100 block text-center">Your avatar</label>
+            <label for="avatarUpload" class="font-medium text-gray-200 focus:text-gray-100 block">Your avatar</label>
             <input type="file" name="avatar" id="avatarUpload" accept="image/*"
                 class="hidden"
                 @change="avatarChanged = $event.target.files.length > 0; 
@@ -76,6 +76,23 @@
         </button>
     </form>
 </div>
+
+<!-- Username Change Section -->
+<div class="mt-12 w-full">
+    <form method="POST" action="" class="flex flex-col items-center space-y-4">
+        <div class="form-group w-full">
+            <label for="newUsername" class="font-medium text-gray-200 focus:text-gray-100 block">Change Username</label>
+            <input type="text" name="new_username" id="newUsername" value="<?php echo htmlspecialchars($userProfile['username'], ENT_QUOTES); ?>"
+                class="bg-red-900 bg-opacity-40 shadow-xl px-3 py-3 text-base focus:outline-none w-full rounded-lg my-auto ring-2 ring-offset-2 ring-offset-red-800 ring-red-700 mt-5 cursor-pointer focus:bg-red-900 hover:bg-red-800 focus:bg-opacity-100 transition"
+                required>
+        </div>
+        <button type="submit" name="change_username_submit"
+                class="bg-opacity-40 shadow-xl px-3 py-3 focus:outline-none w-full rounded-full my-auto ring-2 ring-red-700 cursor-pointer hover:bg-red-900 hover:bg-opacity-100 transition font-bold text-2xl focus:bg-red-900 focus:bg-opacity-100">
+            Change Username
+        </button>
+    </form>
+</div>
+
 
 
                 </div>

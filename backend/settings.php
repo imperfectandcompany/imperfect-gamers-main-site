@@ -3,7 +3,6 @@
 //Variables
 
 $steamId = Settings::hasSteam($userid);
-$userProfile = Settings::getUserProfile($userid);
 
 //print_r($settings->user);
 
@@ -17,12 +16,31 @@ if($_POST && $_SERVER['REQUEST_METHOD'] == 'POST')
             case"unhook_steam":
                 DatabaseConnector::updateData(
                     "profiles", 
-                    "steam_id_64 = NULL, steam_id_3 = NULL", 
+                    "steam_id = NULL, steam_id_64 = NULL, steam_id_3 = NULL", 
                     "user_id = :userid", 
                     array(':userid' => $userid)
                 );
                 header("location: ".$GLOBALS['config']['url']."/settings");
             break;
+            case "change_username":
+                // Handle username change logic here
+                $newUsername = $_POST['new_username'];
+                echo "AWDE";
+                // Perform your checks and throw exceptions as needed
+                // ...
+
+                // If all checks pass, update the username
+                DatabaseConnector::updateData(
+                    "profiles", 
+                    "username = :newUsername", 
+                    "user_id = :userId", 
+                    array(':newUsername' => $newUsername, ':userId' => $userid)
+                );
+
+                $_SESSION['messages']['success'][] = "Username updated successfully!";
+                // Redirect to settings page or appropriate location
+                header("location: ".$GLOBALS['config']['url']."/settings");
+                break;       
             case "adjust_avatar":
                 try
                 {

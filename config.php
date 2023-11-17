@@ -19,6 +19,11 @@ switch ($GLOBALS['url_loc'][1])
         $BACKEND = "settings";
         $FRONTEND = "settings";
         break;
+        case "profile":
+            $PAGE_TITLE = "Profile";
+            $BACKEND = "profile";
+            $FRONTEND = "profile";
+            break;        
         case "attachSteam":
             $BACKEND = "attachSteam";
             break;                    

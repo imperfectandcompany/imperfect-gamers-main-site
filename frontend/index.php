@@ -25,6 +25,9 @@ Log in
 <a href="https://prototype.imperfectgamers.org/settings" class="primary-btn banner-btn animate__animated animate__fadeInUp">
 Settings
 </a>
+<a href="https://prototype.imperfectgamers.org/profile" class="primary-btn banner-btn animate__animated animate__fadeInUp">
+Profile
+</a>
 <?php endif; ?>
 <!-- server section
 <div id="server" class="container">

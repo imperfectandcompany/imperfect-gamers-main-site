@@ -2,6 +2,9 @@
 //first see if the user is logged in
 $userid = User::isLoggedIn();
 
+$profileData = DatabaseConnector::query('SELECT * FROM profiles WHERE user_id=:userId', array(':userId' => $userid));
+$userProfile = $profileData ? $profileData[0] : null; // Return the first row or null if no data
+
 	if ($userid){
 	//grab usersid
 	//see if the user has a username
@@ -25,6 +28,7 @@ $userid = User::isLoggedIn();
 	DatabaseConnector::query('UPDATE users SET status="offline" WHERE TIMESTAMPDIFF(MINUTE, FROM_UNIXTIME(updatedAt), NOW()) > 1');
 	DatabaseConnector::query('UPDATE users SET status="online" WHERE TIMESTAMPDIFF(MINUTE, FROM_UNIXTIME(updatedAt), NOW()) < 1');
 	}
+	
 ?>
 
 

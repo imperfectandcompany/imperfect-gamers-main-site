@@ -5,7 +5,6 @@ class Settings
 
     public static function hasSteam($id)
     {
-        //check to see if the user is an admin
         if (DatabaseConnector::query('SELECT steam_id_64 FROM profiles WHERE user_id=:id', array(':id' => $id))[0]['steam_id_64']) {
             return DatabaseConnector::query('SELECT steam_id_64 FROM profiles WHERE user_id=:id', array(':id' => $id))[0]['steam_id_64'];
         } else {
@@ -36,11 +35,6 @@ class Settings
         /* cleanup memory */
         imagedestroy($image);
         imagedestroy($tmp);
-    }
-
-    public static function getUserProfile($userId) {
-        $profileData = DatabaseConnector::query('SELECT * FROM profiles WHERE user_id=:userId', array(':userId' => $userId));
-        return $profileData ? $profileData[0] : null; // Return the first row or null if no data
     }
 
     public static function updateAvatar($avatar, $userId) {
