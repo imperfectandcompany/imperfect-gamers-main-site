@@ -27,5 +27,49 @@ include('../backend/'.$BACKEND.'.php');
       </footer>
       <?php endif; ?>
     </div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('avatarForm', () => ({
+        avatarChanged: false,
+        avatarPreview: '<?php echo $userAvatarUrl ?? $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']; ?>',
+
+        fileChosen(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    this.avatarPreview = e.target.result;
+                    this.avatarChanged = true;
+                }.bind(this); // Use .bind(this) to refer to the Alpine component
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }));
+});
+</script>
+
   </body>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('avatarForm', () => ({
+        avatarChanged: false,
+        avatarPreview: '<?php echo $userAvatarUrl ?? $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']; ?>',
+
+        fileChosen(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    this.avatarPreview = e.target.result;
+                    this.avatarChanged = true;
+                }.bind(this); // Use .bind(this) to refer to the Alpine component
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }));
+});
+</script>
+
 </html>

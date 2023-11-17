@@ -327,3 +327,86 @@ body {
   touch-action: manipulation;
 }	
 	
+
+
+
+
+/* Add this CSS to your stylesheets */
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #fff;
+}
+
+.profile-header {
+    /* Other styles */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Adds a subtle line to separate from the rest of the content */
+    padding-bottom: 10px; /* Spacing below the header */
+    margin-bottom: 20px; /* Spacing between header and the first section */
+}
+
+.profile-section {
+    margin-top: 20px;
+    padding: 15px; /* Adjusted padding */
+    background-color: rgba(255, 255, 255, 0.1); /* Lighter than the section background for better readability */
+    border-radius: 5px; /* Rounded corners for a softer look */
+}
+
+
+.profile-section label {
+    display: block;
+    font-weight: bold;
+    font-weight: 600; /* Bolder than the list content */
+    margin-bottom: 15px; /* More space between the label and the list */
+}
+
+.profile-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-section li {
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.associated-emails small.explanation {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8em;
+    color: #ccc;
+}
+
+
+.user-role, .permanent-packages {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.text-white {
+    color: #fff;
+}
+
+/* Define your text colors for titles */
+.text-red-500 { color: #f56565; }
+.text-orange-500 { color: #ed8936; }
+.text-yellow-500 { color: #ecc94b; }
+.text-green-500 { color: #48bb78; }
+.text-white { color: #ffffff; }
+
+/* Add more as needed... */
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 10px; /* Less padding on smaller screens */
+    }
+
+    .profile-section {
+        padding: 10px; /* Adjusted for smaller screens */
+    }
+}

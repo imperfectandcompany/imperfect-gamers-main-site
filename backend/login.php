@@ -30,7 +30,7 @@ if (isset($_POST['login'])) {
                 setcookie("IMPERFECTGAMERS_", '1', time() + 60 * 60 * 24 * 3, '/', $domain, false);
                 $GLOBALS['messages']['success'][] = "Logging you in...";
             } else {
-                $GLOBALS['messages']['success'][] = "Please wait while we log you in...";
+                throw new Exception('Password is incorrect!');
             }
 
         } else {
