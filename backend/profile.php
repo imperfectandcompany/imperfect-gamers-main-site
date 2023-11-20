@@ -58,22 +58,34 @@ function steamid64_to_steamid($steamid64)
     return array($steamId0, $steamId1);
 }
 
-function getUserRole($steamId)
-{
+function getUserRoles($steamId) {
     // Connect to the sourcebans database
     $pdo = DatabaseConnector::getDatabase("igfastdl_sourcebans");
 
-    // Map possibilities bc it may be steam_0 or steam_1
+    // Map possibilities because it may be steam_0 or steam_1
     $accountID = bcsub($steamId, '76561197960265728');
     $steamId1 = 'STEAM_1:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
     $steamId0 = 'STEAM_0:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
     $steamIdArray = array($steamId0, $steamId1);
 
+    // Prepare the SQL statement
     $stmt = $pdo->prepare('SELECT srv_group FROM sb_admins WHERE authid IN (?, ?)');
+    
+    // Execute the statement with the steamIdArray
     $stmt->execute($steamIdArray);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result ? $result['srv_group'] : 'Not found';
+    
+    // Fetch all matching roles
+    $roles = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    // If no roles found, return a default message
+    if (empty($roles)) {
+        return ['Not found'];
+    }
+
+    // Return the array of roles
+    return $roles;
 }
+
 
 
 function getPermanentPackages($steamId)
@@ -111,7 +123,7 @@ function getPermanentPackages($steamId)
 }
 
 
-function getAdditionalUsernames($steamId64, $mainUsername, $mainEmail, $associatedEmails)
+function getAdditionalUsernames($steamId64, $mainUsername, $mainEmail, $associatedEmails, $pdoMyBB)
 {
     // Add main email to the list of emails to search
     array_unshift($associatedEmails, $mainEmail);
@@ -125,30 +137,27 @@ function getAdditionalUsernames($steamId64, $mainUsername, $mainEmail, $associat
     // lets get info from the forums using our collected emails
     $pdoForum = DatabaseConnector::getDatabase("igfastdl_forum");
     $pdoForums = DatabaseConnector::getDatabase("igfastdl_forums");
-    // Query the igfastdl_mybb database for additional usernames
-    $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
 
-    // Map possibilities bc it may be steam_0 or steam_1
-    $accountID = bcsub($steamId64, '76561197960265728');
-    $steamId1 = 'STEAM_1:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
-    $steamId0 = 'STEAM_0:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
-    $steamIdArray = array($steamId0, $steamId1);
-    $stmtSourcebans = $pdoSourcebans->prepare('SELECT user FROM sb_admins WHERE authid IN (?, ?)');
-    $stmtSourcebans->execute($steamIdArray);
-    $sourcebansUsernames = $stmtSourcebans->fetchAll(PDO::FETCH_COLUMN);
+    if (!empty($steamId64)) {
+        // Map possibilities bc it may be steam_0 or steam_1
+        $accountID = bcsub($steamId64, '76561197960265728');
+        $steamId1 = 'STEAM_1:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
+        $steamId0 = 'STEAM_0:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
+        $steamIdArray = array($steamId0, $steamId1);
+        $stmtSourcebans = $pdoSourcebans->prepare('SELECT user FROM sb_admins WHERE authid IN (?, ?)');
+        $stmtSourcebans->execute($steamIdArray);
+        $sourcebansUsernames = $stmtSourcebans->fetchAll(PDO::FETCH_COLUMN);
 
+        // Fetch the name from the players table within igfastdl_donate database
+        $stmtDonate = $pdoDonate->prepare('SELECT name FROM players WHERE uid = :uid');
+        $stmtDonate->execute([':uid' => $steamId64]);
+        $donateNames = $stmtDonate->fetchAll(PDO::FETCH_COLUMN);
 
-    // Fetch the name from the players table within igfastdl_donate database
-    $stmtDonate = $pdoDonate->prepare('SELECT name FROM players WHERE uid = :uid');
-    $stmtDonate->execute([':uid' => $steamId64]);
-    $donateNames = $stmtDonate->fetchAll(PDO::FETCH_COLUMN);
-
-    // handle surftimer related operation
-    $stmtSurfTimer = $pdoSurfTimer->prepare('SELECT DISTINCT name FROM ck_playerrank WHERE steamid64 = :steamid64');
-    $stmtSurfTimer->execute([':steamid64' => $steamId64]);
-    $surfTimerNames = $stmtSurfTimer->fetchAll(PDO::FETCH_COLUMN);
-
-
+        // handle surftimer related operation
+        $stmtSurfTimer = $pdoSurfTimer->prepare('SELECT DISTINCT name FROM ck_playerrank WHERE steamid64 = :steamid64');
+        $stmtSurfTimer->execute([':steamid64' => $steamId64]);
+        $surfTimerNames = $stmtSurfTimer->fetchAll(PDO::FETCH_COLUMN);
+    }
 
     // Initialize an array to store forum usernames
     $forumUsernames = [];
@@ -193,6 +202,9 @@ function getAdditionalUsernames($steamId64, $mainUsername, $mainEmail, $associat
 
 function getAssociatedEmails($steamId64)
 {
+
+    $uniqueEmails = []; // Initialize as an empty array
+
     // Map possibilities bc it may be steam_0 or steam_1
     $accountID = bcsub($steamId64, '76561197960265728');
     $steamId1 = 'STEAM_1:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
@@ -229,9 +241,40 @@ function getAssociatedEmails($steamId64)
         return stripos($email, 'assigned by admin') === false;
     });
 
-    return $filteredEmails;
+    // Filter out any emails that contain the phrase "assigned by admin"
+    $filteredEmails2 = array_filter($filteredEmails, function ($email) {
+        return stripos($email, 'blacklist@gmail.com') === false;
+    });
+
+    return $filteredEmails2;
 
 }
+
+function getForumAccountInfo($associatedEmails, $pdoMyBB) {
+    // Initialize an array to store forum account info
+    $forumAccountsInfo = [];
+
+    // Loop through each associated email to find forum accounts
+    foreach ($associatedEmails as $email) {
+        // Prepare the SQL query
+        $stmt = $pdoMyBB->prepare('SELECT uid, username, email, postnum, threadnum FROM mybb_users WHERE email = :email LIMIT 1');
+        
+        // Execute the query with the current email
+        $stmt->execute([':email' => $email]);
+        
+        echo $email;
+        // Fetch the account info
+        $accountInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If an account was found, add its info to the array
+        if ($accountInfo) {
+            $forumAccountsInfo[] = $accountInfo;
+        }
+    }
+    // Return the array of forum accounts info
+    return $forumAccountsInfo;
+}
+
 
 // Function to check if the title should be displayed
 function shouldDisplayTitle($title)
@@ -241,27 +284,35 @@ function shouldDisplayTitle($title)
 }
 
 
-// Get the steamId 64
-$steamId = $userProfile['steam_id'];
-$mainUsername = $userProfile['username'];
-$mainEmail = $userProfile['email'];
-$associatedEmails = getAssociatedEmails($userProfile['steam_id_64']);
-$additionalUsernames = getAdditionalUsernames($userProfile['steam_id_64'], $mainUsername, $mainEmail, $associatedEmails);
+// Get the steamId 64 if available
+$steamId = $userProfile['steam_id'] ?? null;
+$mainUsername = $userProfile['username'] ?? null;
+$mainEmail = $userProfile['email'] ?? null;
 
-// Get the user titles
-$rawTitles = getUserTitles($steamId);
-$userTitles = formatUserTitles($rawTitles);
-
-$processedTitles = array_map('mapColorCodesToStyles', $userTitles);
-
-// Get the user role
-$userRole = getUserRole($userProfile['steam_id_64']);
-if ($userRole === '') {
-    $userRole = "None listed";
+// Initialize variables with defaults
+$userTitles = [];
+$userRole = 'None listed';
+$permanentPackages = ['You have none!'];
+$associatedEmails = ['No emails found'];
+$additionalUsernames = [];
+$processedTitles = ['No tags found'];
+if ($steamId) {
+    // Steam ID is available, so fetch all related data
+    $rawTitles = getUserTitles($steamId);
+    $userTitles = formatUserTitles($rawTitles);
+    $processedTitles = array_map('mapColorCodesToStyles', $userTitles);
+    $userRoles = array_filter(getUserRoles($userProfile['steam_id_64']), function($role) {
+        return !empty($role); // Filter out empty strings
+    });
+    $permanentPackages = getPermanentPackages($userProfile['steam_id_64']);
+    $associatedEmails = getAssociatedEmails($userProfile['steam_id_64']);
+        // Query the igfastdl_mybb database for additional usernames
+        $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+    $additionalUsernames = getAdditionalUsernames($userProfile['steam_id_64'], $mainUsername, $mainEmail, $associatedEmails, $pdoMyBB);
+    $forumAccountsInfo = getForumAccountInfo($associatedEmails, $pdoMyBB);
+} else {
+    // No Steam ID is available // TODO: Setup a flag
 }
-
-// Get the user's permanent packages
-$permanentPackages = getPermanentPackages($userProfile['steam_id_64']);
 
 
 ?>

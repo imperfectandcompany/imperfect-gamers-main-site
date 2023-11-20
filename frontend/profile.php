@@ -13,26 +13,41 @@
                 <div class="profile-container">
                     <!-- Profile Header -->
                     <div class="profile-header">
-                        <p class="main-username" style="font-size: 0.9em; margin-top: 5px;">
-                            <?= htmlspecialchars($mainUsername); ?>
-                        </p>
-                        <p class="additional-usernames" style="font-size: 0.9em; margin-top: 5px;">Also known as:
-                            <?= implode(', ', $additionalUsernames); ?>
-                        </p>
+                        <div class="header-content">
+                            <div class="text-content">
+                                <p class="main-username highlighted-username"
+                                    style="font-size: 0.9em; margin-top: 5px;">
+                                    <?= htmlspecialchars($mainUsername); ?>
+                                </p>
+                                <?php if (!empty($additionalUsernames)): ?>
+                                    <p class="additional-usernames" style="font-size: 0.9em; margin-top: 5px;">
+                                        Also known as:
+                                        <?= implode(', ', $additionalUsernames); ?>
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+                            <div class="profile-avatar">
+                                <img src="<?= htmlspecialchars($userProfile['avatar'] ? $GLOBALS['config']['avatar_url'] . '/' . $userProfile['avatar'] : $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']); ?>"
+                                    class="avatar-image" alt="Profile Avatar">
+                            </div>
+                        </div>
                     </div>
 
-        <!-- Associated Emails Section -->
-        <div class="profile-section associated-emails">
-            <label>Your associated emails:</label>
-            <ul>
-                <?php foreach ($associatedEmails as $email): ?>
-                    <li><?= htmlspecialchars($email); ?></li>
-                <?php endforeach; ?>
-            </ul>
-            <small class="explanation">
-                *Emails are gathered from various parts of our services where you may have used different emails.
-            </small>
-        </div>                    
+                    <!-- Associated Emails Section -->
+                    <div class="profile-section associated-emails">
+                        <label>Your associated emails:</label>
+                        <ul>
+                            <?php foreach ($associatedEmails as $email): ?>
+                                <li>
+                                    <?= htmlspecialchars($email); ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <small class="explanation">
+                            *Emails are gathered from various parts of our services where you may have used different
+                            emails.
+                        </small>
+                    </div>
 
                     <!-- Titles Section -->
                     <div class="profile-section">
@@ -52,7 +67,17 @@
                     <div class="profile-section user-role">
                         <label>Your role:</label>
                         <div>
-                            <?= htmlspecialchars($userRole); ?>
+                            <?php
+                            if (!empty($userRoles)) {
+                                echo '<ul>';
+                                foreach ($userRoles as $role) {
+                                    echo '<li>' . htmlspecialchars($role) . '</li>';
+                                }
+                                echo '</ul>';
+                            } else {
+                                echo '<p>No roles listed.</p>';
+                            }
+                            ?>
                         </div>
                     </div>
 
@@ -67,6 +92,22 @@
                             <?php endforeach; ?>
                         </ul>
                     </div>
+
+                    <!-- Packages Section -->
+                    <div class="profile-section permanent-packages">
+                        <label>Interactions:</label>
+                        <ul>
+                            <?php foreach ($forumAccountsInfo as $account): ?>
+                                <li>
+                                    <?= 
+                                        "Found forum account with username: " . htmlspecialchars($account['username']) . "\n";
+                                        "Posts: " . $account['postnum'] . ", Threads: " . $account['threadnum'] . "\n";
+                                         ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
 

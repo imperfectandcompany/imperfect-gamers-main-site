@@ -326,16 +326,11 @@ main {
 body {
   touch-action: manipulation;
 }	
-	
 
-
-
-
-/* Add this CSS to your stylesheets */
 .profile-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 2px;
     color: #fff;
 }
 
@@ -347,18 +342,19 @@ body {
 }
 
 .profile-section {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     margin-top: 20px;
-    padding: 15px; /* Adjusted padding */
+    padding: 20px; /* Adjusted padding */
     background-color: rgba(255, 255, 255, 0.1); /* Lighter than the section background for better readability */
     border-radius: 5px; /* Rounded corners for a softer look */
+    margin-bottom: 30px; /* More space between each section */
 }
 
 
 .profile-section label {
     display: block;
-    font-weight: bold;
     font-weight: 600; /* Bolder than the list content */
-    margin-bottom: 15px; /* More space between the label and the list */
 }
 
 .profile-section ul {
@@ -366,11 +362,20 @@ body {
     padding: 0;
 }
 
-.profile-section li {
-    background-color: rgba(0, 0, 0, 0.5);
-    margin-bottom: 10px;
+.profile-section ul li {
+    list-style-type: none; /* Removes list bullet */
+    /*background-color: rgba(0, 0, 0, 0.5);  or any color that fits your design */
     padding: 10px;
     border-radius: 5px;
+    font-size: 1em; /* Adjust font size if needed */
+    color: #ffffff; /* Text color */
+}
+
+
+.profile-section li {
+    list-style-type: none; /* Removes list bullet */
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Optional: adds a subtle border for definition */
 }
 
 .associated-emails small.explanation {
@@ -380,10 +385,38 @@ body {
     color: #ccc;
 }
 
+/* Ensuring the email text doesn't wrap or overflow */
+.associated-emails li {
+}
+
+.main-username {
+    font-size: 1.5em; /* Increase font size */
+    font-weight: bold; /* Bold for emphasis */
+    color: #FFFFFF; /* White color */
+    margin-bottom: 0.5em; /* Add space below the main username */
+}
+
+/* Alias username styles */
+.additional-usernames {
+    font-size: 1em; /* Smaller font size for less emphasis */
+    color: #CCCCCC; /* Lighter color for aliases */
+    margin-bottom: 1em; /* More space before the next section */
+}
+
+.additional-usernames li {
+    display: inline-block;
+    font-size: 0.8em; /* Smaller font size for aka names */
+}
+
+/* To make the "pmuj" name stand out, you might add a class to it in your HTML and then style it like so: */
+.highlighted-username {
+    font-size: 1.5em; /* Larger font size */
+    font-weight: bold; /* Make it bold */
+    color: #E0E0E0; /* A lighter color for higher contrast */
+}
+
 
 .user-role, .permanent-packages {
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
 }
 
@@ -398,6 +431,44 @@ body {
 .text-green-500 { color: #48bb78; }
 .text-white { color: #ffffff; }
 
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Other styles */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom:10px;
+}
+
+.text-content {
+    /* Adjust the width as needed */
+    flex: 1;
+}
+
+.profile-avatar {
+    /* Aligns the avatar to the right side of the header */
+    margin-left: auto;
+}
+
+.avatar-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Additional CSS for other elements */
+
 /* Add more as needed... */
 
 /* Responsive design */
@@ -408,5 +479,9 @@ body {
 
     .profile-section {
         padding: 10px; /* Adjusted for smaller screens */
+    }
+
+    .main-username, .additional-usernames, .profile-section label {
+        font-size: 1em; /* Smaller font size on mobile */
     }
 }

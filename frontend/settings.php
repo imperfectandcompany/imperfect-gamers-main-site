@@ -2,13 +2,13 @@
     <div class="overlay overlay-bg"></div>
     <div class="container">
         <div class="flex flex-col mt-20 fullscreen justify-content-center align-items-center">
-
+            <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
             <div class="mb-4 flex">
                 <?php
-                /*Call our notification handling*/include("../frontend/sitenotif.php");
+                /*Call our notification handling*/
+                include("../frontend/sitenotif.php");
                 ?>
-            </div>
-            <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
+            </div>                
                 <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">Account settings</h2>
                 <div id="username" class="mt-2">
                     <div class="form-group">
@@ -53,9 +53,8 @@
                             <img :src="avatarPreview || '<?php echo $userProfile['avatar'] ? $GLOBALS['config']['avatar_url'] . '/' . $userProfile['avatar'] : $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']; ?>'"
                                 class="h-32 w-32 rounded-full object-cover mx-auto" alt="Current Avatar">
                         </div>
-
                         <!-- Avatar Update Form -->
-                        <form method="POST" action="" enctype="multipart/form-data"
+                        <form method="POST" enctype="multipart/form-data"
                             class="flex flex-col items-center space-y-4">
                             <div class="form-group w-full">
                                 <label for="avatarUpload"
