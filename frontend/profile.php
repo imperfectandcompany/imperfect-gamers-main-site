@@ -1,7 +1,13 @@
 <section class="banner-area mx-auto">
     <div class="overlay overlay-bg"></div>
     <div class="container">
-        <div class="flex flex-col mt-20 fullscreen justify-content-center align-items-center">
+        <div class="flex flex-col fullscreen justify-content-center align-items-center">
+            <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer mb-10">
+                <div class="mx-auto text-center animate__animated animate__fadeIn animate__delay-1s">
+                    <object class="pointer-events-none	" data="https://cdn.imperfectgamers.org/inc/assets/svg/text.svg"
+                        height="30px"></object>
+                </div>
+            </a>
 
             <div class="mb-4 flex">
                 <?php

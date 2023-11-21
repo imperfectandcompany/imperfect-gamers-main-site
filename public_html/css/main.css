@@ -327,11 +327,34 @@ body {
   touch-action: manipulation;
 }	
 
-.profile-container {
+.forum-container {
     min-width: 80vw; /* 80% of the viewport width */
     max-width: 90%; /* Instead of a fixed pixel value */
     margin: 0 auto;
     padding: 2px;
+    color: #fff;
+}
+
+.thread-item {
+    display: block;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+    color: #ffffff; /* Ensure text color is white */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.thread-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+.profile-container {
+    min-width: 80vw; /* 80% of the viewport width */
+    max-width: 100%; /* Instead of a fixed pixel value */
+    margin: 0 auto;
     color: #fff;
 }
 
@@ -568,12 +591,13 @@ body {
 
 .pagination {
     display: flex;
-    padding-left: 0;
+    justify-content: center; /* Centers the pagination */
+    padding: 1rem;
     list-style: none;
 }
 
 .page-item {
-    margin: 0 4px;
+    margin: 0 5px; /* Adds a little space between page items */
 }
 
 .page-item .page-link {
@@ -588,10 +612,31 @@ body {
     cursor: pointer;
 }
 
+.page-item a.page-link {
+    display: inline-block;
+    padding: 0.5rem 0.75rem;
+    background-color: #343a40;
+    color: #fff;
+    border-radius: 0.25rem; /* Rounded corners for the page links */
+    border: 1px solid #454d55;
+    text-decoration: none;
+}
+
 .page-item.active .page-link {
     background-color: #ff0000;
     border-color: #ff0000;
 }
+
+.page-item.active a.page-link,
+.page-item a.page-link:hover {
+    background-color: #ff0000;
+    border-color: #ff0000;
+}
+
+.page-item.disabled a.page-link {
+    pointer-events: none; /* Disables click on link */
+}
+
 
 .page-item .page-link:hover {
     background-color: #b30000;
