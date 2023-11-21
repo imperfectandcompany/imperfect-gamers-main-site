@@ -2,24 +2,24 @@
 
 class Forum
 {
-    public static function fetchThreadsByFid($fid, $page, $perPage) {
-        // Get the PDO instance for the MyBB database
+    public static function fetchThreadsByFid(array $fids, $page, $perPage)
+    {
         $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+        $start = ($page - 1) * $perPage; // Calculate the offset for the LIMIT clause
 
-        // Calculate the start point for the threads to be fetched
-        $start = ($page - 1) * $perPage;
+        // Convert $fids array to a comma-separated string of integers
+        $fidList = implode(',', array_map('intval', $fids));
 
-                // Users and threads to exclude
-                $excludedUids = [880, 881, 879, 771, 271, 882];
-                $excludedTids = [652, 653];
+        // Users and threads to exclude
+        $excludedUids = [880, 881, 879, 771, 271, 882];
+        $excludedTids = [652, 653];
 
         // Prepare the SQL query using prepared statements to prevent SQL injection
         $stmt = $pdoMyBB->prepare("
-            SELECT t.*, COUNT(p.pid) as post_count, t.views
+            SELECT t.*, COUNT(p.pid) as post_count
             FROM mybb_threads t
             LEFT JOIN mybb_posts p ON t.tid = p.tid
-            WHERE t.fid = :fid 
-            AND t.visible = 1 
+            WHERE t.fid IN ($fidList) AND t.visible = 1
             AND t.uid NOT IN (" . implode(',', array_map('intval', $excludedUids)) . ") 
             AND t.tid NOT IN (" . implode(',', array_map('intval', $excludedTids)) . ") 
             GROUP BY t.tid
@@ -27,38 +27,33 @@ class Forum
             LIMIT :start, :perPage
         ");
 
-        // Bind the parameters
-        $stmt->bindValue(':fid', $fid, PDO::PARAM_INT);
+        // Execute the query with the provided forum ID(s) and pagination parameters
         $stmt->bindValue(':start', $start, PDO::PARAM_INT);
         $stmt->bindValue(':perPage', $perPage, PDO::PARAM_INT);
-
-        // Execute the query
         $stmt->execute();
 
         // Fetch and return the results
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public static function countThreadsByFid($fid) {
-        $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
 
-        // Users and threads to exclude
+    public static function countThreadsByFid(array $fids)
+    {
+        $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+    
+        $fidList = implode(',', array_map('intval', $fids));
+    
         $excludedUids = [880, 881, 879, 771, 271, 882];
         $excludedTids = [652, 653];
-
-        // Prepare the SQL query for counting threads, excluding specific users and threads
+    
         $stmt = $pdoMyBB->prepare("
-            SELECT COUNT(*) FROM mybb_threads
-            WHERE fid = :fid 
-            AND visible = 1 
-            AND uid NOT IN (" . implode(',', array_map('intval', $excludedUids)) . ") 
-            AND tid NOT IN (" . implode(',', array_map('intval', $excludedTids)) . ")
+            SELECT COUNT(DISTINCT t.tid) FROM mybb_threads t
+            WHERE t.fid IN ($fidList) AND t.visible = 1
+            AND t.uid NOT IN (" . implode(',', array_map('intval', $excludedUids)) . ") 
+            AND t.tid NOT IN (" . implode(',', array_map('intval', $excludedTids)) . ")
         ");
-
-        // Execute the query
-        $stmt->execute([':fid' => $fid]);
-
-        // Return the count result
+    
+        $stmt->execute();
+    
         return $stmt->fetchColumn();
     }
 }
