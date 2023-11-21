@@ -327,6 +327,30 @@ body {
   touch-action: manipulation;
 }	
 
+.forum-container {
+    min-width: 80vw; /* 80% of the viewport width */
+    max-width: 90%; /* Instead of a fixed pixel value */
+    margin: 0 auto;
+    padding: 2px;
+    color: #fff;
+}
+
+.thread-item {
+    display: block;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+    color: #ffffff; /* Ensure text color is white */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.thread-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+
 .profile-container {
     min-width: 80vw; /* 80% of the viewport width */
     max-width: 90%; /* Instead of a fixed pixel value */
