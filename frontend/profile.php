@@ -9,8 +9,8 @@
                 ?>
             </div>
             <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
-                <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">Your profile</h2>
-                <div class="profile-container">
+                <h2 class="text-lg font-semibold text-gray-700 capitalize text-white"><?php echo($profileExists ? $ownsProfile ? 'Your profile' : $GLOBALS['url_loc'][2] : '' ) ?></h2>
+                <div class="profile-container <?php echo($profileExists ? '' :'hidden')?>">
                     <!-- Profile Header -->
                     <div class="profile-header">
                         <div class="header-content">
@@ -93,20 +93,49 @@
                         </ul>
                     </div>
 
-                    <!-- Packages Section -->
-                    <div class="profile-section permanent-packages">
-                        <label>Interactions:</label>
-                        <ul>
-                            <?php foreach ($forumAccountsInfo as $account): ?>
-                                <li>
-                                    <?= 
-                                        "Found forum account with username: " . htmlspecialchars($account['username']) . "\n";
-                                        "Posts: " . $account['postnum'] . ", Threads: " . $account['threadnum'] . "\n";
-                                         ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
+                    
+
+<!-- Forum Section -->
+<div class="profile-section forum-activity">
+    <label>Social Activity:</label>
+    <?php if (!empty($forumAccountsInfo)): ?>
+        <ul>
+            <?php foreach ($forumAccountsInfo as $account): ?>
+                <li>
+                    <strong>Posts:</strong> <?= htmlspecialchars($account['postnum']); ?><br>
+                    <strong>Threads:</strong> <?= htmlspecialchars($account['threadnum']); ?><br>
+                    <strong>Recent Activity:</strong>
+    <ul>
+    <?php foreach (array_slice($account['posts'], 0, 5) as $post): ?>
+            <li>
+                <?php
+                    // Strip all BBCode from the post content
+                    $postContent = stripQuotesAndContents($post['message']);
+                    // Truncate the post content to a reasonable length
+                    $postSnippet = htmlspecialchars($postContent);
+                ?>
+                <?= $postSnippet; ?>
+                <em>in</em>
+                <a href="thread-link.php?tid=<?= htmlspecialchars($post['tid']); ?>">
+                    <?= htmlspecialchars(trim(preg_replace("/^RE:\s*/i", "", $post['subject']))); ?>
+                </a>
+                - <?= date('Y-m-d', $post['dateline']); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+                    <a href="<?= htmlspecialchars($GLOBALS['config']['url']); ?>/profile/posts" class="view-all">View All Posts</a>
+                    <a href="<?= htmlspecialchars($GLOBALS['config']['url']); ?>/profile/threads" class="view-all">View All Threads</a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>No forum activity found.</p>
+    <?php endif; ?>
+</div>
+
+
+
+                    
 
                 </div>
             </div>

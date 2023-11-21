@@ -62,10 +62,12 @@ public static function getUsername($id)
 
 public static function getUserId($username)
 {
+
+	$result = DatabaseConnector::query('SELECT user_id FROM profiles WHERE username=:username', array(':username'=>$username));
 	//grabs the userid of the given username $id. else return false.
-	if(DatabaseConnector::query('SELECT user_id FROM profiles WHERE username=:username', array(':username'=>$username))[0]['user_id']){
+	if($result && !empty($result) && isset($result[0]['user_id'])) {
 	//return username
-	return DatabaseConnector::query('SELECT user_id FROM profiles WHERE username=:username', array(':username'=>$username))[0]['user_id'];
+	return $result[0]['user_id'];
 	}
 	else {
 	return false;

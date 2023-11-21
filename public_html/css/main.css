@@ -424,6 +424,28 @@ body {
     color: #fff;
 }
 
+
+.view-all {
+    display: block;
+    background-color: #444; /* Dark background for contrast */
+    color: #fff; /* White text */
+    text-align: center;
+    padding: 5px 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+
+    /* Responsive adjustments */
+    width: auto; /* Auto-width to fit content */
+    max-width: 200px; /* Maximum width */
+    font-size: 0.8em; /* Smaller font size */
+}
+
+.view-all:hover {
+    background-color: #555; /* Slightly lighter on hover */
+}
+
 /* Define your text colors for titles */
 .text-red-500 { color: #f56565; }
 .text-orange-500 { color: #ed8936; }
