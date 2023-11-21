@@ -2,7 +2,7 @@
 $profile = "";
 $ownsProfile = false;
 $profileExists = false;
-
+$backUrl = $GLOBALS['config']['url'];
 try {
     //if profile wasnt given...
 
@@ -45,40 +45,53 @@ try {
                 $profileData = DatabaseConnector::query('SELECT p.*, u.email FROM profiles p INNER JOIN users u ON p.user_id = u.id WHERE p.user_id = :userId', array(':userId' => User::getUserId($GLOBALS['url_loc'][2])));
                 $userProfile = $profileData ? $profileData[0] : null; // Return the first row or null if no data
             }
-                // Get the steamId 64 if available
-                $steamId = $userProfile['steam_id'] ?? null;
-                $mainUsername = $userProfile['username'] ?? null;
-                $mainEmail = $userProfile['email'] ?? null;
-                // Initialize variables with defaults
-                $userTitles = [];
-                $userRole = 'None listed';
-                $permanentPackages = ['You have none!'];
-                $associatedEmails = ['No emails found'];
-                $additionalUsernames = [];
-                $processedTitles = ['No tags found'];
-                if ($steamId) {
-                    // Steam ID is available, so fetch all related data
-                    $rawTitles = getUserTitles($steamId);
-                    $userTitles = formatUserTitles($rawTitles);
-                    $processedTitles = array_map('mapColorCodesToStyles', $userTitles);
-                    $userRoles = array_filter(getUserRoles($userProfile['steam_id_64']), function ($role) {
-                        return !empty($role); // Filter out empty strings
-                    });
-                    $permanentPackages = getPermanentPackages($userProfile['steam_id_64']);
-                    $associatedEmails = getAssociatedEmails($userProfile['steam_id_64']);
-                    // Query the igfastdl_mybb database for additional usernames
-                    $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
-                    $additionalUsernames = getAdditionalUsernames($userProfile['steam_id_64'], $mainUsername, $mainEmail, $associatedEmails, $pdoMyBB);
-                    $forumAccountsInfo = getForumAccountInfo($associatedEmails, $pdoMyBB);
+            
+            // Get the steamId 64 if available
+            $steamId = $userProfile['steam_id'] ?? null;
+            $mainUsername = $userProfile['username'] ?? null;
+            $mainEmail = $userProfile['email'] ?? null;
+            // Initialize variables with defaults
+            $userTitles = [];
+            $userRole = 'None listed';
+            $permanentPackages = ['You have none!'];
+            $associatedEmails = ['No emails found'];
+            $additionalUsernames = [];
+            $processedTitles = ['No tags found'];
+            if ($steamId) {
+                // Steam ID is available, so fetch all related data
+                $rawTitles = getUserTitles($steamId);
+                $userTitles = formatUserTitles($rawTitles);
+                $processedTitles = array_map('mapColorCodesToStyles', $userTitles);
+                $userRoles = array_filter(getUserRoles($userProfile['steam_id_64']), function ($role) {
+                    return !empty($role); // Filter out empty strings
+                });
+                $permanentPackages = getPermanentPackages($userProfile['steam_id_64']);
+                $associatedEmails = getAssociatedEmails($userProfile['steam_id_64']);
+                // Query the igfastdl_mybb database for additional usernames
+                $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+                $additionalUsernames = getAdditionalUsernames($userProfile['steam_id_64'], $mainUsername, $mainEmail, $associatedEmails, $pdoMyBB);
+                $forumAccountsInfo = getForumAccountInfo($associatedEmails, $pdoMyBB);
+                if (isset($GLOBALS['url_loc'][3])) {
+                    switch ($GLOBALS['url_loc'][3]) {
+                        case 'threads':
+                            $threads = $forumAccountsInfo[0]['threads'];
+                            $backUrl = $GLOBALS['config']['url'] . '/profile/' . $userProfile['username'];
+                            break;
+                        case 'posts':
+                            $posts = $forumAccountsInfo[0]['posts'];
+                            $backUrl = $GLOBALS['config']['url'] . '/profile/' . $userProfile['username'];
+                            break;
+                        default:
+                        header('Location: ' . $GLOBALS['config']['url'] . '/profile/' . $userProfile['username']);
+                        throw new Exception('Error: Page does not exist!');
+                    }
                 }
+            }
         }
     }
 } catch (Exception $e) {
     $GLOBALS['errors'][] = $e->getMessage();
 }
-
-
-
 
 function getUserTitles($steamId)
 {
@@ -374,14 +387,6 @@ function trimText($text, $length)
     }
     return $text; // Return $text
 }
-
-
-
-
-
-
-
-
 
 function getForumAccountInfo($associatedEmails, $pdoMyBB)
 {

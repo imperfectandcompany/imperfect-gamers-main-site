@@ -489,6 +489,73 @@ body {
     object-fit: cover;
 }
 
+.threads-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.thread-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.thread-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.thread-title {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.thread-details {
+    font-size: 0.875rem;
+    color: #cccccc;
+}
+
+.no-content {
+    text-align: center;
+    color: #ffffff;
+}
+
+.posts-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.post-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.post-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.post-content {
+    color: #ffffff;
+}
+
+.post-details {
+    font-size: 0.875rem;
+    color: #cccccc;
+}
+
+.no-content {
+    text-align: center;
+    color: #ffffff;
+}
+
+
 /* Additional CSS for other elements */
 
 /* Add more as needed... */
