@@ -328,10 +328,15 @@ body {
 }	
 
 .profile-container {
-    max-width: 1200px;
+    min-width: 80vw; /* 80% of the viewport width */
+    max-width: 90%; /* Instead of a fixed pixel value */
     margin: 0 auto;
     padding: 2px;
     color: #fff;
+}
+
+.profile-container, .profile-section {
+    min-height: 100; /* Adjust as needed */
 }
 
 .profile-header {
@@ -343,6 +348,11 @@ body {
 
 .profile-section {
     backdrop-filter: blur(5px);
+    min-height: 150px; /* This will ensure that the section is never shorter than 150px */
+    min-width: 300px; /* This will ensure that the section is never narrower than 300px */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* This will vertically center the content if the div is taller than the content */
     -webkit-backdrop-filter: blur(5px);
     margin-top: 20px;
     padding: 20px; /* Adjusted padding */
@@ -390,7 +400,7 @@ body {
 }
 
 .main-username {
-    font-size: 1.5em; /* Increase font size */
+    font-size: clamp(1rem, 2.5vw, 1.5em); /* Adjusts between 1rem and 1.5em depending on viewport width */
     font-weight: bold; /* Bold for emphasis */
     color: #FFFFFF; /* White color */
     margin-bottom: 0.5em; /* Add space below the main username */
@@ -430,7 +440,7 @@ body {
     background-color: #444; /* Dark background for contrast */
     color: #fff; /* White text */
     text-align: center;
-    padding: 5px 10px;
+    padding: clamp(5px, 2.5vw, 10px); /* Adjusts padding responsively */
     margin-top: 10px;
     border-radius: 5px;
     text-decoration: none;
@@ -483,8 +493,9 @@ body {
 }
 
 .avatar-image {
+    max-width: 100%; /* Makes the image responsive */
     width: 100px;
-    height: 100px;
+    height: auto; /* Maintain aspect ratio */
     border-radius: 50%;
     object-fit: cover;
 }
@@ -555,6 +566,63 @@ body {
     color: #ffffff;
 }
 
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+}
+
+.page-item {
+    margin: 0 4px;
+}
+
+.page-item .page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #fff;
+    background-color: #343a40;
+    border: 1px solid #454d55;
+    cursor: pointer;
+}
+
+.page-item.active .page-link {
+    background-color: #ff0000;
+    border-color: #ff0000;
+}
+
+.page-item .page-link:hover {
+    background-color: #b30000;
+    border-color: #b30000;
+}
+
+.page-item:first-child .page-link {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.page-item:last-child .page-link {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.page-link {
+    z-index: 2;
+    color: #fff;
+    text-decoration: none;
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+}
+
+.page-link:hover {
+    z-index: 3;
+    color: #fff;
+    background-color: #5a6268;
+    border-color: #545b62;
+}
 
 /* Additional CSS for other elements */
 
@@ -563,14 +631,25 @@ body {
 /* Responsive design */
 @media (max-width: 768px) {
     .profile-container {
-        padding: 10px; /* Less padding on smaller screens */
+        max-width: 100%;
+        padding: 10px;
     }
 
     .profile-section {
-        padding: 10px; /* Adjusted for smaller screens */
+        padding: 10px;
     }
 
     .main-username, .additional-usernames, .profile-section label {
-        font-size: 1em; /* Smaller font size on mobile */
+        font-size: 1em;
+    }
+    
+    /* Adjust text and other elements for mobile view */
+    .main-username {
+        font-size: 1.2em; /* Larger font for mobile */
+    }
+
+    .profile-section {
+        min-height: auto; /* Adjust the min-height for mobile */
+        padding: 15px; /* More padding on mobile */
     }
 }

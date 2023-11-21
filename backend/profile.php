@@ -45,7 +45,7 @@ try {
                 $profileData = DatabaseConnector::query('SELECT p.*, u.email FROM profiles p INNER JOIN users u ON p.user_id = u.id WHERE p.user_id = :userId', array(':userId' => User::getUserId($GLOBALS['url_loc'][2])));
                 $userProfile = $profileData ? $profileData[0] : null; // Return the first row or null if no data
             }
-            
+
             // Get the steamId 64 if available
             $steamId = $userProfile['steam_id'] ?? null;
             $mainUsername = $userProfile['username'] ?? null;
@@ -74,16 +74,24 @@ try {
                 if (isset($GLOBALS['url_loc'][3])) {
                     switch ($GLOBALS['url_loc'][3]) {
                         case 'threads':
-                            $threads = $forumAccountsInfo[0]['threads'];
                             $backUrl = $GLOBALS['config']['url'] . '/profile/' . $userProfile['username'];
+                            $page = isset($GLOBALS['url_loc'][4]) && is_numeric($GLOBALS['url_loc'][4]) ? (int) $GLOBALS['url_loc'][4] : 1;
+                            $uid = $forumAccountsInfo[0]['uid']; // Assume $forumAccountsInfo[0] is the correct account
+                            $threads = getForumAccountThreads($uid, $page, $pdoMyBB);
+                            $totalPages = getTotalThreadPages($uid, $pdoMyBB);
+                            $pagination = getPagination($page, $totalPages);
                             break;
                         case 'posts':
-                            $posts = $forumAccountsInfo[0]['posts'];
                             $backUrl = $GLOBALS['config']['url'] . '/profile/' . $userProfile['username'];
+                            $page = isset($GLOBALS['url_loc'][4]) && is_numeric($GLOBALS['url_loc'][4]) ? (int) $GLOBALS['url_loc'][4] : 1;
+                            $uid = $forumAccountsInfo[0]['uid']; // Assume $forumAccountsInfo[0] is the correct account
+                            $posts = getForumAccountPosts($uid, $page, $pdoMyBB);
+                            $totalPages = getTotalPostPages($uid, $pdoMyBB);
+                            $pagination = getPagination($page, $totalPages);
                             break;
                         default:
-                        header('Location: ' . $GLOBALS['config']['url'] . '/profile/' . $userProfile['username']);
-                        throw new Exception('Error: Page does not exist!');
+                            header('Location: ' . $GLOBALS['config']['url'] . '/profile/' . $userProfile['username']);
+                            throw new Exception('Error: Page does not exist!');
                     }
                 }
             }
@@ -91,6 +99,34 @@ try {
     }
 } catch (Exception $e) {
     $GLOBALS['errors'][] = $e->getMessage();
+}
+
+function getPagination($page, $totalPages, $visiblePages = 10) {
+    $start = max($page - floor($visiblePages / 2), 1);
+    $end = min($start + $visiblePages - 1, $totalPages);
+
+    // Adjust the start if we're at the end
+    $start = max($end - $visiblePages + 1, 1);
+
+    return ['start' => $start, 'end' => $end];
+}
+
+function getTotalThreadPages($uid, $pdoMyBB, $threadsPerPage = 6)
+{
+    $stmt = $pdoMyBB->prepare('SELECT COUNT(*) FROM mybb_threads WHERE uid = :uid');
+    $stmt->execute([':uid' => $uid]);
+    $totalThreads = $stmt->fetchColumn();
+
+    return ceil($totalThreads / $threadsPerPage);
+}
+
+function getTotalPostPages($uid, $pdoMyBB, $postsPerPage = 6)
+{
+    $stmt = $pdoMyBB->prepare('SELECT COUNT(*) FROM mybb_posts WHERE uid = :uid');
+    $stmt->execute([':uid' => $uid]);
+    $totalPosts = $stmt->fetchColumn();
+
+    return ceil($totalPosts / $postsPerPage);
 }
 
 function getUserTitles($steamId)
@@ -387,6 +423,35 @@ function trimText($text, $length)
     }
     return $text; // Return $text
 }
+
+function getForumAccountPosts($uid, $page, $pdoMyBB)
+{
+    $postsPerPage = 6; // Set how many posts we want per page
+    $offset = ($page - 1) * $postsPerPage;
+
+    $stmt = $pdoMyBB->prepare('SELECT p.pid, p.subject, p.message, p.dateline, t.subject as thread_subject, p.tid FROM mybb_posts p LEFT JOIN mybb_threads t ON p.tid = t.tid WHERE p.uid = :uid ORDER BY p.dateline DESC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $postsPerPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getForumAccountThreads($uid, $page, $pdoMyBB)
+{
+    $threadsPerPage = 6; // Set how many threads we want per page
+    $offset = ($page - 1) * $threadsPerPage;
+
+    $stmt = $pdoMyBB->prepare('SELECT tid, subject, dateline FROM mybb_threads WHERE uid = :uid ORDER BY dateline DESC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $threadsPerPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 function getForumAccountInfo($associatedEmails, $pdoMyBB)
 {
