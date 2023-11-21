@@ -1,4 +1,133 @@
 <?php
+$profile = "";
+$ownsProfile = false;
+$profileExists = false;
+$backUrl = $GLOBALS['config']['url'];
+try {
+    //if profile wasnt given...
+
+    if (!isset($GLOBALS['url_loc'][2])) {
+        //Check to see if user is logged in, if so... load his profile otherwise ask user to provide a profile
+        if (User::isLoggedIn()) {
+            echo "user is logged in";
+            $profile = User::getUsername($userid);
+            header("location: ./profile/$profile");
+        } else {
+            throw new Exception('Error: Please provide a profile!');
+        }
+    }
+
+    //if profile was specified
+    if (isset($GLOBALS['url_loc'][2])) {
+        //check to see if it was a numerical value, if so translate it to the users profile.
+        if (is_numeric($GLOBALS['url_loc'][2])) {
+            //throw error if the userid does not exist
+            if (!User::getUsername($GLOBALS['url_loc'][2])) {
+                throw new Exception('Error: User does not exist!');
+            }
+
+            $profile = User::getUsername($GLOBALS['url_loc'][2]);
+            header("location: $profile");
+        }
+
+        //uses get method to grab information
+        if (is_string($profile)) {
+            // Check if the user exists
+            if (!User::getUserId($GLOBALS['url_loc'][2])) {
+                throw new Exception('Error: User does not exist!');
+            }
+            $profileExists = true;
+            // If user owns profile
+            if (isset($userProfile['username']) && $userProfile['username'] === $GLOBALS['url_loc'][2]) {
+                $ownsProfile = true;
+            } else {
+                // Join the profiles table with the users table to get the profile data along with the email
+                $profileData = DatabaseConnector::query('SELECT p.*, u.email FROM profiles p INNER JOIN users u ON p.user_id = u.id WHERE p.user_id = :userId', array(':userId' => User::getUserId($GLOBALS['url_loc'][2])));
+                $userProfile = $profileData ? $profileData[0] : null; // Return the first row or null if no data
+            }
+
+            // Get the steamId 64 if available
+            $steamId = $userProfile['steam_id'] ?? null;
+            $mainUsername = $userProfile['username'] ?? null;
+            $mainEmail = $userProfile['email'] ?? null;
+            // Initialize variables with defaults
+            $userTitles = [];
+            $userRole = 'None listed';
+            $permanentPackages = ['You have none!'];
+            $associatedEmails = ['No emails found'];
+            $additionalUsernames = [];
+            $processedTitles = ['No tags found'];
+            if ($steamId) {
+                // Steam ID is available, so fetch all related data
+                $rawTitles = getUserTitles($steamId);
+                $userTitles = formatUserTitles($rawTitles);
+                $processedTitles = array_map('mapColorCodesToStyles', $userTitles);
+                $userRoles = array_filter(getUserRoles($userProfile['steam_id_64']), function ($role) {
+                    return !empty($role); // Filter out empty strings
+                });
+                $permanentPackages = getPermanentPackages($userProfile['steam_id_64']);
+                $associatedEmails = getAssociatedEmails($userProfile['steam_id_64']);
+                // Query the igfastdl_mybb database for additional usernames
+                $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+                $additionalUsernames = getAdditionalUsernames($userProfile['steam_id_64'], $mainUsername, $mainEmail, $associatedEmails, $pdoMyBB);
+                $forumAccountsInfo = getForumAccountInfo($associatedEmails, $pdoMyBB);
+                if (isset($GLOBALS['url_loc'][3])) {
+                    switch ($GLOBALS['url_loc'][3]) {
+                        case 'threads':
+                            $backUrl = $GLOBALS['config']['url'] . '/profile/' . $userProfile['username'];
+                            $page = isset($GLOBALS['url_loc'][4]) && is_numeric($GLOBALS['url_loc'][4]) ? (int) $GLOBALS['url_loc'][4] : 1;
+                            $uid = $forumAccountsInfo[0]['uid']; // Assume $forumAccountsInfo[0] is the correct account
+                            $threads = getForumAccountThreads($uid, $page, $pdoMyBB);
+                            $totalPages = getTotalThreadPages($uid, $pdoMyBB);
+                            $pagination = getPagination($page, $totalPages);
+                            break;
+                        case 'posts':
+                            $backUrl = $GLOBALS['config']['url'] . '/profile/' . $userProfile['username'];
+                            $page = isset($GLOBALS['url_loc'][4]) && is_numeric($GLOBALS['url_loc'][4]) ? (int) $GLOBALS['url_loc'][4] : 1;
+                            $uid = $forumAccountsInfo[0]['uid']; // Assume $forumAccountsInfo[0] is the correct account
+                            $posts = getForumAccountPosts($uid, $page, $pdoMyBB);
+                            $totalPages = getTotalPostPages($uid, $pdoMyBB);
+                            $pagination = getPagination($page, $totalPages);
+                            break;
+                        default:
+                            header('Location: ' . $GLOBALS['config']['url'] . '/profile/' . $userProfile['username']);
+                            throw new Exception('Error: Page does not exist!');
+                    }
+                }
+            }
+        }
+    }
+} catch (Exception $e) {
+    $GLOBALS['errors'][] = $e->getMessage();
+}
+
+function getPagination($page, $totalPages, $visiblePages = 10) {
+    $start = max($page - floor($visiblePages / 2), 1);
+    $end = min($start + $visiblePages - 1, $totalPages);
+
+    // Adjust the start if we're at the end
+    $start = max($end - $visiblePages + 1, 1);
+
+    return ['start' => $start, 'end' => $end];
+}
+
+function getTotalThreadPages($uid, $pdoMyBB, $threadsPerPage = 6)
+{
+    $stmt = $pdoMyBB->prepare('SELECT COUNT(*) FROM mybb_threads WHERE uid = :uid');
+    $stmt->execute([':uid' => $uid]);
+    $totalThreads = $stmt->fetchColumn();
+
+    return ceil($totalThreads / $threadsPerPage);
+}
+
+function getTotalPostPages($uid, $pdoMyBB, $postsPerPage = 6)
+{
+    $stmt = $pdoMyBB->prepare('SELECT COUNT(*) FROM mybb_posts WHERE uid = :uid');
+    $stmt->execute([':uid' => $uid]);
+    $totalPosts = $stmt->fetchColumn();
+
+    return ceil($totalPosts / $postsPerPage);
+}
 
 function getUserTitles($steamId)
 {
@@ -58,22 +187,35 @@ function steamid64_to_steamid($steamid64)
     return array($steamId0, $steamId1);
 }
 
-function getUserRole($steamId)
+function getUserRoles($steamId)
 {
     // Connect to the sourcebans database
     $pdo = DatabaseConnector::getDatabase("igfastdl_sourcebans");
 
-    // Map possibilities bc it may be steam_0 or steam_1
+    // Map possibilities because it may be steam_0 or steam_1
     $accountID = bcsub($steamId, '76561197960265728');
     $steamId1 = 'STEAM_1:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
     $steamId0 = 'STEAM_0:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
     $steamIdArray = array($steamId0, $steamId1);
 
+    // Prepare the SQL statement
     $stmt = $pdo->prepare('SELECT srv_group FROM sb_admins WHERE authid IN (?, ?)');
+
+    // Execute the statement with the steamIdArray
     $stmt->execute($steamIdArray);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result ? $result['srv_group'] : 'Not found';
+
+    // Fetch all matching roles
+    $roles = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    // If no roles found, return a default message
+    if (empty($roles)) {
+        return ['Not found'];
+    }
+
+    // Return the array of roles
+    return $roles;
 }
+
 
 
 function getPermanentPackages($steamId)
@@ -111,7 +253,7 @@ function getPermanentPackages($steamId)
 }
 
 
-function getAdditionalUsernames($steamId64, $mainUsername, $mainEmail, $associatedEmails)
+function getAdditionalUsernames($steamId64, $mainUsername, $mainEmail, $associatedEmails, $pdoMyBB)
 {
     // Add main email to the list of emails to search
     array_unshift($associatedEmails, $mainEmail);
@@ -125,30 +267,27 @@ function getAdditionalUsernames($steamId64, $mainUsername, $mainEmail, $associat
     // lets get info from the forums using our collected emails
     $pdoForum = DatabaseConnector::getDatabase("igfastdl_forum");
     $pdoForums = DatabaseConnector::getDatabase("igfastdl_forums");
-    // Query the igfastdl_mybb database for additional usernames
-    $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
 
-    // Map possibilities bc it may be steam_0 or steam_1
-    $accountID = bcsub($steamId64, '76561197960265728');
-    $steamId1 = 'STEAM_1:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
-    $steamId0 = 'STEAM_0:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
-    $steamIdArray = array($steamId0, $steamId1);
-    $stmtSourcebans = $pdoSourcebans->prepare('SELECT user FROM sb_admins WHERE authid IN (?, ?)');
-    $stmtSourcebans->execute($steamIdArray);
-    $sourcebansUsernames = $stmtSourcebans->fetchAll(PDO::FETCH_COLUMN);
+    if (!empty($steamId64)) {
+        // Map possibilities bc it may be steam_0 or steam_1
+        $accountID = bcsub($steamId64, '76561197960265728');
+        $steamId1 = 'STEAM_1:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
+        $steamId0 = 'STEAM_0:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
+        $steamIdArray = array($steamId0, $steamId1);
+        $stmtSourcebans = $pdoSourcebans->prepare('SELECT user FROM sb_admins WHERE authid IN (?, ?)');
+        $stmtSourcebans->execute($steamIdArray);
+        $sourcebansUsernames = $stmtSourcebans->fetchAll(PDO::FETCH_COLUMN);
 
+        // Fetch the name from the players table within igfastdl_donate database
+        $stmtDonate = $pdoDonate->prepare('SELECT name FROM players WHERE uid = :uid');
+        $stmtDonate->execute([':uid' => $steamId64]);
+        $donateNames = $stmtDonate->fetchAll(PDO::FETCH_COLUMN);
 
-    // Fetch the name from the players table within igfastdl_donate database
-    $stmtDonate = $pdoDonate->prepare('SELECT name FROM players WHERE uid = :uid');
-    $stmtDonate->execute([':uid' => $steamId64]);
-    $donateNames = $stmtDonate->fetchAll(PDO::FETCH_COLUMN);
-
-    // handle surftimer related operation
-    $stmtSurfTimer = $pdoSurfTimer->prepare('SELECT DISTINCT name FROM ck_playerrank WHERE steamid64 = :steamid64');
-    $stmtSurfTimer->execute([':steamid64' => $steamId64]);
-    $surfTimerNames = $stmtSurfTimer->fetchAll(PDO::FETCH_COLUMN);
-
-
+        // handle surftimer related operation
+        $stmtSurfTimer = $pdoSurfTimer->prepare('SELECT DISTINCT name FROM ck_playerrank WHERE steamid64 = :steamid64');
+        $stmtSurfTimer->execute([':steamid64' => $steamId64]);
+        $surfTimerNames = $stmtSurfTimer->fetchAll(PDO::FETCH_COLUMN);
+    }
 
     // Initialize an array to store forum usernames
     $forumUsernames = [];
@@ -193,6 +332,9 @@ function getAdditionalUsernames($steamId64, $mainUsername, $mainEmail, $associat
 
 function getAssociatedEmails($steamId64)
 {
+
+    $uniqueEmails = []; // Initialize as an empty array
+
     // Map possibilities bc it may be steam_0 or steam_1
     $accountID = bcsub($steamId64, '76561197960265728');
     $steamId1 = 'STEAM_1:' . bcmod($accountID, '2') . ':' . bcdiv($accountID, 2);
@@ -229,9 +371,129 @@ function getAssociatedEmails($steamId64)
         return stripos($email, 'assigned by admin') === false;
     });
 
-    return $filteredEmails;
+    // Filter out any emails that contain the phrase "assigned by admin"
+    $filteredEmails2 = array_filter($filteredEmails, function ($email) {
+        return stripos($email, 'blacklist@gmail.com') === false;
+    });
+
+    return $filteredEmails2;
 
 }
+
+function stripBBCodeTags($text)
+{
+    // Pattern to match BBCode tags but not their contents
+    $pattern = '/\[(\/?)[^\]]+\]/';
+
+    // Replace BBCode tags with an empty string
+    $text = preg_replace($pattern, '', $text);
+
+    // Return the cleaned text
+    return trim($text);
+}
+
+function stripQuotesAndContents($text)
+{
+    // Pattern to match BBCode quotes and their contents (including nested BBCode)
+    $quotePattern = '/\[quote[^]]*](.*?)\[\/quote\]/is';
+
+    // Replace all quote matches with an empty string
+    $textWithoutQuotes = preg_replace($quotePattern, '', $text);
+
+    // Find the last occurrence of [/quote] and get the text after it
+    $lastQuotePos = strrpos($textWithoutQuotes, '[/quote]');
+    if ($lastQuotePos !== false) {
+        $textWithoutQuotes = substr($textWithoutQuotes, $lastQuotePos + strlen('[/quote]'));
+    }
+
+    $strippedBBCodeText = stripBBCodeTags($textWithoutQuotes);
+
+    // Truncate the text to a reasonable length
+    $trimmedText = trimText($strippedBBCodeText, 100);
+
+    // Remove any extra whitespace and return the cleaned text
+    return trim($trimmedText); // Use $trimmedText here
+}
+
+
+function trimText($text, $length)
+{
+    if (mb_strlen($text) > $length) { // Use $length here
+        $text = mb_substr($text, 0, $length) . '...'; // Use $length here
+    }
+    return $text; // Return $text
+}
+
+function getForumAccountPosts($uid, $page, $pdoMyBB)
+{
+    $postsPerPage = 6; // Set how many posts we want per page
+    $offset = ($page - 1) * $postsPerPage;
+
+    $stmt = $pdoMyBB->prepare('SELECT p.pid, p.subject, p.message, p.dateline, t.subject as thread_subject, p.tid FROM mybb_posts p LEFT JOIN mybb_threads t ON p.tid = t.tid WHERE p.uid = :uid ORDER BY p.dateline DESC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $postsPerPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getForumAccountThreads($uid, $page, $pdoMyBB)
+{
+    $threadsPerPage = 6; // Set how many threads we want per page
+    $offset = ($page - 1) * $threadsPerPage;
+
+    $stmt = $pdoMyBB->prepare('SELECT tid, subject, dateline FROM mybb_threads WHERE uid = :uid ORDER BY dateline DESC LIMIT :limit OFFSET :offset');
+    $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $threadsPerPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+function getForumAccountInfo($associatedEmails, $pdoMyBB)
+{
+    // Initialize an array to store forum account info
+    $forumAccountsInfo = [];
+
+    // Loop through each associated email to find forum accounts
+    foreach ($associatedEmails as $email) {
+        // Prepare the SQL query for user info
+        $stmtUser = $pdoMyBB->prepare('SELECT uid, username, email, postnum, threadnum FROM mybb_users WHERE email = :email LIMIT 1');
+        // Execute the query with the current email
+        $stmtUser->execute([':email' => $email]);
+        // Fetch the account info
+        $accountInfo = $stmtUser->fetch(PDO::FETCH_ASSOC);
+
+        // If an account was found, fetch posts and threads
+        if ($accountInfo) {
+            // Prepare the SQL query for posts
+            $stmtPosts = $pdoMyBB->prepare('SELECT p.pid, p.subject, p.message, p.dateline, t.subject as thread_subject, p.tid FROM mybb_posts p LEFT JOIN mybb_threads t ON p.tid = t.tid WHERE p.uid = :uid ORDER BY p.dateline DESC LIMIT 5');
+            $stmtPosts->execute([':uid' => $accountInfo['uid']]);
+            // Fetch all posts
+            $posts = $stmtPosts->fetchAll(PDO::FETCH_ASSOC);
+
+            // Prepare the SQL query for threads
+            $stmtThreads = $pdoMyBB->prepare('SELECT tid, subject, dateline FROM mybb_threads WHERE uid = :uid');
+            $stmtThreads->execute([':uid' => $accountInfo['uid']]);
+            // Fetch all threads
+            $threads = $stmtThreads->fetchAll(PDO::FETCH_ASSOC);
+
+            // Add posts and threads to the account info
+            $accountInfo['posts'] = $posts;
+            $accountInfo['threads'] = $threads;
+
+            // Add the complete account info to the array
+            $forumAccountsInfo[] = $accountInfo;
+        }
+    }
+    // Return the array of forum accounts info
+    return $forumAccountsInfo;
+}
+
+
 
 // Function to check if the title should be displayed
 function shouldDisplayTitle($title)
@@ -239,29 +501,6 @@ function shouldDisplayTitle($title)
     // Check if the title is not null and not an empty string
     return !is_null($title) && $title !== '';
 }
-
-
-// Get the steamId 64
-$steamId = $userProfile['steam_id'];
-$mainUsername = $userProfile['username'];
-$mainEmail = $userProfile['email'];
-$associatedEmails = getAssociatedEmails($userProfile['steam_id_64']);
-$additionalUsernames = getAdditionalUsernames($userProfile['steam_id_64'], $mainUsername, $mainEmail, $associatedEmails);
-
-// Get the user titles
-$rawTitles = getUserTitles($steamId);
-$userTitles = formatUserTitles($rawTitles);
-
-$processedTitles = array_map('mapColorCodesToStyles', $userTitles);
-
-// Get the user role
-$userRole = getUserRole($userProfile['steam_id_64']);
-if ($userRole === '') {
-    $userRole = "None listed";
-}
-
-// Get the user's permanent packages
-$permanentPackages = getPermanentPackages($userProfile['steam_id_64']);
 
 
 ?>
