@@ -326,17 +326,17 @@ main {
 body {
   touch-action: manipulation;
 }	
+	
 
+
+
+
+/* Add this CSS to your stylesheets */
 .profile-container {
-    min-width: 80vw; /* 80% of the viewport width */
-    max-width: 90%; /* Instead of a fixed pixel value */
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 2px;
+    padding: 20px;
     color: #fff;
-}
-
-.profile-container, .profile-section {
-    min-height: 100; /* Adjust as needed */
 }
 
 .profile-header {
@@ -347,24 +347,18 @@ body {
 }
 
 .profile-section {
-    backdrop-filter: blur(5px);
-    min-height: 150px; /* This will ensure that the section is never shorter than 150px */
-    min-width: 300px; /* This will ensure that the section is never narrower than 300px */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* This will vertically center the content if the div is taller than the content */
-    -webkit-backdrop-filter: blur(5px);
     margin-top: 20px;
-    padding: 20px; /* Adjusted padding */
+    padding: 15px; /* Adjusted padding */
     background-color: rgba(255, 255, 255, 0.1); /* Lighter than the section background for better readability */
     border-radius: 5px; /* Rounded corners for a softer look */
-    margin-bottom: 30px; /* More space between each section */
 }
 
 
 .profile-section label {
     display: block;
+    font-weight: bold;
     font-weight: 600; /* Bolder than the list content */
+    margin-bottom: 15px; /* More space between the label and the list */
 }
 
 .profile-section ul {
@@ -372,20 +366,11 @@ body {
     padding: 0;
 }
 
-.profile-section ul li {
-    list-style-type: none; /* Removes list bullet */
-    /*background-color: rgba(0, 0, 0, 0.5);  or any color that fits your design */
+.profile-section li {
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
     padding: 10px;
     border-radius: 5px;
-    font-size: 1em; /* Adjust font size if needed */
-    color: #ffffff; /* Text color */
-}
-
-
-.profile-section li {
-    list-style-type: none; /* Removes list bullet */
-    border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Optional: adds a subtle border for definition */
 }
 
 .associated-emails small.explanation {
@@ -395,65 +380,15 @@ body {
     color: #ccc;
 }
 
-/* Ensuring the email text doesn't wrap or overflow */
-.associated-emails li {
-}
-
-.main-username {
-    font-size: clamp(1rem, 2.5vw, 1.5em); /* Adjusts between 1rem and 1.5em depending on viewport width */
-    font-weight: bold; /* Bold for emphasis */
-    color: #FFFFFF; /* White color */
-    margin-bottom: 0.5em; /* Add space below the main username */
-}
-
-/* Alias username styles */
-.additional-usernames {
-    font-size: 1em; /* Smaller font size for less emphasis */
-    color: #CCCCCC; /* Lighter color for aliases */
-    margin-bottom: 1em; /* More space before the next section */
-}
-
-.additional-usernames li {
-    display: inline-block;
-    font-size: 0.8em; /* Smaller font size for aka names */
-}
-
-/* To make the "pmuj" name stand out, you might add a class to it in your HTML and then style it like so: */
-.highlighted-username {
-    font-size: 1.5em; /* Larger font size */
-    font-weight: bold; /* Make it bold */
-    color: #E0E0E0; /* A lighter color for higher contrast */
-}
-
 
 .user-role, .permanent-packages {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
 }
 
 .text-white {
     color: #fff;
-}
-
-
-.view-all {
-    display: block;
-    background-color: #444; /* Dark background for contrast */
-    color: #fff; /* White text */
-    text-align: center;
-    padding: clamp(5px, 2.5vw, 10px); /* Adjusts padding responsively */
-    margin-top: 10px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-
-    /* Responsive adjustments */
-    width: auto; /* Auto-width to fit content */
-    max-width: 200px; /* Maximum width */
-    font-size: 0.8em; /* Smaller font size */
-}
-
-.view-all:hover {
-    background-color: #555; /* Slightly lighter on hover */
 }
 
 /* Define your text colors for titles */
@@ -463,193 +398,15 @@ body {
 .text-green-500 { color: #48bb78; }
 .text-white { color: #ffffff; }
 
-
-.profile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* Other styles */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom:10px;
-}
-
-.text-content {
-    /* Adjust the width as needed */
-    flex: 1;
-}
-
-.profile-avatar {
-    /* Aligns the avatar to the right side of the header */
-    margin-left: auto;
-}
-
-.avatar-image {
-    max-width: 100%; /* Makes the image responsive */
-    width: 100px;
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.threads-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.thread-item {
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.3s ease;
-}
-
-.thread-item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.thread-title {
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.thread-details {
-    font-size: 0.875rem;
-    color: #cccccc;
-}
-
-.no-content {
-    text-align: center;
-    color: #ffffff;
-}
-
-.posts-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.post-item {
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.3s ease;
-}
-
-.post-item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.post-content {
-    color: #ffffff;
-}
-
-.post-details {
-    font-size: 0.875rem;
-    color: #cccccc;
-}
-
-.no-content {
-    text-align: center;
-    color: #ffffff;
-}
-
-.pagination {
-    display: flex;
-    padding-left: 0;
-    list-style: none;
-}
-
-.page-item {
-    margin: 0 4px;
-}
-
-.page-item .page-link {
-    position: relative;
-    display: block;
-    padding: 0.5rem 0.75rem;
-    margin-left: -1px;
-    line-height: 1.25;
-    color: #fff;
-    background-color: #343a40;
-    border: 1px solid #454d55;
-    cursor: pointer;
-}
-
-.page-item.active .page-link {
-    background-color: #ff0000;
-    border-color: #ff0000;
-}
-
-.page-item .page-link:hover {
-    background-color: #b30000;
-    border-color: #b30000;
-}
-
-.page-item:first-child .page-link {
-    margin-left: 0;
-    border-top-left-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
-}
-
-.page-item:last-child .page-link {
-    border-top-right-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
-}
-
-.page-link {
-    z-index: 2;
-    color: #fff;
-    text-decoration: none;
-    background-color: #6c757d;
-    border: 1px solid #6c757d;
-}
-
-.page-link:hover {
-    z-index: 3;
-    color: #fff;
-    background-color: #5a6268;
-    border-color: #545b62;
-}
-
-/* Additional CSS for other elements */
-
 /* Add more as needed... */
 
 /* Responsive design */
 @media (max-width: 768px) {
     .profile-container {
-        max-width: 100%;
-        padding: 10px;
+        padding: 10px; /* Less padding on smaller screens */
     }
 
     .profile-section {
-        padding: 10px;
-    }
-
-    .main-username, .additional-usernames, .profile-section label {
-        font-size: 1em;
-    }
-    
-    /* Adjust text and other elements for mobile view */
-    .main-username {
-        font-size: 1.2em; /* Larger font for mobile */
-    }
-
-    .profile-section {
-        min-height: auto; /* Adjust the min-height for mobile */
-        padding: 15px; /* More padding on mobile */
+        padding: 10px; /* Adjusted for smaller screens */
     }
 }

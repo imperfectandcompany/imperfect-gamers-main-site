@@ -8,6 +8,7 @@ $steamId = Settings::hasSteam($userid);
 
 if($_POST && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
+    print_r($_POST);
     try
     {
         switch($_POST['form_type'])
@@ -66,7 +67,6 @@ if($_POST && $_SERVER['REQUEST_METHOD'] == 'POST')
 
                     $_SESSION['messages']['success'][] = "Your avatar has been updated!";
                     header("location: ".$GLOBALS['config']['url']."/settings");
-                    $success=true;
                     exit();
                 } catch (Exception $e) {
                     $_SESSION['messages']['errors'][] = $e->getMessage();
@@ -79,7 +79,7 @@ if($_POST && $_SERVER['REQUEST_METHOD'] == 'POST')
         }
     } catch (Exception $e) {
         $_SESSION['messages']['errors'][] = $e->getMessage();
-        header("location: ".$GLOBALS['config']['url']."/settssings");
+        header("location: ".$GLOBALS['config']['url']."/settings");
         exit();
     }
 }
