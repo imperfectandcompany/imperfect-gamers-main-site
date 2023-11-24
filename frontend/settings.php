@@ -1,13 +1,7 @@
 <section class="banner-area mx-auto">
     <div class="overlay overlay-bg"></div>
     <div class="container">
-        <div class="flex flex-col fullscreen justify-content-center align-items-center">
-            <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer mb-10">
-                <div class="mx-auto text-center animate__animated animate__fadeIn animate__delay-1s">
-                    <object class="pointer-events-none	" data="https://cdn.imperfectgamers.org/inc/assets/svg/text.svg"
-                        height="30px"></object>
-                </div>
-            </a>
+        <div class="flex flex-col mt-20 fullscreen justify-content-center align-items-center">
             <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
             <div class="mb-4 flex">
                 <?php
@@ -87,7 +81,7 @@
                     </div>
 
                     <!-- Username Change Section -->
-                    <div class="mt-12 w-full hidden">
+                    <div class="mt-12 w-full">
                         <form method="POST" action="" class="flex flex-col items-center space-y-4">
                             <div class="form-group w-full">
                                 <label for="newUsername"
