@@ -1,14 +1,23 @@
 <?php
-switch ($GLOBALS['url_loc'][1])
-{
+switch ($GLOBALS['url_loc'][1]) {
     case "":
         $BACKEND = "index";
         $FRONTEND = "index";
         $HEADER = "index";
-    break;    
+        break;
     case "signin":
         header("location:../login");
-    break;
+        break;
+    case "applications":
+        $PAGE_TITLE = "Applications";
+        $BACKEND = "applications";
+        $FRONTEND = "applications";
+        break;
+    case "appeals":
+        $PAGE_TITLE = "Appeals";
+        $BACKEND = "appeals";
+        $FRONTEND = "appeals";
+        break;
     case "login":
         $PAGE_TITLE = "Log In";
         $BACKEND = "login";
@@ -19,22 +28,26 @@ switch ($GLOBALS['url_loc'][1])
         $BACKEND = "settings";
         $FRONTEND = "settings";
         break;
-        case "profile":
-            $PAGE_TITLE = "Profile";
-            $BACKEND = "profile";
-            $FRONTEND = "profile";
-            break;        
-        case "attachSteam":
-            $BACKEND = "attachSteam";
-            break;                    
+    case "profile":
+        $PAGE_TITLE = "Profile";
+        $BACKEND = "profile";
+        $FRONTEND = "profile";
+        break;
+    case "attachSteam":
+        $BACKEND = "attachSteam";
+        break;
     case "getstarted":
         $PAGE_TITLE = "Getting started";
         $BACKEND = "getstarted";
-        $FRONTEND = "getstarted";        
-    break;
+        $FRONTEND = "getstarted";
+        break;
+    case "install":
+        $PAGE_TITLE = "install";
+        $FRONTEND = "installer";
+        break;
     case "logout":
         $BACKEND = "logout";
     default:
-	break;
+        break;
 }
 ?>

@@ -1,4 +1,8 @@
 <?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+
 //This is how we get what page we should be on based on URL.
 $GLOBALS['url_loc'] = explode('/', htmlspecialchars(strtok($_SERVER['REQUEST_URI'], '?'), ENT_QUOTES));
 
@@ -50,5 +54,6 @@ include_once("../classes/class.user.php");
 include_once("../classes/class.database.php");		
 include_once("../classes/class.general.php");	
 include_once("../classes/class.settings.php");	
+include_once("../classes/class.forum.php");	
 
 ?>

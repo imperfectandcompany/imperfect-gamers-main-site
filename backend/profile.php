@@ -373,7 +373,7 @@ function getAssociatedEmails($steamId64)
 
     // Filter out any emails that contain the phrase "assigned by admin"
     $filteredEmails2 = array_filter($filteredEmails, function ($email) {
-        return stripos($email, 'blacklist@gmail.com') === false;
+        return stripos($email, 'filtered@hotmail.com') === false;
     });
 
     return $filteredEmails2;
@@ -409,7 +409,7 @@ function stripQuotesAndContents($text)
     $strippedBBCodeText = stripBBCodeTags($textWithoutQuotes);
 
     // Truncate the text to a reasonable length
-    $trimmedText = trimText($strippedBBCodeText, 100);
+    $trimmedText = trimText($strippedBBCodeText, 400);
 
     // Remove any extra whitespace and return the cleaned text
     return trim($trimmedText); // Use $trimmedText here

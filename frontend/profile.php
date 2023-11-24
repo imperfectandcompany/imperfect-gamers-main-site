@@ -1,7 +1,13 @@
 <section class="banner-area mx-auto">
     <div class="overlay overlay-bg"></div>
     <div class="container">
-        <div class="flex flex-col mt-20 fullscreen justify-content-center align-items-center">
+        <div class="flex flex-col fullscreen justify-content-center align-items-center">
+            <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer mb-10">
+                <div class="mx-auto text-center animate__animated animate__fadeIn animate__delay-1s">
+                    <object class="pointer-events-none	" data="https://cdn.imperfectgamers.org/inc/assets/svg/text.svg"
+                        height="30px"></object>
+                </div>
+            </a>
 
             <div class="mb-4 flex">
                 <?php
@@ -40,6 +46,7 @@
                     <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">
                         <?php echo ($profileExists ? $ownsProfile ? 'Your posts' : $GLOBALS['url_loc'][2] . "'s posts" : "") ?>
                     </h2>
+                    <div class="profile-container">
                     <div class="profile-header">
                     </div>
                     <!-- Posts Section -->
@@ -60,6 +67,7 @@
                         </div>
                     <?php else: ?>
                         <p class="no-content">No posts to display.</p>
+                    </div>
                     <?php endif; ?>
 
                     <?php if (isset($GLOBALS['url_loc'][3]) && ($GLOBALS['url_loc'][3] === 'posts' || $GLOBALS['url_loc'][3] === 'threads')): ?>
