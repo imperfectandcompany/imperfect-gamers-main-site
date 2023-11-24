@@ -373,7 +373,7 @@ function getAssociatedEmails($steamId64)
 
     // Filter out any emails that contain the phrase "assigned by admin"
     $filteredEmails2 = array_filter($filteredEmails, function ($email) {
-        return stripos($email, 'iloomcsgo1@gmail.com') === false;
+        return stripos($email, 'filtered@hotmail.com') === false;
     });
 
     return $filteredEmails2;
