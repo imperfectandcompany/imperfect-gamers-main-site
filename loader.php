@@ -1,4 +1,5 @@
 <?php
+
 //This is how we get what page we should be on based on URL.
 $GLOBALS['url_loc'] = explode('/', htmlspecialchars(strtok($_SERVER['REQUEST_URI'], '?'), ENT_QUOTES));
 

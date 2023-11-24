@@ -409,7 +409,7 @@ function stripQuotesAndContents($text)
     $strippedBBCodeText = stripBBCodeTags($textWithoutQuotes);
 
     // Truncate the text to a reasonable length
-    $trimmedText = trimText($strippedBBCodeText, 100);
+    $trimmedText = trimText($strippedBBCodeText, 400);
 
     // Remove any extra whitespace and return the cleaned text
     return trim($trimmedText); // Use $trimmedText here

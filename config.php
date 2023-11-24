@@ -41,6 +41,10 @@ switch ($GLOBALS['url_loc'][1]) {
         $BACKEND = "getstarted";
         $FRONTEND = "getstarted";
         break;
+    case "install":
+        $PAGE_TITLE = "install";
+        $FRONTEND = "installer";
+        break;
     case "logout":
         $BACKEND = "logout";
     default:

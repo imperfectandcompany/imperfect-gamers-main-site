@@ -56,5 +56,22 @@ class Forum
     
         return $stmt->fetchColumn();
     }
+
+    // Fetch a single thread by ID
+    public static function fetchThreadById($threadId) {
+        $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+        $stmt = $pdoMyBB->prepare("SELECT t.*, COUNT(p.pid) as post_count FROM mybb_threads t LEFT JOIN mybb_posts p ON t.tid = p.tid WHERE t.tid = :tid GROUP BY t.tid");
+        $stmt->execute([':tid' => $threadId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Fetch posts for a specific thread
+    public static function fetchPostsByThreadId($threadId) {
+        $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+        $stmt = $pdoMyBB->prepare("SELECT * FROM mybb_posts WHERE tid = :tid");
+        $stmt->execute([':tid' => $threadId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 }
 ?>
