@@ -350,6 +350,12 @@ body {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+.section-header {
+    /* Other styles */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Adds a subtle line to separate from the rest of the content */
+    padding-bottom: 10px; /* Spacing below the header */
+    margin-bottom: 20px; /* Spacing between header and the first section */
+}
 
 .profile-container {
     min-width: 80vw; /* 80% of the viewport width */
@@ -497,6 +503,26 @@ body {
     margin-bottom: 20px;
 }
 
+blockquote {
+    padding: 1em;
+    margin: 1em 0;
+    border-left: 3px solid #ccc;
+}
+
+blockquote small {
+    display: block;
+    margin-bottom: .5em;
+    color: #666;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    blockquote {
+        padding: .5em;
+    }
+}
+
+
 .header-content {
     display: flex;
     justify-content: space-between;
@@ -611,6 +637,8 @@ body {
     border: 1px solid #454d55;
     cursor: pointer;
 }
+
+
 
 .page-item a.page-link {
     display: inline-block;

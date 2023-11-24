@@ -46,6 +46,7 @@
                     <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">
                         <?php echo ($profileExists ? $ownsProfile ? 'Your posts' : $GLOBALS['url_loc'][2] . "'s posts" : "") ?>
                     </h2>
+                    <div class="profile-container">
                     <div class="profile-header">
                     </div>
                     <!-- Posts Section -->
@@ -66,6 +67,7 @@
                         </div>
                     <?php else: ?>
                         <p class="no-content">No posts to display.</p>
+                    </div>
                     <?php endif; ?>
 
                     <?php if (isset($GLOBALS['url_loc'][3]) && ($GLOBALS['url_loc'][3] === 'posts' || $GLOBALS['url_loc'][3] === 'threads')): ?>
