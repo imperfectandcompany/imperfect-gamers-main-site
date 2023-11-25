@@ -9,6 +9,15 @@ class prometheus
         return $UID !== null;
     }
 
+        public static function loggedInIG(): bool
+        {
+            if(isset($_COOKIE['token'])){
+                global $imperfectgamersDb;
+                $igUser = $imperfectgamersDb->getOne("SELECT user_id FROM login_tokens WHERE token = ?", sha1($_COOKIE['token']));
+            }
+            return isset($igUser) && (int) $igUser;
+        } 
+
     public static function isAdmin(): bool
     {
         global $db;

@@ -143,16 +143,21 @@
     <div class="nav-gradient left"></div>
     <ul class="nav-links left">
         <li>
-<?php if(!prometheus::loggedin()) {
+<?php if(!prometheus::loggedInIG()) {
     echo '<a href="/login">' . "Login" . '</a>';
     } else {
         echo '<a href="/logout">' . "Logout" . '</a>';
         }
 ?>
 </li>
-        <li><a href="/settings">settings</a></li>
-
-<?php if (prometheus::loggedin()) { ?>
+<?php if (prometheus::loggedInIG()) { ?>
+    <li>
+        <a href="/settings">
+            settings
+    </a>
+    </li>
+<?php } ?>
+<?php if (prometheus::loggedInIG()) { ?>
     <li>
         <a href="/profile">
             profile

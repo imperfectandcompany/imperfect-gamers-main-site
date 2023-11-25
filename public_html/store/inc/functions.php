@@ -253,7 +253,9 @@ function autoload_classes($class_name)
 spl_autoload_register('autoload_classes');
 
 global $db_host, $db_user, $db_pass, $db_database, $db_port;
-$db = new db($db_host, $db_user, $db_pass, $db_database, $db_port);
+$db = new db("localhost", $db_user, $db_pass, $db_database, $db_port);
+$imperfectgamersDb = new db("localhost", $db_user, $db_pass, "igfastdl_imperfectgamers", $db_port);
+
 $message = new FlashMessages();
 
 if (isset($_COOKIE['prometheus_language']) && !empty($_COOKIE['prometheus_language'])

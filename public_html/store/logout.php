@@ -11,6 +11,7 @@ if (!csrf_check()) {
 
 unset($_COOKIE["uid"]);
 unset($_COOKIE["token"]);
+unset($_COOKIE["IMPERFECTGAMERS_"]);
 setcookie('uid', null, -1, '/');
 setcookie('token', null, -1, '/');
 
@@ -18,4 +19,4 @@ unset($_SESSION['uid']);
 
 session_destroy();
 
-util::redirect('.');
+util::redirect(header('Location: ../'));

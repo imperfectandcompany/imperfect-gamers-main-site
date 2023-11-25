@@ -85,14 +85,19 @@ try {
     <div class="row ">
         <div class="col-12">
             <div class="jumbotron bg-transparent justify-content-center text-center">
-                <?php if (!prometheus::loggedin()) { ?>
-                    <div class="header">
-                        <?= lang('signin', 'Sign in'); ?>
-                    </div>
-                    <?= lang('You need to sign in first in order to purchase', 'You need to sign in first in order to buy any packages'); ?><br><br>
-                    <?php echo '<a href="' .steamLogin::genUrl() . '"><img src="//steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_large_noborder.png"></img></a>'; ?>
-                    <br><br>
-                <?php } ?>
+            <?php if (!prometheus::loggedInIG()): ?>
+                <a href="/login" class="primary-btn animate__animated animate__fadeInUp">
+                    <i class="fa fa-sign-in"></i>
+                    Login
+                </a>
+            <?php elseif(!prometheus::loggedin()):?>
+            <div class="header">
+            Link steam
+            </div>
+            <?= lang('You need to link your steam in first in order to purchase', 'You need to link your steam first in order to buy any packages'); ?><br><br>
+            <?php echo '<a href="' .steamLogin::genUrl() . '"><img src="//steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_large_noborder.png"></img></a>'; ?>
+            <br><br>
+        <?php endif; ?>
     <div class="card-deck">
             <!-- CREDIT CARD -->
             <div class="card card-splash ">
