@@ -56,7 +56,6 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('avatarForm', () => ({
         avatarChanged: false,
         avatarPreview: '<?php echo $userAvatarUrl ?? $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']; ?>',
-
         fileChosen(event) {
             const input = event.target;
             if (input.files && input.files[0]) {
