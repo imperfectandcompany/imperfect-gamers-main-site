@@ -3,7 +3,7 @@
     <ul class="pagination justify-center">
         <!-- First Page Link -->
         <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-            <a class="page-link" href="?page=1">First</a>
+            <a class="page-link" href="?page=1" aria-label="First page"><i class="material-icons">first_page</i></a>
         </li>
 
         <!-- Previous Page Link -->
@@ -27,7 +27,7 @@
 
         <!-- Last Page Link -->
         <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
-            <a class="page-link" href="?page=<?= $totalPages ?>">Last</a>
+            <a class="page-link" href="?page=<?= $totalPages ?>" aria-label="Last page"><i class="material-icons">last_page</i></a>
         </li>
     </ul>
 </nav>

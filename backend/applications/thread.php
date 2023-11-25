@@ -7,13 +7,6 @@ $threadPosts = Forum::fetchPostsByThreadId($threadId);
 // Create a new instance of the BBCode parser
 $bbcodeParser = new ChrisKonnertz\BBCode\BBCode();
 
-
-// Check if thread details exist
-if (!$threadDetails) {
-    echo "<p>Thread not found or does not exist.</p>";
-    exit;
-}
-
 // Initialize an empty array to hold the parsed posts
 $parsedPosts = [];
 

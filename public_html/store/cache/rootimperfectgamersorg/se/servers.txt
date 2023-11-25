@@ -1,0 +1,10 @@
+a:4:{s:5:"value";s:287:"
+						<div class="col-12 col-md-4">
+							<a href="store.php?page=packages&id=1">
+								<div class="srv-box" style="">
+									<i class="fas fa-server fa-4x fa-fw"></i>
+									<div class="srv-label">[IG] Imperfect Gamers Servers</div>
+								</div>
+							</a>
+						</div>
+					";s:10:"write_time";i:1700882493;s:10:"expired_in";i:86400;s:12:"expired_time";i:1700968893;}

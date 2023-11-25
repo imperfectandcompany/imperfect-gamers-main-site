@@ -1,0 +1,358 @@
+$yellow: #f0ad4e !default;
+$red: #d9534f !default;
+$blue: #5bc0de !default;
+$green: #5cb85c !default;
+
+$theme-primary: #c10000 !default;
+
+$body-bg:                   #212323 !default !default;
+$body-color:                gray !default !default;
+
+$link-color:                             #FFF !default !default;
+$link-decoration:                         none !default !default;
+$link-hover-color:                        #FFF !default !default;
+
+$font-size-base:            0.875rem !default !default;
+
+$input-color: #FFF !default;
+
+$btn-border-radius: 0 !default;
+$btn-border-radius-lg: 0 !default;
+$btn-border-radius-sm: 0 !default;
+
+// Dropdowns
+//
+$dropdown-color:                    $body-color !default;
+$dropdown-bg:                       #202020 !default;
+$dropdown-border-radius:            0 !default;
+
+$dropdown-link-color:               #FFF !default;
+$dropdown-link-hover-color:         #FFF !default;
+$dropdown-link-hover-bg:            #2f2f2f !default;
+
+$dropdown-link-active-color:        #FFF !default;
+$dropdown-link-active-bg:           $theme-primary !default;
+
+$dropdown-item-padding-y:           10px !default;
+$dropdown-item-padding-x:           20px !default;
+
+//
+// Inputs
+//
+
+$input-bg:                              #282828 !default;
+
+
+$input-color:                           #FFF !default;
+$input-border-color:                    transparent !default;
+$input-box-shadow:                      none !default;
+
+$input-focus-bg:                        $input-bg !default;
+$input-focus-border-color:              #000 !default;
+$input-focus-box-shadow:                none !default;
+
+
+
+// pagination
+
+$pagination-color:                  #FFF !default;
+$pagination-bg:                     #131515 !default;
+$pagination-border-color:           transparent !default;
+
+$pagination-focus-box-shadow:       none !default;
+
+$pagination-hover-color:            #FFF !default;
+$pagination-hover-bg:               #161616 !default;
+$pagination-hover-border-color:     transparent !default;
+
+$pagination-active-color:           #FFF !default;
+$pagination-active-bg:              $theme-primary !default;
+$pagination-active-border-color:    transparent !default;
+
+$pagination-disabled-color:         #FFF !default;
+$pagination-disabled-bg:            #131515 !default;
+$pagination-disabled-border-color:  transparent !default;
+
+$theme-global-link-default: $theme-primary !default;
+$theme-global-link-hover: $theme-primary !default;
+
+//
+
+$theme-navbar-background-default: #1a1d1d !default;
+$theme-navbar-link-default: #495057 !default;
+$theme-navbar-link-hover: #fff !default;
+$theme-navbar-link-active: #fff !default;
+
+$theme-navbar-link-background-default: transparent !default;
+$theme-navbar-link-background-hover: #252727 !default;
+$theme-navbar-link-background-active: #212323 !default;
+
+$theme-navbar-dropdown-background-default: #202020 !default;
+
+$theme-navbar-dropdown-link-default: #fff !default;
+$theme-navbar-dropdown-link-hover: #fff !default;
+
+$theme-navbar-dropdown-link-background-default: transparent !default;
+$theme-navbar-dropdown-link-background-hover: #2f2f2f !default;
+
+//
+
+$theme-advent-box-background: #005D9E !default;
+$theme-advent-box-span-background: rgba(0, 93, 158, 0.6) !default;
+$theme-advent-box-span-color: #FFF !default;
+$theme-advent-box-span-padding: 5px !default;
+$theme-advent-box-not-yet-opacity: 0.5 !default;
+
+//
+
+$theme-srv-box-background-hover: #1a1d1d !default;
+$theme-srv-box-color: #FFF !default;
+$theme-srv-box-svg-color: #FFF !default;
+$theme-srv-box-svg-color-hover: $theme-primary !default;
+$theme-srv-box-label-background: #131515 !default;
+
+//
+
+$theme-stat-box-header-padding: 10px !default;
+$theme-stat-box-header-background: #131515 !default;
+$theme-stat-box-header-color: #FFF !default;
+$theme-stat-box-padding: 40px !default;
+$theme-stat-box-background: #202020 !default;
+
+//
+
+$theme-store-box-header-padding: 10px !default;
+$theme-store-box-header-color: #FFF !default;
+$theme-store-box-header-background: #131515 !default;
+
+$theme-store-box-border-bottom: 1px solid #1d1d1d;
+$theme-store-box-border-right: 1px solid #1d1d1d;
+$theme-store-box-border-left: 1px solid #1d1d1d;
+
+$theme-store-box-upper-color: #FFF!default ;
+$theme-store-box-upper-border-bottom: 1px solid #1d1d1d !default;
+$theme-store-box-upper-li-border-top: 1px solid #1d1d1d!default ;
+$theme-store-box-upper-li-last-child-border-bottom: 1px solid #1d1d1d!default ;
+
+//
+
+$theme-buy-btn-padding: 10px !default;
+$theme-buy-btn-background: $theme-primary !default;
+$theme-buy-btn-color: #FFF !default;
+$theme-buy-btn-background-focus-hover: $theme-primary !default;
+$theme-buy-btn-color-focus-hover: #FFF !default;
+$theme-buy-btn-border-bottom: 1px solid #1d1d1d !default;
+$theme-buy-btn-border-right: 1px solid #1d1d1d !default;
+$theme-buy-btn-border-left: 1px solid #1d1d1d !default;
+
+//
+
+$theme-dashboard-nav-background: #131515 !default;
+
+$theme-dashboard-nav-link-background: #131515 !default;
+$theme-dashboard-nav-link-padding: 15px 10px 10px !default;
+$theme-dashboard-nav-link-color: #FFF !default;
+
+$theme-dashboard-nav-link-background-hover: $theme-primary !default;
+$theme-dashboard-nav-link-color-hover: #FFF !default;
+$theme-dashboard-nav-link-background-active: $theme-primary !default;
+
+//
+
+$theme-dashboard-widget-box-padding: 23px 20px !default;
+$theme-dashboard-widget-box-background: #202020 !default;
+$theme-dashboard-widget-box-border-top: 3px solid #c10000 !default;
+$theme-dashboard-widget-box-border-radius: 2px !default;
+$theme-dashboard-widget-box-border-radius: 2px !default;
+
+$theme-dashboard-widget-box-element-color: $theme-primary !default;
+$theme-dashboard-widget-box-caption-color: gray !default;
+
+$theme-dashboard-widget-box-svg: $theme-primary !default;
+
+//
+
+$theme-options-box-padding: 20px !default;
+
+//
+
+$theme-main-menu-box-background: #1a1d1d !default;
+$theme-main-menu-box-color: #FFF !default;
+
+$theme-main-menu-box-sub-menu-background: #141717 !default;
+$theme-main-menu-box-sub-menu-header-color: #AEAEAE !default;
+$theme-main-menu-box-sub-menu-header-padding: 10px 0 !default;
+
+
+$theme-main-menu-box-ul-color: #FFF !default;
+
+$theme-main-menu-box-ul-li-background: transparent !default;
+$theme-main-menu-box-ul-li-padding: 10px 15px !default;
+
+$theme-content-page-top-background: #1a1d1d !default;
+$theme-content-page-top-padding: 0 20px !default;
+$theme-content-page-top-before-border-color: #1a1d1d transparent transparent!default ;
+$theme-content-page-top-span-padding: 10px 0 !default;
+$theme-content-page-top-span-color: #959595 !default;
+
+$theme-help-box-background: none !default;
+$theme-help-box-color: #FFF !default;
+
+
+//
+$theme-bs-callout-border: 1px solid #1d1d1d !default;
+$theme-bs-callout-padding: 10px 20px !default;
+$theme-bs-callout-background: #1d1d1d !default;
+$theme-bs-callout-color: #FFF !default;
+
+$theme-bs-callout-info-border-left-color: #5bc0de !default;
+$theme-bs-callout-danger-border-left-color: #d9534f !default;
+$theme-bs-callout-success-border-left-color: #dff0d8 !default;
+
+$theme-not-setup-background: $theme-primary !default;
+$theme-not-setup-color: #FFF !default;
+$theme-not-setup-link-color: #FFF !default;
+$theme-not-setup-link-color-hover: #FFF !default;
+
+$theme-sale-box-background: $theme-primary !default;
+$theme-sale-box-color: #FFF !default;
+
+//
+
+$theme-banner-background: #131515 !default;
+
+//
+
+$theme-button-close-color: #FFF !default;
+
+$theme-button-prom-background: #131515 !default;
+$theme-button-prom-color: #FFF !default;
+$theme-button-prom-border-radius: 0 !default;
+$theme-button-prom-background-hover: #161818 !default;
+$theme-button-prom-color-hover: #FFF !default;
+
+$theme-button-default-background: #1d1d1d !default;
+$theme-button-default-color: #FFF !default;
+$theme-button-default-border-color: #1d1d1d !default;
+
+$theme-button-default-background-hover-focus-active: #1d1d1d !default;
+$theme-button-default-border-color-hover-focus-active: #1d1d1d !default;
+
+
+//
+
+$theme-credit-box-content-border: 1px solid #1d1d1d !default;
+$theme-credit-box-content-padding: 15px !default;
+$theme-credit-box-content-span-children-color: #FFF !default;
+$theme-credit-box-content-span-child-3-border-top: 1px solid #1d1d1d !default;
+
+//
+
+$theme-credits-padding: 10px !default;
+$theme-credits-background: darkgreen !default;
+$theme-credits-color: #FFF !default;
+
+
+//
+
+$theme-dropdown-menu-item-link-color: #FFF !default;
+$theme-dropdown-menu-item-link-background-active: $theme-primary !default;
+
+//
+
+$theme-h2-font-family: BebasNeue !default;
+$theme-h2-color: #c7c7c7 !default;
+$theme-h6-font-family: 'Open Sans' !default;
+$theme-header-color: #FFF !default;
+
+//
+
+$theme-footer-color: #909090 !default;
+$theme-footer-background: #262b2b !default;
+$theme-footer-link-color: $theme-primary !default;
+$theme-footer-link-color-hover: $theme-primary !default;
+
+$theme-footer-tos-link-color: #bbb !default;
+$theme-footer-tos-link-color-hover: $theme-primary !default;
+
+//
+
+$theme-info-box-padding: 15px !default;
+$theme-info-box-background: #1e1f1f !default;
+$theme-info-box-border-left: 3px solid #31b6bf !default;
+
+$theme-darker-box-padding: 15px !default;
+$theme-darker-box-background: #1e1f1f !default;
+
+//
+
+$theme-news-block-padding: 15px !default;
+$theme-news-block-background: #202020 !default;
+
+$theme-news-block-link-color: $theme-primary !default;
+$theme-news-block-link-color-hover: $theme-primary !default;
+$theme-news-block-span-color: #a4a4a4 !default;
+
+//
+
+$theme-panel-body-padding: 0 12px !default;
+$theme-panel-body-background: #202020 !default;
+
+$theme-panel-body-header-padding: 10px !default;
+$theme-panel-body-header-background: #131515 !default;
+$theme-panel-body-header-color: #FFF !default;
+
+$theme-panel-body-inner-padding: 23px 0 !default;
+$theme-panel-body-inner-color: gray !default;
+
+//
+
+$theme-pkg-step-background: #202020 !default;
+$theme-pkg-step-span-font-family: 'BebasNeue' !default;
+
+//
+
+$theme-progress-background: #1d1d1d !default;
+
+//
+
+$theme-slider-track-background: #1d1d1d !default;
+$theme-slider-selection-background: $theme-primary !default;
+
+//
+
+$theme-ui-sortable-li-background: #1d1d1d !default;
+$theme-ui-sortable-li-padding: 10px !default;
+
+$theme-ui-sortable-li-svg: $theme-primary !default;
+
+//
+
+$theme-category-link-padding: 10px !default;
+$theme-category-link-background: $theme-primary !default;
+$theme-category-link-color: #FFF !default;
+
+//
+
+$theme-tables-striped-background: #131515 !default;
+$theme-tables-striped-color: #FFF !default;
+
+$theme-tables-striped-thead-th-border-color: transparent !default;
+$theme-tables-striped-th-td-border-color: transparent !default;
+
+$theme-tables-striped-tbody-tr-odd-background: #202020 !default;
+
+
+//
+
+$theme-ticket-header-background: #131515 !default;
+$theme-ticket-header-color: #ccc !default;
+
+//
+
+$theme-notify-icon-border-radius: 0px !default;
+$theme-notify-icon-border: 1px solid $theme-primary !default;
+$theme-notify-icon-background: $theme-primary !default;
+$theme-notify-icon-color: #FFF !default;
+
+

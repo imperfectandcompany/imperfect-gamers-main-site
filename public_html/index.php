@@ -1,9 +1,13 @@
 <?php
 include("../loader.php");
+
 include ('../config.php');
 if(isset($BACKEND)){
 include('../backend/'.$BACKEND.'.php');
+
 }
+
+
 ?>
 <!doctype html>
 <html>
@@ -11,7 +15,7 @@ include('../backend/'.$BACKEND.'.php');
   <body class="w-full max-w-8xl mx-auto">
     <div class="flex flex-col">
       <?php if(isset($HEADER)): ?>
-       <header id="header" class="z-10 text-center justify-center" style="touch-action: none; top: 0px;">
+       <header id="header" class="text-center justify-center" style="touch-action: none;">
        <?php include('../header/'.$HEADER.'.php');?>
       </header>
       <?php endif; ?>
@@ -56,7 +60,6 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('avatarForm', () => ({
         avatarChanged: false,
         avatarPreview: '<?php echo $userAvatarUrl ?? $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']; ?>',
-
         fileChosen(event) {
             const input = event.target;
             if (input.files && input.files[0]) {

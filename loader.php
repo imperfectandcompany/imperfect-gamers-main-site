@@ -36,6 +36,11 @@ if($GLOBALS['config']['url_offset'] > 0){
     $GLOBALS['url_loc'] = array_values($GLOBALS['url_loc']);
 }
 
+if($GLOBALS['url_loc'][1]=="store"){
+    include_once('../frontend/store/install.php');
+    die();
+}
+
 //Do not touch -- These are settings we should define or set, but not adjust unless we absolutely need to.
 $GLOBALS['errors'] = array();
 

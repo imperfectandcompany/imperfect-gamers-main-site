@@ -1,21 +1,7 @@
-<section class="banner-area mx-auto">
-    <div class="overlay overlay-bg"></div>
+<section class="mx-auto">
     <div class="container">
         <div class="flex flex-col fullscreen justify-content-center align-items-center">
-            <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer mb-10">
-                <div class="mx-auto text-center animate__animated animate__fadeIn animate__delay-1s">
-                    <object class="pointer-events-none	" data="https://cdn.imperfectgamers.org/inc/assets/svg/text.svg"
-                        height="30px"></object>
-                </div>
-            </a>
-
-            <div class="mb-4 flex">
-                <?php
-                /*Call our notification handling*/include("../frontend/sitenotif.php");
-                ?>
-            </div>
             <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
-
                 <!-- Conditional content rendering -->
                 <?php if (isset($GLOBALS['url_loc'][3]) && $GLOBALS['url_loc'][3] === 'threads'): ?>
                     <!-- Threads Section -->
@@ -46,28 +32,28 @@
                     <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">
                         <?php echo ($profileExists ? $ownsProfile ? 'Your posts' : $GLOBALS['url_loc'][2] . "'s posts" : "") ?>
                     </h2>
-                    <div class="profile-container">
-                    <div class="profile-header">
-                    </div>
-                    <!-- Posts Section -->
-                    <?php if (isset($posts) && !empty($posts)): ?>
-                        <div class="posts-container">
-                            <?php foreach ($posts as $post): ?>
-                                <div class="post-item">
-                                    <p class="post-content">
-                                        <?= stripQuotesAndContents(htmlspecialchars($post['message'])); ?>
-                                    </p>
-                                    <div class="post-details">
-                                        <span class="post-date">
-                                            <?= date('Y-m-d', $post['dateline']); ?>
-                                        </span>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+                    <div class="container">
+                        <div class="section-header">
                         </div>
-                    <?php else: ?>
-                        <p class="no-content">No posts to display.</p>
-                    </div>
+                        <!-- Posts Section -->
+                        <?php if (isset($posts) && !empty($posts)): ?>
+                            <div class="posts-container">
+                                <?php foreach ($posts as $post): ?>
+                                    <div class="post-item">
+                                        <p class="post-content">
+                                            <?= stripQuotesAndContents(htmlspecialchars($post['message'])); ?>
+                                        </p>
+                                        <div class="post-details">
+                                            <span class="post-date">
+                                                <?= date('Y-m-d', $post['dateline']); ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <p class="no-content">No posts to display.</p>
+                        </div>
                     <?php endif; ?>
 
                     <?php if (isset($GLOBALS['url_loc'][3]) && ($GLOBALS['url_loc'][3] === 'posts' || $GLOBALS['url_loc'][3] === 'threads')): ?>
@@ -106,13 +92,13 @@
 
                 <?php else: ?>
                     <?php if ($profileExists): ?>
-                        <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">
-                            <?php echo ($profileExists ? $ownsProfile ? 'Your profile' : "Profile" : '') ?>
-                        </h2>
-                        <div class="profile-container">
+                        <div class="container">
                             <!-- Profile Header -->
-                            <div class="profile-header">
-                                <div class="header-content">
+                            <div class="section-header">
+                                <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">
+                                    <?php echo ($profileExists ? $ownsProfile ? 'Your profile' : "Profile" : '') ?>
+                                </h2>
+                                <div class="profile-header-content">
                                     <div class="text-content">
                                         <p class="main-username highlighted-username"
                                             style="font-size: 0.9em; margin-top: 5px;">
@@ -146,35 +132,35 @@
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
-                                    <small class="explanation">
-                                        *Emails are gathered from various parts of our services where you may have used different
-                                        emails.
-                                    </small>
+                                        <small class="explanation">
+                                            *Emails are gathered from various parts of our services where you may have used different
+                                            emails.
+                                        </small>
                                     <? endif; ?>
 
                                 </div>
                             <?php endif; ?>
 
                             <?php if ((empty($userProfile['steam_id']) && $ownsProfile) || (!empty($userProfile['steam_id']))): ?>
-                            <!-- Titles Section -->
-                            <div class="profile-section">
-                                <label>
-                                    <?php echo ($ownsProfile ? 'Your titles' : 'Titles') ?>:
-                                </label>
-                                <?php if (empty($userProfile['steam_id'])): ?>
-                                    <p>Please link your Steam account to see more details.</p>
-                                <? else: ?>
-                                    <ul>
-                                        <?php foreach ($processedTitles as $processedTitle): ?>
-                                            <?php if (!empty($processedTitle)): // Check if the title is not empty ?>
-                                                <li>
-                                                    <?= $processedTitle; ?>
-                                                </li>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                <? endif; ?>
-                            </div>
+                                <!-- Titles Section -->
+                                <div class="profile-section">
+                                    <label>
+                                        <?php echo ($ownsProfile ? 'Your titles' : 'Titles') ?>:
+                                    </label>
+                                    <?php if (empty($userProfile['steam_id'])): ?>
+                                        <p>Please link your Steam account to see more details.</p>
+                                    <? else: ?>
+                                        <ul>
+                                            <?php foreach ($processedTitles as $processedTitle): ?>
+                                                <?php if (!empty($processedTitle)): // Check if the title is not empty ?>
+                                                    <li>
+                                                        <?= $processedTitle; ?>
+                                                    </li>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    <? endif; ?>
+                                </div>
                             <?php endif; ?>
 
                             <?php if ((empty($userProfile['steam_id']) && $ownsProfile) || (!empty($userProfile['steam_id']))): ?>
@@ -204,75 +190,75 @@
                             <? endif; ?>
 
                             <?php if ((empty($userProfile['steam_id']) && $ownsProfile) || (!empty($userProfile['steam_id']))): ?>
-                            <!-- Packages Section -->
-                            <div class="profile-section permanent-packages">
-                                <label>
-                                    <?php echo ($ownsProfile ? 'Your permanent packages' : 'Permanent packages') ?>:
-                                </label>
-                                <?php if (empty($userProfile['steam_id'])): ?>
-                                    <p>Please link your Steam account to see more details.</p>
-                                <? else: ?>
-                                    <ul>
-                                        <?php foreach ($permanentPackages as $packageTitle): ?>
-                                            <li>
-                                                <?= htmlspecialchars($packageTitle); ?>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                <? endif; ?>
-                            </div>
+                                <!-- Packages Section -->
+                                <div class="profile-section permanent-packages">
+                                    <label>
+                                        <?php echo ($ownsProfile ? 'Your permanent packages' : 'Permanent packages') ?>:
+                                    </label>
+                                    <?php if (empty($userProfile['steam_id'])): ?>
+                                        <p>Please link your Steam account to see more details.</p>
+                                    <? else: ?>
+                                        <ul>
+                                            <?php foreach ($permanentPackages as $packageTitle): ?>
+                                                <li>
+                                                    <?= htmlspecialchars($packageTitle); ?>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    <? endif; ?>
+                                </div>
                             <?php endif; ?>
 
 
                             <?php if ((empty($userProfile['steam_id']) && $ownsProfile) || (!empty($userProfile['steam_id']))): ?>
-                            <!-- Forum Section -->
-                            <div class="profile-section forum-activity">
-                                <label>
-                                    <?php echo ($ownsProfile ? 'Your social activity' : 'Social Activity') ?>:
-                                </label>
-                                <?php if (empty($userProfile['steam_id'])): ?>
-                                    <p>Please link your Steam account to see more details.</p>
-                                <? else: ?>
-                                    <?php if (!empty($forumAccountsInfo)): ?>
-                                        <ul>
-                                            <?php foreach ($forumAccountsInfo as $account): ?>
-                                                <li>
-                                                    <strong>Posts:</strong>
-                                                    <?= htmlspecialchars($account['postnum']); ?><br>
-                                                    <strong>Threads:</strong>
-                                                    <?= htmlspecialchars($account['threadnum']); ?><br>
-                                                    <strong>Recent Activity:</strong>
-                                                    <ul>
-                                                        <?php foreach (array_slice($account['posts'], 0, 5) as $post): ?>
-                                                            <li>
-                                                                <?php
-                                                                // Strip all BBCode from the post content
-                                                                $postContent = stripQuotesAndContents($post['message']);
-                                                                // Truncate the post content to a reasonable length
-                                                                $postSnippet = htmlspecialchars($postContent);
-                                                                ?>
-                                                                <?= $postSnippet; ?>
-                                                                <em>in</em>
-                                                                <a href="thread-link.php?tid=<?= htmlspecialchars($post['tid']); ?>">
-                                                                    <?= htmlspecialchars(trim(preg_replace("/^RE:\s*/i", "", $post['subject']))); ?>
-                                                                </a>
-                                                                -
-                                                                <?= date('Y-m-d', $post['dateline']); ?>
-                                                            </li>
-                                                        <?php endforeach; ?>
-                                                    </ul>
-                                                    <a href="<?= htmlspecialchars($GLOBALS['config']['url']) . '/profile/' . $GLOBALS['url_loc'][2] . '/posts' ?>"
-                                                        class="view-all">View All Posts</a>
-                                                    <a href="<?= htmlspecialchars($GLOBALS['config']['url']) . '/profile/' . $GLOBALS['url_loc'][2] . '/threads' ?>"
-                                                        class="view-all">View All Threads</a>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    <?php else: ?>
-                                        <p>No forum activity found.</p>
-                                    <?php endif; ?>
-                                <? endif; ?>
-                            </div>
+                                <!-- Forum Section -->
+                                <div class="profile-section forum-activity">
+                                    <label>
+                                        <?php echo ($ownsProfile ? 'Your social activity' : 'Social Activity') ?>:
+                                    </label>
+                                    <?php if (empty($userProfile['steam_id'])): ?>
+                                        <p>Please link your Steam account to see more details.</p>
+                                    <? else: ?>
+                                        <?php if (!empty($forumAccountsInfo)): ?>
+                                            <ul>
+                                                <?php foreach ($forumAccountsInfo as $account): ?>
+                                                    <li>
+                                                        <strong>Posts:</strong>
+                                                        <?= htmlspecialchars($account['postnum']); ?><br>
+                                                        <strong>Threads:</strong>
+                                                        <?= htmlspecialchars($account['threadnum']); ?><br>
+                                                        <strong>Recent Activity:</strong>
+                                                        <ul>
+                                                            <?php foreach (array_slice($account['posts'], 0, 5) as $post): ?>
+                                                                <li>
+                                                                    <?php
+                                                                    // Strip all BBCode from the post content
+                                                                    $postContent = stripQuotesAndContents($post['message']);
+                                                                    // Truncate the post content to a reasonable length
+                                                                    $postSnippet = htmlspecialchars($postContent);
+                                                                    ?>
+                                                                    <?= $postSnippet; ?>
+                                                                    <em>in</em>
+                                                                    <a href="thread-link.php?tid=<?= htmlspecialchars($post['tid']); ?>">
+                                                                        <?= htmlspecialchars(trim(preg_replace("/^RE:\s*/i", "", $post['subject']))); ?>
+                                                                    </a>
+                                                                    -
+                                                                    <?= date('Y-m-d', $post['dateline']); ?>
+                                                                </li>
+                                                            <?php endforeach; ?>
+                                                        </ul>
+                                                        <a href="<?= htmlspecialchars($GLOBALS['config']['url']) . '/profile/' . $GLOBALS['url_loc'][2] . '/posts' ?>"
+                                                            class="view-all">View All Posts</a>
+                                                        <a href="<?= htmlspecialchars($GLOBALS['config']['url']) . '/profile/' . $GLOBALS['url_loc'][2] . '/threads' ?>"
+                                                            class="view-all">View All Threads</a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php else: ?>
+                                            <p>No forum activity found.</p>
+                                        <?php endif; ?>
+                                    <? endif; ?>
+                                </div>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>

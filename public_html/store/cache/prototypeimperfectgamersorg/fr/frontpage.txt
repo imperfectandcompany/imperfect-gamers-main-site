@@ -1,0 +1,2 @@
+a:4:{s:5:"value";s:197:"<p></p><h2>Click <a href="store.php?page=global">here</a> for the store tab to view available VIP packages.</h2>
+<h2><br>All questions or issues should be sent to phantomx@imperfectgamers.org.</h2>";s:10:"write_time";i:1700884493;s:10:"expired_in";i:31536000;s:12:"expired_time";i:1732420493;}

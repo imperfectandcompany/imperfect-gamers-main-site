@@ -1,0 +1,3 @@
+<?php
+define("LOCAL_PATH_ROOT", $_SERVER["DOCUMENT_ROOT"]);
+define("HTTP_PATH_ROOT", isset($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"] : (isset($_SERVER["SERVER_NAME"]) ? $_SERVER["SERVER_NAME"] : '_UNKNOWN_'));
