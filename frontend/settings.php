@@ -1,20 +1,7 @@
-<section class="banner-area mx-auto">
-    <div class="overlay overlay-bg"></div>
+<section class="mx-auto">
     <div class="container">
         <div class="flex flex-col fullscreen justify-content-center align-items-center">
-            <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer mb-10">
-                <div class="mx-auto text-center animate__animated animate__fadeIn animate__delay-1s">
-                    <object class="pointer-events-none	" data="https://cdn.imperfectgamers.org/inc/assets/svg/text.svg"
-                        height="30px"></object>
-                </div>
-            </a>
             <div class="animate__animated animate__fadeIn animate__delay-0s text-white relative">
-            <div class="mb-4 flex">
-                <?php
-                /*Call our notification handling*/
-                include("../frontend/sitenotif.php");
-                ?>
-            </div>                
                 <h2 class="text-lg font-semibold text-gray-700 capitalize text-white">Account settings</h2>
                 <div id="username" class="mt-2">
                     <div class="form-group">

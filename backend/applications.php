@@ -2,7 +2,7 @@
 // Define the number of threads per page
 $perPage = 10;
 
-$forumIds = [2]; // Ban Appeals fid and Archived Ban Appeals fid
+$forumIds = [2]; // Staff applications fid
 
 
 // Get the current page from the query parameter or default to 1

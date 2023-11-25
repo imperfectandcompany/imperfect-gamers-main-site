@@ -3,7 +3,6 @@ switch ($GLOBALS['url_loc'][1]) {
     case "":
         $BACKEND = "index";
         $FRONTEND = "index";
-        $HEADER = "index";
         break;
     case "signin":
         header("location:../login");
@@ -12,11 +11,13 @@ switch ($GLOBALS['url_loc'][1]) {
         $PAGE_TITLE = "Applications";
         $BACKEND = "applications";
         $FRONTEND = "applications";
+        $HEADER = "subpage";
         break;
     case "appeals":
         $PAGE_TITLE = "Appeals";
         $BACKEND = "appeals";
         $FRONTEND = "appeals";
+        $HEADER = "subpage";
         break;
         case "stores":
             $PAGE_TITLE = "store/index";
@@ -36,11 +37,13 @@ switch ($GLOBALS['url_loc'][1]) {
         $PAGE_TITLE = "Settings";
         $BACKEND = "settings";
         $FRONTEND = "settings";
+        $HEADER = "subpage";
         break;
     case "profile":
         $PAGE_TITLE = "Profile";
         $BACKEND = "profile";
         $FRONTEND = "profile";
+        $HEADER = "subpage";
         break;
     case "attachSteam":
         $BACKEND = "attachSteam";

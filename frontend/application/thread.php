@@ -1,5 +1,4 @@
 <div class="thread-details">
-
     <div class="posts">
         <?php foreach ($parsedPosts as $parsedPost): ?>
             <div class='post'>
