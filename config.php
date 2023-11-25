@@ -18,6 +18,15 @@ switch ($GLOBALS['url_loc'][1]) {
         $BACKEND = "appeals";
         $FRONTEND = "appeals";
         break;
+        case "stores":
+            $PAGE_TITLE = "store/index";
+            $FRONTEND = "store/index";
+            break;        
+        case "shop":
+            $PAGE_TITLE = "Shop";
+            $BACKEND = "shop";
+            $FRONTEND = "shop";
+            break;        
     case "login":
         $PAGE_TITLE = "Log In";
         $BACKEND = "login";

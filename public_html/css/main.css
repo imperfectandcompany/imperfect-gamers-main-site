@@ -1,932 +1,187 @@
-    .backdrop {
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-    }
-
-    #progress {
-        position: fixed;
-        z-index: 2147483647;
-        top: 0;
-        left: -6px;
-        width: 1%;
-        height: 2px;
-        background: #FF002B;
-        -moz-border-radius: 1px;
-        -webkit-border-radius: 1px;
-        border-radius: 1px;
-        -moz-transition: width 500ms ease-out, opacity 400ms linear;
-        -ms-transition: width 500ms ease-out, opacity 400ms linear;
-        -o-transition: width 500ms ease-out, opacity 400ms linear;
-        -webkit-transition: width 500ms ease-out, opacity 400ms linear;
-        transition: width 500ms ease-out, opacity 400ms linear;
-    }
-
-    #progress dd,
-    #progress dt {
-        position: absolute;
-        top: 3px;
-        height: 2px;
-        -moz-box-shadow: #FF002B 1px 0 6px 1px;
-        -ms-box-shadow: #FF002B 1px 0 6px 1px;
-        -webkit-box-shadow: #FF002B 1px 0 6px 1px;
-        box-shadow: #FF002B 1px 0 6px 1px;
-        -moz-border-radius: 100%;
-        -webkit-border-radius: 100%;
-        border-radius: 100%;
-    }
-
-    #progress dt {
-        opacity: .6;
-        width: 180px;
-        right: -80px;
-        clip: rect(-6px, 90px, 14px, -6px);
-    }
-
-    #progress dd {
-        opacity: .6;
-        width: 20px;
-        right: 0;
-        clip: rect(-6px, 22px, 14px, 10px);
-    }
-
-    @supports(padding: max(0px)) {
-        .post {
-            padding-left: max(12px, env(safe-area-inset-left));
-            padding-right: max(12px, env(safe-area-inset-right));
-            height: calc(100% + (var(--safe-area-inset-top) + var(--safe-area-inset-bottom)));
-
-        }
-    }
-
-    :root {
-        --header-height: 65px;
-        --headeropen-height: 230px;
-        --footer-height: 3.5rem;
-    }
-
-    header {
-        height: 65px;
-        height: var(--header-height, 65px);
-        position: sticky;
-        transition: top 0.3s ease-in-out;
-        top: 0;
-    }
-
-    .headeropen {
-        height: 230px;
-        height: var(--headeropen-height, 230px);
-    }
-
-    footer {
-        height: 3.5rem;
-        height: var(--footer-height, 3.5rem);
-        position: sticky;
-        transition: bottom 0.3s ease-in-out;
-        bottom: 0;
-    }
-
-    main {
-        margin-bottom: 3.5rem;
-        margin-bottom: calc(3.5rem);
-        margin-bottom: calc(var(--footer-height, 3.5rem));
-    }
-
-    .like {
-        width: 1.5rem;
-        height: 1.5rem;
-        border-radius: 50%;
-        background: #FFF;
-        position: relative;
-        cursor: pointer;
-        transition: background-color 0.25s ease;
-        overflow: hidden;
-    }
-
-    .like:hover {
-        background: rgba(229, 231, 235, var(--tw-bg-opacity));
-        transition: background-color 0.25s ease;
-    }
-
-    .liked .like-icon-state {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewbox='0 0 100 100'><path fill='%23de3618' d='M50,88.87 C76.67,70.46 90,53.9 90,39.17 C90,17.08 63.12,3.84 50,27.63 C38.875,3.85 10,17.08 10,39.17 C10,53.9 23.33,70.46 50,88.87 Z'/></svg>");
-    }
-
-    .unliked .like-icon-state {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewbox='0 0 100 100'><path fill='none' stroke='%23666' stroke-width='5' d='M50,88.87 C76.67,70.46 90,53.9 90,39.17 C90,17.08 63.12,3.84 50,27.63 C38.875,3.85 10,17.08 10,39.17 C10,53.9 23.33,70.46 50,88.87 Z'/></svg>");
-    }
-
-    .like span {
-        text-indent: -1000px;
-        fone-size: 1px;
-    }
-
-    .like-icon {
-        background-size: contain;
-        position: absolute;
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
-        top: 15%;
-        right: 15%;
-        bottom: 15%;
-        left: 15%;
-    }
-
-    .liked .like-icon-state {
-        transform: scale(0);
-    }
-
-    .liked .like-icon-state {
-        opacity: 0;
-        animation: 1.2s like-animation both cubic-bezier(0.45, 0.05, 0.55, 0.95);
-    }
-
-    @keyframes like-animation {
-        0% {
-            transform: scale(0);
-        }
-
-        15% {
-            transform: scale(1.25);
-        }
-
-        32% {
-            transform: scale(0.95);
-        }
-
-        50% {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-
-    .unliked .like-icon-state {
-        opacity: 0;
-        animation: 1.2s unlike-animation both cubic-bezier(0.45, 0.05, 0.55, 0.95);
-    }
-
-    @keyframes unlike-animation {
-        0% {
-            transform: scale(0);
-        }
-
-        15% {
-            transform: scale(1.1);
-        }
-
-        30% {
-            transform: scale(0.98);
-        }
-
-        45% {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-
-    .liked {
-        background: #FFF;
-        animation: 1.2s liked-bg-animation both;
-    }
-
-    @keyframes liked-bg-animation {
-        0% {
-            transform: scale(0);
-        }
-
-        15% {
-            transform: scale(1.1);
-        }
-
-        30% {
-            transform: scale(0.95);
-        }
-
-        50% {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-
-    .unliked {
-        animation: 1.2s unliked-bg-animation both;
-    }
-
-    @keyframes unliked-bg-animation {
-        0% {
-            transform: scale(0);
-        }
-
-        10% {
-            transform: scale(0.7);
-        }
-
-        30% {
-            transform: scale(0.95);
-        }
-
-        50% {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-    .like::before {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.75);
-        transform: scale(0);
-    }
-
-    .liked::before {
-        animation: 1.2s bg-ring-animation both;
-    }
-
-    @keyframes bg-ring-animation {
-        0% {
-            transform: scale(0);
-            opacity: 0;
-        }
-
-        10% {
-            transform: scale(1.5);
-            opacity: 0.25;
-        }
-
-        15% {
-            transform: scale(2);
-            opacity: 0.15;
-        }
-
-        45% {
-            transform: scale(3.25);
-            opacity: 0;
-        }
-
-        to {
-            transform: scale(1);
-            opacity: 0;
-        }
-    }
-
-    .saving::after {
-        content: '';
-        box-sizing: border-box;
-        position: absolute;
-        top: 20%;
-        left: 20%;
-        width: 60%;
-        height: 60%;
-        border: 0.15em solid rgba(100, 100, 100, 0.5);
-        border-radius: 50%;
-        border-right-color: transparent;
-        border-top-color: transparent;
-        animation: spin-animation 400ms infinite linear;
-    }
-
-    @keyframes spin-animation {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    [x-cloak] {
-        display: none !important;
-    }
-
-
-    body {
-        touch-action: manipulation;
-    }
-
-    .forum-container {
-        min-width: 80vw;
-        /* 80% of the viewport width */
-        max-width: 90%;
-        /* Instead of a fixed pixel value */
-        margin: 0 auto;
-        padding: 2px;
-        color: #fff;
-    }
-
-    .thread-item {
-        display: block;
-        background-color: rgba(255, 255, 255, 0.1);
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 0.5rem;
-        transition: background-color 0.3s ease;
-        color: #ffffff;
-        /* Ensure text color is white */
-        text-decoration: none;
-        /* Remove underline from links */
-    }
-
-    .thread-item:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .section-header {
-        /* Other styles */
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        /* Adds a subtle line to separate from the rest of the content */
-        padding-bottom: 10px;
-        /* Spacing below the header */
-        margin-bottom: 20px;
-        /* Spacing between header and the first section */
-    }
-
-    .profile-container {
-        min-width: 80vw;
-        /* 80% of the viewport width */
-        max-width: 100%;
-        /* Instead of a fixed pixel value */
-        margin: 0 auto;
-        color: #fff;
-    }
-
-    .profile-container,
-    .profile-section {
-        min-height: 100;
-        /* Adjust as needed */
-    }
-
-    .profile-header {
-        /* Other styles */
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        /* Adds a subtle line to separate from the rest of the content */
-        padding-bottom: 10px;
-        /* Spacing below the header */
-        margin-bottom: 20px;
-        /* Spacing between header and the first section */
-    }
-
-    .profile-section {
-        backdrop-filter: blur(5px);
-        min-height: 150px;
-        /* This will ensure that the section is never shorter than 150px */
-        min-width: 300px;
-        /* This will ensure that the section is never narrower than 300px */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        /* This will vertically center the content if the div is taller than the content */
-        -webkit-backdrop-filter: blur(5px);
-        margin-top: 20px;
-        padding: 20px;
-        /* Adjusted padding */
-        background-color: rgba(255, 255, 255, 0.1);
-        /* Lighter than the section background for better readability */
-        border-radius: 5px;
-        /* Rounded corners for a softer look */
-        margin-bottom: 30px;
-        /* More space between each section */
-    }
-
-
-    .profile-section label {
-        display: block;
-        font-weight: 600;
-        /* Bolder than the list content */
-    }
-
-    .profile-section ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .profile-section ul li {
-        list-style-type: none;
-        /* Removes list bullet */
-        /*background-color: rgba(0, 0, 0, 0.5);  or any color that fits your design */
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 1em;
-        /* Adjust font size if needed */
-        color: #ffffff;
-        /* Text color */
-    }
-
-
-    .profile-section li {
-        list-style-type: none;
-        /* Removes list bullet */
-        border-radius: 5px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        /* Optional: adds a subtle border for definition */
-    }
-
-    .associated-emails small.explanation {
-        display: block;
-        margin-top: 10px;
-        font-size: 0.8em;
-        color: #ccc;
-    }
-
-    /* Ensuring the email text doesn't wrap or overflow */
-    .associated-emails li {}
-
-    .main-username {
-        font-size: clamp(1rem, 2.5vw, 1.5em);
-        /* Adjusts between 1rem and 1.5em depending on viewport width */
-        font-weight: bold;
-        /* Bold for emphasis */
-        color: #FFFFFF;
-        /* White color */
-        margin-bottom: 0.5em;
-        /* Add space below the main username */
-    }
-
-    /* Alias username styles */
-    .additional-usernames {
-        font-size: 1em;
-        /* Smaller font size for less emphasis */
-        color: #CCCCCC;
-        /* Lighter color for aliases */
-        margin-bottom: 1em;
-        /* More space before the next section */
-    }
-
-    .additional-usernames li {
-        display: inline-block;
-        font-size: 0.8em;
-        /* Smaller font size for aka names */
-    }
-
-    /* To make the "pmuj" name stand out, you might add a class to it in your HTML and then style it like so: */
-    .highlighted-username {
-        font-size: 1.5em;
-        /* Larger font size */
-        font-weight: bold;
-        /* Make it bold */
-        color: #E0E0E0;
-        /* A lighter color for higher contrast */
-    }
-
-
-    .user-role,
-    .permanent-packages {
-        border-radius: 5px;
-    }
-
-    .text-white {
-        color: #fff;
-    }
-
-
-    .view-all {
-        display: block;
-        background-color: #444;
-        /* Dark background for contrast */
-        color: #fff;
-        /* White text */
-        text-align: center;
-        padding: clamp(5px, 2.5vw, 10px);
-        /* Adjusts padding responsively */
-        margin-top: 10px;
-        border-radius: 5px;
-        text-decoration: none;
-        transition: background-color 0.3s ease;
-
-        /* Responsive adjustments */
-        width: auto;
-        /* Auto-width to fit content */
-        max-width: 200px;
-        /* Maximum width */
-        font-size: 0.8em;
-        /* Smaller font size */
-    }
-
-    .view-all:hover {
-        background-color: #555;
-        /* Slightly lighter on hover */
-    }
-
-    /* Define your text colors for titles */
-    .text-red-500 {
-        color: #f56565;
-    }
-
-    .text-orange-500 {
-        color: #ed8936;
-    }
-
-    .text-yellow-500 {
-        color: #ecc94b;
-    }
-
-    .text-green-500 {
-        color: #48bb78;
-    }
-
-    .text-white {
-        color: #ffffff;
-    }
-
-
-    .profile-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        /* Other styles */
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
-
-    blockquote {
-        padding: 0.5em;
-        margin: 0.5em 0;
-        border-left: 4px solid #555;
-        /* A subtle border that fits the theme */
-        background-color: #333;
-        /* Darker background for blockquotes */
-        color: #ddd;
-        /* Light text for readability */
-    }
-
-    blockquote small {
-        display: block;
-        margin-bottom: .5em;
-        color: #888;
-        /* Even lighter text for the attribution */
-    }
-
-    .post-content,
-    .thread-details {
-        background-color: rgba(0, 0, 0, 0.8);
-        /* Semi-transparent black background */
-        border: 1px solid #e74c3c;
-        /* Borders matching the site theme */
-        padding: 15px;
-        border-radius: 4px;
-        color: #fff;
-        /* Light text for readability */
-        margin-bottom: 10px;
-    }
-
-    /* Style the username to be more visible */
-    .post>h2 {
-        background-color: #e74c3c;
-        /* Background color that stands out */
-        padding: 5px;
-        border-radius: 4px;
-        color: #fff;
-        /* White text */
-        display: inline-block;
-    }
-
-    /* Responsive design adjustments */
-    @media (max-width: 768px) {
-        blockquote {
-            padding: .5em;
-        }
-
-        .post-content,
-        .thread-details {
-            padding: 10px;
-        }
-    }
-
-
-    /* Username and metadata styling */
-    .thread-poster,
-    .replier-name {
-        color: #007bff;
-        /* Bootstrap primary color for links */
-        font-weight: bold;
-        /* Make username bold */
-    }
-
-    /* Ensure that the quoted text color is consistent */
-    blockquote p {
-        color: #555;
-        /* Dark grey color for the quoted text */
-    }
-
-    /* Styling for the usernames */
-    .username {
-        color: #ffffff;
-        /* White color for better readability */
-        background-color: #007bff;
-        /* Bootstrap primary blue for contrast */
-        padding: 2px 6px;
-        border-radius: 4px;
-        /* Rounded edges for the username tag */
-        font-weight: bold;
-        margin-right: 5px;
-        /* Space between username and text */
-        display: inline-block;
-        /* Align with the text properly */
-    }
-
-    /* Additional responsive styling */
-    @media (max-width: 768px) {
-        blockquote {
-            padding: 10px;
-            /* Smaller padding on smaller screens */
-        }
-
-        .forum-container,
-        .profile-container,
-        .posts-container,
-        .threads-container {
-            padding: 1rem;
-        }
-
-        .username,
-        .thread-poster,
-        .replier-name {
-            font-size: 0.9em;
-        }
-    }
-
-    .section-header,
-    .profile-header {
-      border-bottom: 2px solid #dee2e6;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
-    
-    .username,
-    .thread-poster,
-    .replier-name {
-      display: inline-block;
-      background-color: #007bff;
-      color: #fff;
-      padding: 0.2em 0.6em;
-      border-radius: 15px;
-      font-weight: bold;
-    }
-
-    .quote-attribution,
-    .blockquote {
-      color: #6c757d;
-      border-left: 4px solid #adb5bd;
-      background-color: #f8f9fa;
-      padding: 1em;
-      margin: 0.5em 0;
-      font-size: 0.9em;
-    }
-    
-    .page-link,
-    .view-all {
-      background-color: #007bff;
-      color: #fff;
-      padding: 0.5rem 0.75rem;
-      border-radius: 15px;
-      text-decoration: none;
-    }
-    
-    .page-link:hover,
-    .view-all:hover {
-      background-color: #0056b3;
-    }
-
-
-    .header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .text-content {
-        /* Adjust the width as needed */
-        flex: 1;
-    }
-
-    .profile-avatar {
-        /* Aligns the avatar to the right side of the header */
-        margin-left: auto;
-    }
-
-    .avatar-image {
-        max-width: 100%;
-        /* Makes the image responsive */
-        width: 100px;
-        height: auto;
-        /* Maintain aspect ratio */
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .threads-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-    }
-
-    .thread-item {
-        background-color: rgba(255, 255, 255, 0.1);
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 0.5rem;
-        transition: background-color 0.3s ease;
-    }
-
-    .thread-item:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .thread-title {
-        color: #ffffff;
-        font-weight: bold;
-        text-decoration: none;
-    }
-
-    .thread-details {
-        font-size: 0.875rem;
-        color: #cccccc;
-    }
-
-    .no-content {
-        text-align: center;
-        color: #ffffff;
-    }
-
-    .posts-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-    }
-
-    .post-item {
-        background-color: rgba(255, 255, 255, 0.1);
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 0.5rem;
-        transition: background-color 0.3s ease;
-    }
-
-    .post-item:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .post-content {
-        color: #ffffff;
-    }
-
-    .post-details {
-        font-size: 0.875rem;
-        color: #cccccc;
-    }
-
-    .no-content {
-        text-align: center;
-        color: #ffffff;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        /* Centers the pagination */
-        padding: 1rem;
-        list-style: none;
-    }
-
-    .page-item {
-        margin: 0 5px;
-        /* Adds a little space between page items */
-    }
-
-    .page-item .page-link {
-        position: relative;
-        display: block;
-        padding: 0.5rem 0.75rem;
-        margin-left: -1px;
-        line-height: 1.25;
-        color: #fff;
-        background-color: #343a40;
-        border: 1px solid #454d55;
-        cursor: pointer;
-    }
-
-
-
-    .page-item a.page-link {
-        display: inline-block;
-        padding: 0.5rem 0.75rem;
-        background-color: #343a40;
-        color: #fff;
-        border-radius: 0.25rem;
-        /* Rounded corners for the page links */
-        border: 1px solid #454d55;
-        text-decoration: none;
-    }
-
-    .page-item.active .page-link {
-        background-color: #ff0000;
-        border-color: #ff0000;
-    }
-
-    .page-item.active a.page-link,
-    .page-item a.page-link:hover {
-        background-color: #ff0000;
-        border-color: #ff0000;
-    }
-
-    .page-item.disabled a.page-link {
-        pointer-events: none;
-        /* Disables click on link */
-    }
-
-
-    .page-item .page-link:hover {
-        background-color: #b30000;
-        border-color: #b30000;
-    }
-
-    .page-item:first-child .page-link {
-        margin-left: 0;
-        border-top-left-radius: 0.25rem;
-        border-bottom-left-radius: 0.25rem;
-    }
-
-    .page-item:last-child .page-link {
-        border-top-right-radius: 0.25rem;
-        border-bottom-right-radius: 0.25rem;
-    }
-
-    .page-link {
-        z-index: 2;
-        color: #fff;
-        text-decoration: none;
-        background-color: #6c757d;
-        border: 1px solid #6c757d;
-    }
-
-    .page-link:hover {
-        z-index: 3;
-        color: #fff;
-        background-color: #5a6268;
-        border-color: #545b62;
-    }
-
-    /* Additional CSS for other elements */
-
-    /* Add more as needed... */
-
-    /* Responsive design */
-    @media (max-width: 768px) {
-        .profile-container {
-            max-width: 100%;
-            padding: 10px;
-        }
-
-        .profile-section {
-            padding: 10px;
-        }
-
-        .main-username,
-        .additional-usernames,
-        .profile-section label {
-            font-size: 1em;
-        }
-
-        /* Adjust text and other elements for mobile view */
-        .main-username {
-            font-size: 1.2em;
-            /* Larger font for mobile */
-        }
-
-        .profile-section {
-            min-height: auto;
-            /* Adjust the min-height for mobile */
-            padding: 15px;
-            /* More padding on mobile */
-        }
-    }
+a,
+a:focus,
+a:hover {
+    text-decoration: none;
+    outline: 0;
+    color: #777
+}
+
+
+.overlay-bg {
+    background-color: #010000;
+    background: url(https://cdn.imperfectgamers.org/inc/assets/img/background.png);
+    min-height: 100%;
+    min-width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0
+}
+
+.primary-btn {
+    padding: 20px 70px;
+    border-radius: 80px;
+    background: 0 0;
+    border: 2px solid #8e2825;
+    color: white;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 1.5em;
+    -webkit-transition: all .3s ease 0s;
+    -moz-transition: all .3s ease 0s;
+    -o-transition: all .3s ease 0s;
+    transition: all .3s ease 0s;
+    cursor: pointer
+}
+
+.primary-btn:hover {
+    background: #8e2825;
+    color: #fff;
+    box-shadow: 0 10px 20px 0 rgba(60, 64, 143, .2);
+    text-decoration: none;
+}
+
+
+.container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern and clean font */
+    min-width: 80vw;
+    max-width: 95%;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+.section-header {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Make the line more visible */
+    padding-bottom: 15px; /* Increase padding for visual comfort */
+    margin-bottom: 25px; /* Increase margin for more space */
+}
+
+.thread-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.thread-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.thread-details {
+    color: #999;
+}
+
+@supports(padding: max(0px)) {
+    .post {
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+        height: calc(100% + (var(--safe-area-inset-top) + var(--safe-area-inset-bottom)));
+    }
+}
+
+.post>h2 {
+    background-color: #e74c3c;
+    /* Background color that stands out */
+    padding: 5px;
+    border-radius: 4px;
+    color: #fff;
+    /* White text */
+    display: inline-block;
+}
+
+.post-content {
+    background: rgba(255, 255, 255, 0.05);
+    /* Slightly visible on dark background */
+    border-radius: 4px;
+    /* Softened edges */
+    padding: 10px;
+    /* Space around text */
+    margin-bottom: 10px;
+    /* Space between posts */
+    font-size: 1rem;
+    /* Readable text size */
+    color: #E0E0E0;
+    /* Light grey for readability */
+}
+
+blockquote {
+    color: #ccc;
+    /* Soft color for quoted text */
+    border-left: 5px solid #b65959; /* Colorful border for quotes */
+    background-color: #333;
+    /* Visible on dark theme */
+    padding: 1em;
+    margin: 0.5em 0;
+    color: #ddd !important;
+    font-size: 0.9em;
+    border-radius: 3px; /* Rounded corners for code blocks */
+}
+
+
+blockquote small {
+    display: block;
+    margin-bottom: .5em;
+    color: #999;
+    /* Less emphasis on attribution */
+}
+
+.page-item {
+    margin: 0 5px;
+    /* Adds a little space between page items */
+}
+
+/* Pagination: Make it more thumb-friendly on mobile */
+.page-item a.page-link {
+    padding: 10px 15px; /* Larger area for mobile users */
+    background-color: #444444; /* Distinct background */
+    color: #FFFFFF; /* High contrast for readability */
+    border-radius: 20px; /* More pronounced rounded corners */
+    border: none; /* Remove border */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.page-item.active a.page-link,
+.page-item a.page-link:hover {
+    background-color: #FF6347; /* Vibrant color for active/hover state */
+}
+
+.page-item.disabled a.page-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;    
+}   
+
+.page-item.disabled a.page-link, .page-item.active a.page-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;     
+}
+
+/* Disabled page numbers style */
+.page-item.disabled .page-link {
+    opacity: 0.5;
+    /* Half transparent */
+    cursor: not-allowed;
+    /* Show no action can be taken */
+}
+
+/* Links and interactive elements */
+a.thread-item,
+.page-link {
+    border-radius: 4px;
+    /* Subtle rounded corners */
+    padding: 10px 15px;
+    /* Comfortable padding */
+    margin: 8px 0;
+    /* Spacing between elements */
+    display: block;
+    /* Block-level for better tap targets on mobile */
+    transition: background-color 0.3s ease;
+    /* Smooth transition for hover effect */
+}
