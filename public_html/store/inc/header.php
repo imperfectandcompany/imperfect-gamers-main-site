@@ -21,12 +21,25 @@
 		<meta charset="utf-8">
 		<title><?= getSetting('site_title', 'value'); ?> - <?= $page_title; ?></title>
 		<meta http-equiv="content-type" value="text/html; charset=UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@ryangjchandler/alpine-clipboard@1.x.x/dist/alpine-clipboard.js">
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css" />
 		<link rel="icon" href="favicon.ico" type="image/x-icon"/>
 
-		<link rel="stylesheet" type="text/css" href="compiled/css/site.css">
+<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+    type="text/css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+<script src="https://use.fontawesome.com/cdebacd051.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<link rel="stylesheet" href="https://prototype.imperfectgamers.org/css/main.css">
+
 
 		<?php
 
@@ -41,13 +54,9 @@
                 $theme = $_COOKIE['prometheus_theme'];
             }
 
-            if ($theme != '') {
-                echo '<link rel="stylesheet" type="text/css" href="themes/'.$theme.'/style.css">';
-            }
 
         ?>
 
-        <script src="compiled/js/essential.js"></script>
 
 		<script type="text/javascript">
 			<?php if ($page != 'admin' && getSetting('christmas_things', 'value2') == 1) { ?>
@@ -60,9 +69,131 @@
       <?php if (gateways::enabled('stripe')) { ?>
         <script src="https://js.stripe.com/v3/"></script>
       <?php } ?>
+
+
+<style>
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 10px 0;
+}
+
+
+/* Logo Styles */
+.nav-logo img {
+    max-width: 120px;
+    z-index: 2;
+}
+
+/* Navigation Links */
+.nav-links {
+    display: flex;
+    z-index: 2;
+    position: relative;
+}
+
+.nav-links a {
+    color: #fff;
+    padding: 0 15px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    color: #ddd;
+}
+
+/* Bottom border under navbar */
+.navbar:after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: red;
+    z-index: 3;
+}
+
+/* Remove the individual gradients since we're using an overlay for both sides */
+.navbar::before,
+.navbar::after {
+    display: none;
+}
+
+/* Add border to both ends */
+.navbar {
+    background: linear-gradient(to right, rgb(169 42 42 / 79%), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4), rgb(169 42 42 / 79%));
+    border-bottom: 1px solid red;
+    /* Adjust the color and thickness as needed */
+}
+</style>
+
 	</head>
 
-	<body>
+
+  <body>
+<div class="overlay-bg"></div>
+<nav class="navbar">
+    <div class="nav-gradient left"></div>
+    <ul class="nav-links left">
+        <li>
+<?php if(!prometheus::loggedin()) {
+    echo '<a href="/login">' . "Login" . '</a>';
+    } else {
+        echo '<a href="/logout">' . "Logout" . '</a>';
+        }
+?>
+</li>
+        <li><a href="/settings">settings</a></li>
+
+<?php if (prometheus::loggedin()) { ?>
+    <li>
+        <a href="/profile">
+            profile
+    </a>
+    </li>
+<?php } ?>
+
+</li>
+    </ul>
+
+    <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer">
+        <div class="nav-logo">
+
+            <object data="https://cdn.imperfectgamers.org/inc/assets/img/logo.svg" alt="Imperfect Gamers Brand Logo"
+                type="image/svg+xml" height="48px" width="48px">
+            </object>
+        </div>
+
+    </a>
+
+    <ul class="nav-links right">
+        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/store">store</a></li>
+        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/applications">applications</a></li>
+        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/appeals">appeals</a></li>
+    </ul>
+    <div class="nav-gradient right"></div>
+</nav>
+
+<div class="flex flex-col my-4 items-center space-y-4">
+    <div class="">
+        <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer">
+            <div class="mx-auto text-center animate__animated animate__fadeIn animate__delay-1s">
+                <object class="pointer-events-none    " data="https://cdn.imperfectgamers.org/inc/assets/svg/text.svg"
+                    height="30px"></object>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+
 	<?php if ($page != 'admin') { ?>
 		<?php if (getSetting('paypal_sandbox', 'value2') == 1 && getSetting('warning_sandbox', 'value2') == 0 && prometheus::isAdmin() && gateways::enabled('paypal')) { ?>
 			<div class="notSetup d-flex align-items-center p-0">
@@ -155,113 +286,3 @@
 		<?php } ?>
 	<?php } ?>
 	<div class="wrap">
-		<?php if ($page != 'admin' && getSetting('site_banner', 'value') != '') { ?>
-            <div class="banner" style="text-align: center;">
-            <div class="container" style="padding: 20px">
-            <object data="https://cdn.imperfectgamers.org/inc/assets/svg/text.svg" height="24px"></object>
-                <div class="row">
-                    <div class="col d-flex justify-content-end align-items-start">
-                        <?php if (gateways::enabled('credits')) { ?>
-                            <?php if (prometheus::loggedIn()) { ?>
-                                <div class="credits d-block">
-                                    <i class="fas fa-coins fa-fw"></i>
-                                    <?php echo credits::get($_SESSION['uid']); ?> CR
-                                </div>
-                            <?php } ?>
-                        <?php } ?>
-                    </div>
-                </div>
-			</div>
-		</div>
-		<?php } ?>
-
-
-		<nav class="navbar navbar-inverse navbar-expand-lg <?= $page == 'admin' ? 'fixed-top' : ''; ?>" role="navigation">
-			<?= $page == 'admin' ? '' : '<div class="container">'; ?>
-            <div class="navbar-header d-flex justify-content-between justify-content-md-start align-items-center">
-                <?php if($page == 'admin') { ?>
-                    <button class="navbar-toggler toggle-menu visible-xs-inline-block">
-                        <i class="fas fa-bars fa-fw text-white"></i>
-                    </button>
-                <?php } ?>
-
-
-                <div class="ml-auto ml-md-0">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-bars fa-fw text-white"></i>
-                    </button>
-
-                    <?php if(getSetting('site_logo', 'value') != ''){ ?>
-                        <a class="navbar-brand" href="."><object data="https://cdn.imperfectgamers.org/inc/assets/img/logo.svg" alt="Imperfect Gamers Brand Logo" type="image/svg+xml" height="48px" width="48px">
-                            </object> </a>
-
-                    <?php } ?>
-                </div>
-            </div>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="nav flex-column flex-md-row">
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="/">
-                            <i class="fas fa-home fa-fw"></i> <?= lang('home'); ?>
-                        </a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/shop">
-						                            <i class="fas fa-store fa-fw"></i>
-
-                            Shop
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/forum">
-						                            <i class="fas fa-comments fa-fw"></i>
-
-                            Forum
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/bans">
-                            <i class="fas fa-hammer fa-fw"></i>
-                            Bans
-                        </a>
-                    </li>
-
-                    <?php if(getSetting('installed', 'value2') == 1){ ?>
-
-
-
-                    <?php if (prometheus::loggedin()) { ?>
-                        <li class="nav-item <?php echo $page == 'profile' ? 'active' : ''; ?>">
-                            <a class="nav-link" href="profile.php">
-                                <i class="fas fa-user fa-fw"></i>
-                                <?= lang('profile'); ?>
-                            </a>
-                        </li>
-                    <?php } ?>
-
-
-
-
-
-                </ul>
-
-                <ul class="nav ml-auto flex-column flex-md-row">
-                    <?php if(prometheus::loggedin()) { ?>
-                        <?php if(getSetting('support_tickets', 'value2') == 1){ ?>
-                            <li class="nav-item position-relative <?php echo $page == 'support' ? 'active' : ''; ?>"><?php if(tickets::read(0) != 0){ ?><div class="notify-icon"><?= tickets::read(0); ?></div><?php } ?><a class="nav-link" href="support.php"><i class="fas fa-question-circle fa-fw"></i> <?= lang('support'); ?></a></li>
-                        <?php } ?>
-                        <?php if(prometheus::isAdmin()){ ?>
-                            <li class="nav-item position-relative <?php echo $page == 'admin' ? 'active' : ''; ?>"><?php if(tickets::read(1) != 0){ ?><div class="notify-icon"><?= tickets::read(1); ?></div><?php } ?><a class="nav-link" href="admin.php"><i class="fas fa-cog fa-fw"></i> <?= lang('admin'); ?></a></li>
-                        <?php } ?>
-                        <li class="nav-item"><a class="nav-link" href="logout.php?csrf_token=<?= csrf_token(); ?>"><i class="fas fa-sign-out-alt fa-fw"></i> <?= lang('sign_out'); ?></a></li>
-                    <?php } ?>
-                    <?php if(!prometheus::loggedin()) { ?>
-                        <?php echo '<li class="nav-item"><a class="nav-link" href="'.steamLogin::genUrl().'"><i class="fas fa-sign-in-alt fa-fw"></i> ' . lang("sign_in") . '</a></li>'; ?>
-                    <?php } ?>
-                </ul>
-                <?php } ?>
-            </div>
-			<?= $page == 'admin' ? '' : '</div>'; ?>
-		</nav>

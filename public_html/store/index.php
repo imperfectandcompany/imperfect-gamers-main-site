@@ -43,56 +43,7 @@ try {
 ?>
 
 <?php include('inc/header.php'); ?>
-<style>
-    .btn-ripple {
-        display: inline-block;
-        position: relative;
-        overflow: hidden;
-        transition: all ease-in-out .5s;
-    }
 
-
-
-    .btn-ripple::after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 25%;
-        height: 100%;
-        width: 50%;
-        background-color: #000;
-        border-radius: 50%;
-        opacity: 0;
-        pointer-events: none;
-        transition: all ease-in-out 1s;
-        transform: scale(5, 5);
-    }
-
-    .btn-ripple:active::after {
-        padding: 0;
-        margin: 0;
-        opacity: .2;
-        transition: 0s;
-        transform: scale(0, 0);
-    }
-
-
-    .fa-question-circle,
-    .fa-bolt,
-    .fa-credit-card {
-        -webkit-transition: all 0.5s;
-        transition: all 0.5s;
-    }
-
-    .fa-question-circle:hover,
-    .fa-credit-card:hover,
-    .fa-bolt:hover {
-        transform: rotate(45deg);
-    }
-</style>
-<link rel="stylesheet" type="text/css" href="https://imperfectgamers.org/shop/mercury/assets/themes/umbra/css/styles.css?version=3accddf64b1dd03abeb9b0b3e5a7ba44">
-<link rel="stylesheet" type="text/css" href="https://imperfectgamers.org/shop/mercury/assets/themes/global/css/styles.css?version=3accddf64b1dd03abeb9b0b3e5a7ba44">
 
 <div class="content mb-5">
     <div class="container">
@@ -286,38 +237,6 @@ try {
             </div>
         </div>
 
-        <div class="col-12">
-                    <div class="jumbotron bg-transparent justify-content-center text-center">
-                        <h3 class="text-center text-light">
-                            Recent Purchases
-                        </h3>
-                    </div>
-                    <div class="card-deck">
-                        <?= dashboard::getRecent(); ?>
-                    </div>
-                    <?php if (isset($_POST['tos_submit'])) {
-                        if (!csrf_check())
-                            return util::error("Invalid CSRF token!");
-
-                        tos::agree();
-
-                        echo "<script type='text/javascript'>window.location.replace('splash.php?tos=1')</script>";
-
-                    } ?>
-                </div>
-
-
-        <div class="row">
-            <div class="col">
-                <?php if (isset($_GET['installed']) && $_GET['installed'] == true) { ?>
-                    <p class="bs-callout bs-callout-success">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        Installation successful! Please delete install.php if it didn't do it itself. The first
-                        user who signs in gets admin access!<br>
-                    </p>
-                <?php } ?>
-            </div>
-        </div>
     </div>
 </div>
 

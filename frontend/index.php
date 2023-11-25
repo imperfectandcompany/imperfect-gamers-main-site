@@ -7,7 +7,7 @@
             </div>
 
             <div class="banner-content text-center flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-4">
-                <a href="<?php echo $GLOBALS['config']['url']; ?><?php if ($loggedIn): ?>
+                <a href="<?php echo $GLOBALS['config']['url']; ?>/<?php if ($loggedIn): ?>
 logout
 <?php else: ?>
 login

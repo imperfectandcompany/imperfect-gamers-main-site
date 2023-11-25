@@ -1,5 +1,16 @@
 <?php
 
+try{
+    if (!User::isLoggedin()) {
+        throw new Exception("You must be logged in to view this page.");
+    }
+} catch (Exception $e) {
+    $_SESSION['messages']['errors'][] = $e->getMessage();
+    header("location: ".$GLOBALS['config']['url']."/login");
+    exit();
+}
+
+
 //Variables
 
 $steamId = Settings::hasSteam($userid);
@@ -79,7 +90,7 @@ if($_POST && $_SERVER['REQUEST_METHOD'] == 'POST')
         }
     } catch (Exception $e) {
         $_SESSION['messages']['errors'][] = $e->getMessage();
-        header("location: ".$GLOBALS['config']['url']."/settssings");
+        header("location: ".$GLOBALS['config']['url']."/settings");
         exit();
     }
 }
