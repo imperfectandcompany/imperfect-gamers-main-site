@@ -1,5 +1,3 @@
-<section class="banner-area mx-auto">
-    <div class="overlay overlay-bg"></div>
     <div class="container">
         <div class="flex flex-col mt-20 fullscreen justify-content-center align-items-center">
             <div class="mb-8 mt-4 text-center animate__animated animate__fadeIn animate__delay-1s ">
@@ -60,4 +58,3 @@ bg-red-900 bg-opacity-40 shadow-xl px-3 py-3 text-base focus:outline-none pb-3 w
             <?php endif; ?>
 
         </div>
-</section>

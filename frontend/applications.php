@@ -1,4 +1,3 @@
-<section class="container mx-auto">
     <div class="flex flex-col fullscreen justify-content-center align-items-center">
         <div class="container animate__animated animate__fadeIn animate__delay-0s text-white relative">
             <?php
@@ -49,4 +48,3 @@
             </a>
         </div>
     </div>
-</section>  

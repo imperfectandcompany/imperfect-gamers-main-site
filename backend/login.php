@@ -54,7 +54,7 @@ if (isset($_POST['login'])) {
                     }
                     // Update session token for player
                     $stmt = $pdo->prepare('UPDATE players SET session_token = :token WHERE uid = :uid');
-                    $stmt->execute([':token' => $token, ':uid' => $steamId]);
+                    $stmt->execute([':token' => sha1($token), ':uid' => $steamId]);
                     setcookie('uid', $steamId, time() + 60 * 60 * 24 * 7, '/', $domain, false);
                     $_SESSION['uid'] = $steamId;
                 }

@@ -586,6 +586,39 @@ class dashboard
         return $db->getOne("SELECT count(*) FROM transactions");
     }
 
+    public static function getRecentPurchases() {
+        global $db;
+        $apiKey = 'EDITED4GITHUB'; // Your Steam API key
+        $recentPurchasesData = $db->getAll("SELECT p.id, p.name AS p_name, t.package, t.price, t.credits, t.currency, t.timestamp, t.uid FROM transactions t JOIN players p ON t.uid = p.uid WHERE t.price IS NOT NULL AND t.txn_id != 'Assigned by Admin' AND t.txn_id != 'Assigned from advent calendar' ORDER BY t.id DESC LIMIT 4");
+    
+        $recentPurchases = [];
+        foreach ($recentPurchasesData as $row) {
+            $uid = $row['uid'];
+            $steamApiUrl = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' . $apiKey . '&steamids=' . $uid;
+            $pavatar = file_get_contents($steamApiUrl);
+            $json = json_decode($pavatar, true);
+            
+            // Check if the player information is available
+            if (isset($json['response']['players'][0])) {
+                $playerInfo = $json['response']['players'][0];
+                $avatarUrl = $playerInfo['avatar'] ?? 'default_avatar.jpg';
+                $profileUrl = 'https://steamcommunity.com/profiles/' . $uid . '/';
+                $name = $playerInfo['personaname'] ?? 'Unknown';
+    
+                $recentPurchases[] = [
+                    'avatarUrl' => $avatarUrl,
+                    'profileUrl' => $profileUrl,
+                    'name' => $name
+                ];
+            }
+        }
+    
+        return $recentPurchases;
+    }
+    
+    
+    
+
     public static function getRecent(): string
     {
         global $db;

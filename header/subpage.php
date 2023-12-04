@@ -3,7 +3,7 @@ $loggedIn = false;
 if (User::isLoggedin()) {
     $loggedIn = true;
 }
-?> 
+?>
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
@@ -68,10 +68,23 @@ if (User::isLoggedin()) {
         border-bottom: 1px solid red;
         /* Adjust the color and thickness as needed */
     }
+
+    .ig_logo {
+  --animate-duration: 0.3s;
+}
+    
 </style>
-<div class="overlay-bg"></div>
 <nav class="navbar">
     <div class="nav-gradient left"></div>
+
+    <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer">
+        <div class="mx-auto text-center ig_logo animate__animated animate__slideInDown ">
+            <object data="https://cdn.imperfectgamers.org/inc/assets/img/logo.svg" alt="Imperfect Gamers Brand Logo"
+                class="pointer-events-none" type="image/svg+xml" height="48px" width="48px">
+            </object>
+        </div>
+    </a>
+
     <ul class="nav-links left">
 
 
@@ -83,44 +96,55 @@ login
 <?php endif; ?>">
                 <?php if ($loggedIn): ?>
                     Logout
+                </a></li>
+                <li><a href="<?php echo $GLOBALS['config']['url']; ?>/settings">
+                <span class="<?php
+                echo ($FRONTEND == "settings" ? "underline decoration-wavy decoration-red-600/50" : "");
+                ?>">
+                    Settings
+                </span>
+            </a></li>
+
+            <li><a href="<?php echo $GLOBALS['config']['url']; ?>/profile">
+                <span class="<?php
+                echo ($FRONTEND == "profile" ? "underline decoration-wavy decoration-red-600/50" : "");
+                ?>">
+                    Profile
+                </span>
+            </a></li>
+
+
                 <?php else: ?>
                     Login
+                </a></li>
                 <?php endif; ?>
-            </a></li>
-            <li><a href="<?php echo $GLOBALS['config']['url']; ?>/settings">settings</a></li>
-        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/profile">profile</a></li>            
-    </ul>
 
-    <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer">
-        <div class="nav-logo">
-
-            <object data="https://cdn.imperfectgamers.org/inc/assets/img/logo.svg" alt="Imperfect Gamers Brand Logo"
-                type="image/svg+xml" height="48px" width="48px">
-            </object>
-        </div>
-
-    </a>
-
+        </ul>
     <ul class="nav-links right">
-        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/store">store</a></li>
-        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/applications">applications</a></li>
-        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/appeals">appeals</a></li>
+        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/store">
+        <span class="<?php
+                echo ($FRONTEND == "store" ? "underline decoration-wavy decoration-red-600/50" : "");
+                ?>">
+                    Store
+                </span>
+    </a></li>
+        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/applications">                <span class="<?php
+                echo ($FRONTEND == "applications" ? "underline decoration-wavy decoration-red-600/50" : "");
+                ?>">
+                    Applications
+                </span></a></li>
+        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/appeals">
+        <span class="<?php
+                echo ($FRONTEND == "appeals" ? "underline decoration-wavy decoration-red-600/50" : "");
+                ?>">
+                    Appeals
+                </span>
+    </a></li>
     </ul>
     <div class="nav-gradient right"></div>
 </nav>
 
 <div class="flex justify-center my-4">
-
-
-
-
-
-    <a href="<?php echo $GLOBALS['config']['url'] ?>" class="cursor-pointer">
-        <div class="mx-auto text-center animate__animated animate__fadeIn animate__delay-1s">
-            <object class="pointer-events-none	" data="https://cdn.imperfectgamers.org/inc/assets/svg/text.svg"
-                height="30px"></object>
-        </div>
-    </a>
     <div class="flex">
         <?php
         /*Call our notification handling*/include("../frontend/sitenotif.php");

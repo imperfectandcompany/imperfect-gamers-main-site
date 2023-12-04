@@ -13,6 +13,12 @@ switch ($GLOBALS['url_loc'][1]) {
         $FRONTEND = "applications";
         $HEADER = "subpage";
         break;
+        case "about":
+            $PAGE_TITLE = "About Us";
+            $BACKEND = "about";
+            $FRONTEND = "about";
+            $HEADER = "subpage";
+            break;
     case "appeals":
         $PAGE_TITLE = "Appeals";
         $BACKEND = "appeals";
@@ -53,13 +59,40 @@ switch ($GLOBALS['url_loc'][1]) {
         $BACKEND = "getstarted";
         $FRONTEND = "getstarted";
         break;
-    case "install":
-        $PAGE_TITLE = "install";
-        $FRONTEND = "installer";
-        break;
     case "logout":
         $BACKEND = "logout";
-    default:
+    // Policy Pages
+    case "terms-of-service":
+        $PAGE_TITLE = "Terms of Service";
+        $BACKEND = "tos";
+        $FRONTEND = "tos";
+        $HEADER = "subpage";
         break;
+    case "privacy-policy":
+        $PAGE_TITLE = "Privacy Policy";
+        $BACKEND = "privacypolicy";
+        $FRONTEND = "privacy-policy";
+        $HEADER = "subpage";
+        break;
+    case "cookie-policy":
+        $PAGE_TITLE = "Cookie Policy";
+        $BACKEND = "cookiepolicy";
+        $FRONTEND = "cookiepolicy";
+        $HEADER = "subpage";
+        break;
+    // Company Information Pages
+    case "imprint":
+        $PAGE_TITLE = "Imprint";
+        $BACKEND = "imprint";
+        $FRONTEND = "imprint";
+        $HEADER = "subpage";
+        break;
+
+
+    default:
+        // It's a good practice to have a case for unmatched URLs which could redirect to a 404 page or the home page
+        header("HTTP/1.0 404 Not Found");
+        $BACKEND = "index";
+        $FRONTEND = "index";
 }
 ?>
