@@ -352,7 +352,7 @@ class packages
                                 </ul>
                             </div>
                             <div class="store-box-lower">
-                                '.$lower_text.'
+                            Once purchased, please allow us up to 12 hours to process this transaction.  Usually, follow-up time is within 1 hour.  We are human - thank you for your patience!
                             </div>
                         </div>
                     </div>

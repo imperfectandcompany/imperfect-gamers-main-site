@@ -10,7 +10,7 @@ $GLOBALS['config']['url_offset'] = 0;
 $GLOBALS['devmode'] = 1; 
 
 
-$GLOBALS['config']['url'] = "https://prototype.imperfectgamers.org";
+$GLOBALS['config']['url'] = "https://imperfectgamers.org";
 
 $GLOBALS['db_conf']['db_host'] = "127.0.0.1";
 $GLOBALS['db_conf']['port'] = "3306";
@@ -60,5 +60,4 @@ include_once("../classes/class.database.php");
 include_once("../classes/class.general.php");	
 include_once("../classes/class.settings.php");	
 include_once("../classes/class.forum.php");	
-
-?>
+include_once("../functions/functions.sitemap.php");

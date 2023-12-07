@@ -37,6 +37,24 @@ function display_feedback($messages = null)
     }
 }
 
+// Function to create a slug from a title
+function createSlugFromTitle($title)
+{
+    return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $title)));
+}
+
+function createMetaDescription($content) {
+    // Limit the content to a certain number of characters
+    $limitedContent = substr($content, 0, 160); // Example: limit to 160 characters
+    return strip_tags($limitedContent); // Remove any HTML tags
+}
+
+function createMetaKeywords($title) {
+    // Split the title into words and use them as keywords
+    $keywords = explode(' ', $title);
+    return implode(', ', $keywords); // Convert the array back into a comma-separated string
+}
+
 
 /**
  * @param $date integer of unixtimestamp format, not actual date type
@@ -165,5 +183,3 @@ function preserve_qs() {
     }
     return "?" . $_SERVER['QUERY_STRING'];
 }
-
-

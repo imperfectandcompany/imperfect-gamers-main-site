@@ -22,6 +22,7 @@ if (!User::isLoggedin()){
     }
     unset($_COOKIE["token"]);
     unset($_COOKIE["IMPERFECTGAMERS_"]);
+    unset($_SESSION['csrf_token']);
     // expire cookie (connected to donate and our own system)
     setcookie('token', '1', -1, '/', $domain, false);
     setcookie('IMPERFECTGAMERS_', '1', -1, '/', $domain, false);

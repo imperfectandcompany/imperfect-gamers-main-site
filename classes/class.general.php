@@ -28,8 +28,3 @@ $userProfile = $profileData ? $profileData[0] : null; // Return the first row or
 	DatabaseConnector::query('UPDATE users SET status="offline" WHERE TIMESTAMPDIFF(MINUTE, FROM_UNIXTIME(updatedAt), NOW()) > 1');
 	DatabaseConnector::query('UPDATE users SET status="online" WHERE TIMESTAMPDIFF(MINUTE, FROM_UNIXTIME(updatedAt), NOW()) < 1');
 	}
-	
-?>
-
-
-

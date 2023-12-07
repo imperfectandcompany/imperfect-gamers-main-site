@@ -11,8 +11,11 @@ try {
         if (User::isLoggedIn()) {
             echo "user is logged in";
             $profile = User::getUsername($userid);
+            header("HTTP/1.1 302 Found"); // Temporary redirect
             header("location: ./profile/$profile");
+            exit();
         } else {
+            header("HTTP/1.1 404 Not Found");
             throw new Exception('Error: Please provide a profile!');
         }
     }
@@ -23,10 +26,12 @@ try {
         if (is_numeric($GLOBALS['url_loc'][2])) {
             //throw error if the userid does not exist
             if (!User::getUsername($GLOBALS['url_loc'][2])) {
-                throw new Exception('Error: User does not exist!');
+                header("HTTP/1.1 404 Not Found");
+                throw new Exception('Error: User ID does not exist!');
             }
 
             $profile = User::getUsername($GLOBALS['url_loc'][2]);
+            header("HTTP/1.1 302 Found"); // Temporary redirect
             header("location: $profile");
         }
 
@@ -34,6 +39,7 @@ try {
         if (is_string($profile)) {
             // Check if the user exists
             if (!User::getUserId($GLOBALS['url_loc'][2])) {
+                header("HTTP/1.1 404 Not Found");
                 throw new Exception('Error: User does not exist!');
             }
             $profileExists = true;

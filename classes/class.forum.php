@@ -5,7 +5,7 @@ class Forum
     public static function fetchThreadsByFid(array $fids, $page, $perPage)
     {
         $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
-        $start = ($page - 1) * $perPage; // Calculate the offset for the LIMIT clause
+        $start = max(($page - 1) * $perPage, 0); // Ensure start is not negative
 
         // Convert $fids array to a comma-separated string of integers
         $fidList = implode(',', array_map('intval', $fids));
@@ -34,6 +34,87 @@ class Forum
 
         // Fetch and return the results
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function generateThreadUrlsByFids(array $forumIds, $perPage)
+    {
+        // if forum ids have 2 then we know its the applications page, otherwise its the appeals page
+        $page = $forumIds[0] == 2 ? 'applications' : 'appeals';
+        $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+    
+        // Convert $forumIds array to a comma-separated string of integers
+        $fidList = implode(',', array_map('intval', $forumIds));
+    
+        // Users and threads to exclude
+        $excludedUids = [880, 881, 879, 771, 271, 882];
+        $excludedTids = [652, 653];
+    
+        // Get the total number of threads for the specified FIDs
+        $stmtCount = $pdoMyBB->prepare("
+            SELECT COUNT(t.tid) as total_threads
+            FROM mybb_threads t
+            WHERE t.fid IN ($fidList) AND t.visible = 1
+            AND t.uid NOT IN (" . implode(',', array_map('intval', $excludedUids)) . ") 
+            AND t.tid NOT IN (" . implode(',', array_map('intval', $excludedTids)) . ")
+        ");
+        $stmtCount->execute();
+        $totalThreads = $stmtCount->fetch(PDO::FETCH_ASSOC)['total_threads'];
+    
+        // Calculate the total number of pages
+        $totalPages = ceil($totalThreads / $perPage);
+    
+        // Initialize an array to hold the thread URLs sorted by page
+        $threadUrlsByPage = [];
+    
+        // Fetch the thread data (subject and tid)
+        $stmt = $pdoMyBB->prepare("
+            SELECT t.tid, t.subject
+            FROM mybb_threads t
+            WHERE t.fid IN ($fidList) AND t.visible = 1
+            AND t.uid NOT IN (" . implode(',', array_map('intval', $excludedUids)) . ") 
+            AND t.tid NOT IN (" . implode(',', array_map('intval', $excludedTids)) . ") 
+            ORDER BY t.lastpost DESC
+        ");
+        $stmt->execute();
+    
+        // Initialize variables to track the current page and thread count
+        $currentPage = 1;
+        $currentThreadCount = 0;
+    
+        // Create an array to store thread URLs for the current page
+        $pageThreadUrls = [];
+    
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $tid = $row['tid'];
+            $subject = $row['subject'];
+            $slug = createSlugFromTitle($subject);
+    
+            // Generate the thread URL and add it to the current page's array
+            $threadUrl = "{$page}/thread/{$tid}/{$slug}";
+            $pageThreadUrls[] = $threadUrl;
+    
+            // Check if we have reached the desired number of threads for the current page
+            $currentThreadCount++;
+            if ($currentThreadCount >= $perPage) {
+                // Add the page's thread URLs to the result array
+                $threadUrlsByPage[$currentPage] = $pageThreadUrls;
+    
+                // Reset variables for the next page
+                $currentPage++;
+                $currentThreadCount = 0;
+                $pageThreadUrls = [];
+            }
+        }
+    
+        // Add any remaining thread URLs to the result array
+        if (!empty($pageThreadUrls)) {
+            $threadUrlsByPage[$currentPage] = $pageThreadUrls;
+        }
+    
+        return [
+            'threadUrlsByPage' => $threadUrlsByPage,
+            'totalThreads' => $totalThreads,
+        ];
     }
 
     public static function countThreadsByFid(array $fids)
@@ -72,7 +153,4 @@ public static function fetchPostsByThreadId($threadId) {
     $stmt->execute([':tid' => $threadId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
-    
 }
-?>

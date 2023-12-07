@@ -1,3 +1,44 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    height: -webkit-fill-available;
+
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Change the background color of selected text */
+::selection {
+    background: #ff0000; /* red */
+    color: white; /* optional: change text color to white when selected */
+  }
+
+  /* Removing focus outline */
+a:focus, button:focus, input:focus, textarea:focus {
+    outline: none; /* Removes the outline */
+    /* Optional: add a different focus style, like a border or background change */
+    background-color: rgba(255, 0, 0, 0.1); /* subtle red background */
+  }
+
+  body > #content {
+    flex: 1;
+  }
+  
+  #content {
+    flex-grow: 1;
+  }
+
+  main {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+  
+  #footer {
+    flex-shrink: 0; /* Prevents the footer from shrinking */
+  }
+
 a,
 a:focus,
 a:hover {
@@ -6,8 +47,8 @@ a:hover {
     color: #777
 }
 
+
 .overlay-bg {
-    background-color: #010000;
     background: url(https://cdn.imperfectgamers.org/inc/assets/img/background.png);
     min-height: 100%;
     min-width: 100%;
@@ -43,16 +84,66 @@ a:hover {
     text-decoration: none;
 }
 
+.card:hover, .card:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
 
 .container {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern and clean font */
-    min-width: 80vw;
-    max-width: 95%;
     margin: 20px auto;
-    padding: 20px;
+    padding: 20px; /* Default padding */
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .container {
+        padding: 20px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .container {
+        padding: 24px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .container {
+        padding: 28px;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) { /* Mobile: Adjust the breakpoint if needed */
+    .container {
+        padding: 10px; /* Less padding on smaller screens */
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) { /* Tablets: Adjust the breakpoints if needed */
+    .container {
+        padding: 15px; /* Slightly more padding than mobile */
+    }
+}
+
+@media (min-width: 1025px) { /* Desktop and up: Adjust the breakpoint if needed */
+    .container {
+        padding: 20px; /* Default padding for larger screens */
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        padding: 32px;
+    }
+}
+
+
 .section-header {
     border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Make the line more visible */
     padding-bottom: 15px; /* Increase padding for visual comfort */
@@ -101,34 +192,12 @@ a:hover {
     /* Softened edges */
     padding: 10px;
     /* Space around text */
-    margin-bottom: 10px;
-    /* Space between posts */
     font-size: 1rem;
     /* Readable text size */
     color: #E0E0E0;
     /* Light grey for readability */
 }
 
-blockquote {
-    color: #ccc;
-    /* Soft color for quoted text */
-    border-left: 5px solid #b65959; /* Colorful border for quotes */
-    background-color: #333;
-    /* Visible on dark theme */
-    padding: 1em;
-    margin: 0.5em 0;
-    color: #ddd !important;
-    font-size: 0.9em;
-    border-radius: 3px; /* Rounded corners for code blocks */
-}
-
-
-blockquote small {
-    display: block;
-    margin-bottom: .5em;
-    color: #999;
-    /* Less emphasis on attribution */
-}
 
 .page-item {
     margin: 0 5px;
@@ -297,3 +366,5 @@ a.thread-item,
 }
 
 
+
+/* store css */

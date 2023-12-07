@@ -50,6 +50,8 @@ if ($_POST && $_SERVER['REQUEST_METHOD'] == 'POST') {
                     unset($_COOKIE["uid"]);
                     setcookie('uid', null, -1, '/', $domain, false);
                     unset($_SESSION['uid']);
+                    unset($_SESSION['csrf_token']);
+                    
                     $_SESSION['messages']['success'][] = "Steam account unhooked successfully!";
                     header("location: " . $GLOBALS['config']['url'] . "/settings");
                 }

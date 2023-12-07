@@ -1,1 +1,11 @@
+RewriteEngine On
+
+# Redirect to non-www and enforce HTTPS
+RewriteCond %{HTTP_HOST} ^www\.(imperfectgamers\.org) [NC] 
+RewriteRule ^ https://imperfectgamers.org/store%{REQUEST_URI} [R=301,L,NE]
+
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://imperfectgamers.org/store%{REQUEST_URI} [R=301,L,NE]
+
+# Turn off the rewrite engine after applying the above rules
 RewriteEngine Off

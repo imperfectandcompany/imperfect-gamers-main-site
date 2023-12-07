@@ -305,10 +305,12 @@ class BBCode
 
                     // Create the quote header with the author's name, post ID, and dateline.
                     $quoteHeader = htmlspecialchars("{$author} wrote (Post ID: $pid, Date: $date):");
-                    $code = "<blockquote><small>$quoteHeader</small><p>";
+                    $code = '<blockquote class="card justify-between rounded-lg bg-red-900/10 border-red-600/50 text-white
+                    post-content
+                    "><span class="whitespace-normal text-xs sm:text-sm md:text-md antialiased break-all md:break-words sm:subpixel-antialiased md:antialiased"><small class="text-gray-400">'.$quoteHeader.'</small><p>';
                 } else {
                     // Close the paragraph and blockquote tags.
-                    $code = '</p></blockquote>';
+                    $code = '</p></span></blockquote>';
                 }
                 break;
             case self::TAG_NAME_B:

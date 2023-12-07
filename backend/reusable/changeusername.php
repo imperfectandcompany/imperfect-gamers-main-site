@@ -23,7 +23,7 @@ if(isset($_POST['settings'])){
 		DatabaseConnector::query('UPDATE users SET username=:newusername WHERE id=:userid', array(':newusername'=>$newusername, ':userid'=>$userid));
 
 //get newly changed password to fill as value in username field
-$username = (DatabaseConnector::query('SELECT username FROM users WHERE id=:userid', array(':userid'=>$userid))[0]['username']);		
+$username = (DatabaseConnector::query('SELECT username FROM profile WHERE user_id=:userid', array(':userid'=>$userid))[0]['username']);		
 		$userwarning = 1;
 		$success="username";
 	} 

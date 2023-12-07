@@ -88,14 +88,25 @@ if (User::isLoggedin()) {
     <ul class="nav-links left">
 
 
-
+    <?php if (!$loggedIn): ?>
+        <li><a href="<?php echo $GLOBALS['config']['url']; ?>/register">
+                <span class="<?php
+                echo ($FRONTEND == "register" ? "underline decoration-wavy decoration-red-600/50" : "");
+                ?>">
+                    Register
+                </span>
+            </a></li>
+<?php endif; ?>
+        
         <li> <a href="<?php echo $GLOBALS['config']['url']; ?><?php if ($loggedIn): ?>
-logout
+/logout
 <?php else: ?>
-login
+/login
 <?php endif; ?>">
                 <?php if ($loggedIn): ?>
-                    Logout
+                    <span class="<?php
+                echo ($FRONTEND == "logout" ? "underline decoration-wavy decoration-red-600/50" : "");
+                ?>">Logout
                 </a></li>
                 <li><a href="<?php echo $GLOBALS['config']['url']; ?>/settings">
                 <span class="<?php
@@ -104,7 +115,6 @@ login
                     Settings
                 </span>
             </a></li>
-
             <li><a href="<?php echo $GLOBALS['config']['url']; ?>/profile">
                 <span class="<?php
                 echo ($FRONTEND == "profile" ? "underline decoration-wavy decoration-red-600/50" : "");
@@ -115,7 +125,9 @@ login
 
 
                 <?php else: ?>
-                    Login
+                    <span class="<?php
+                echo ($FRONTEND == "login" ? "underline decoration-wavy decoration-red-600/50" : "");
+                ?>">Login
                 </a></li>
                 <?php endif; ?>
 
@@ -144,7 +156,7 @@ login
     <div class="nav-gradient right"></div>
 </nav>
 
-<div class="flex justify-center my-4">
+<div class="flex justify-center mt-4">
     <div class="flex">
         <?php
         /*Call our notification handling*/include("../frontend/sitenotif.php");

@@ -282,7 +282,7 @@ if (!prometheus::loggedIn()
     && isset($_COOKIE['uid'], $_COOKIE['token'])) {
     $db_token = $db->getOne("SELECT session_token FROM players WHERE uid = ?", $_COOKIE['uid']);
 
-    if ($_COOKIE['token'] === $db_token) {
+    if ($_COOKIE['token'] === $db_token && prometheus::loggedInIg()) {
         $_SESSION['uid'] = $_COOKIE['uid'];
 
         util::redirect('.');
