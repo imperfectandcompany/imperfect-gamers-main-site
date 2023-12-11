@@ -26,7 +26,7 @@
                         echo '<div class="py-12 bg-red-900/20 mx-auto text-center justify-center">
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div class="flex justify-between items-center text-center py-6">
-                                <h1 class="text-4xl font-bold"> Applications - Thread '.$threadId.'</h1>
+                                <h1 class="text-4xl font-bold"> Applications - Thread ' . $threadId . '</h1>
                             </div>
                         </div>
                     </div>';

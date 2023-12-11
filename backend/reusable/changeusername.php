@@ -12,7 +12,7 @@ if(isset($_POST['settings'])){
 		//set variables
 		$newusername = $_POST['username'];
 		
-		if(strlen($newusername) <= 6) {
+        if(strlen($newusername) < 3) {
 		throw new Exception('Error: This username is way too short!');
 		}
 		

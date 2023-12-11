@@ -6,9 +6,10 @@
     <meta name="description" content="<?php echo htmlspecialchars($META_DESC) ?? 'Imperfect Gamers is a division of Imperfect and Company, an entertainment organization focused on promoting growth in underground music and gaming.'; ?>">
     <meta name="keywords" content="<?php echo htmlspecialchars($META_WORDS) ?? 'imperfect gamers, underground music, surf, counterstrike, gaming entertainment, rap server, csgo, imperfect and company'; ?>">
     <meta property="og:locale" content="en_US">
-    <meta property="og:title" content="<?php echo htmlspecialchars($PAGE_TITLE) ?? 'Underground Entertainment | Imperfect Gamers'; ?>">
+    <meta property="og:title" content="<?php echo isset($PAGE_TITLE) ? $PAGE_TITLE . ' | Imperfect Gamers' : 'Underground Entertainment | Imperfect Gamers'; ?>">
     <meta property="og:description" content="<?php echo htmlspecialchars($META_DESC) ?? 'The new age underground scene for music and gaming enthusiasts.'; ?>">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="<?php echo isset($META_IMAGE) ? htmlspecialchars($META_IMAGE) : 'https://cdn.imperfectgamers.org/inc/assets/img/altlogo.png'; ?>">
     <meta property="og:url" content="https://imperfectgamers.org">
     <title><?php echo isset($PAGE_TITLE) ? $PAGE_TITLE . ' | Imperfect Gamers' : 'Underground Entertainment | Imperfect Gamers'; ?></title>
     <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">

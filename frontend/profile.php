@@ -189,6 +189,35 @@
                                 </div>
                             <? endif; ?>
 
+
+                            <?php if ((empty($userProfile['steam_id']) && $ownsProfile) || (!empty($userProfile['steam_id']))): ?>
+                                <!-- Best Times Section -->
+                                <div class="profile-section best-times">
+                                    <label>
+                                        <?php echo ($ownsProfile ? 'Your Best Times' : 'Best Times') ?>:
+                                    </label>
+                                    <?php if (empty($userProfile['steam_id'])): ?>
+                                        <p>Please link your Steam account to see more details.</p>
+                                    <?php else: ?>
+                                        <?php if (!empty($playerBestTimes)): ?>
+                                            <ul>
+                                                <?php foreach ($playerBestTimes as $timeRecord): ?>
+                                                    <li>
+                                                        <?= htmlspecialchars($timeRecord['MapName']) . ': ' . htmlspecialchars($timeRecord['FormattedTime']) .
+                                                            ' - Ranked #' . htmlspecialchars($timeRecord['Rank']) .
+                                                            ' out of ' . htmlspecialchars($timeRecord['TotalPlayers']) . ' players'; ?>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php else: ?>
+                                            <p>No best times to display.</p>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+
+
+
                             <?php if ((empty($userProfile['steam_id']) && $ownsProfile) || (!empty($userProfile['steam_id']))): ?>
                                 <!-- Packages Section -->
                                 <div class="profile-section permanent-packages">

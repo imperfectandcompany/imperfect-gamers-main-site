@@ -4,10 +4,9 @@ $ownsProfile = false;
 $profileExists = false;
 $backUrl = $GLOBALS['config']['url'];
 try {
-    //if profile wasnt given...
-
+    // If profile wasn't given...
     if (!isset($GLOBALS['url_loc'][2])) {
-        //Check to see if user is logged in, if so... load his profile otherwise ask user to provide a profile
+        // Check if the user is logged in; if so, load their own profile, otherwise ask the user to provide a profile.
         if (User::isLoggedIn()) {
             echo "user is logged in";
             $profile = User::getUsername($userid);
@@ -22,28 +21,38 @@ try {
 
     //if profile was specified
     if (isset($GLOBALS['url_loc'][2])) {
-        //check to see if it was a numerical value, if so translate it to the users profile.
+        // Check to see if it was a numerical value; if so, translate it to the user's profile.
         if (is_numeric($GLOBALS['url_loc'][2])) {
-            //throw error if the userid does not exist
-            if (!User::getUsername($GLOBALS['url_loc'][2])) {
+
+            $profile = User::getUsername($GLOBALS['url_loc'][2]);
+
+            // Throw an error if the user ID does not exist
+            if (!$profile) {
                 header("HTTP/1.1 404 Not Found");
+                $PAGE_TITLE = "Profile Not Found";
+                $META_DESC = "Sorry, the requested profile could not be found.";
+                $META_WORDS = "profile not found, user not found, invalid profile";                
                 throw new Exception('Error: User ID does not exist!');
             }
 
-            $profile = User::getUsername($GLOBALS['url_loc'][2]);
             header("HTTP/1.1 302 Found"); // Temporary redirect
             header("location: $profile");
+            exit;
         }
 
-        //uses get method to grab information
+        // Use the get method to grab information
         if (is_string($profile)) {
             // Check if the user exists
             if (!User::getUserId($GLOBALS['url_loc'][2])) {
                 header("HTTP/1.1 404 Not Found");
+                $PAGE_TITLE = "Profile Not Found";
+                $META_DESC = "Sorry, the requested profile could not be found.";
+                $META_WORDS = "profile not found, user not found, invalid profile";
                 throw new Exception('Error: User does not exist!');
             }
             $profileExists = true;
-            // If user owns profile
+
+            // If the user owns the profile
             if (isset($userProfile['username']) && $userProfile['username'] === $GLOBALS['url_loc'][2]) {
                 $ownsProfile = true;
             } else {
@@ -54,6 +63,7 @@ try {
 
             // Get the steamId 64 if available
             $steamId = $userProfile['steam_id'] ?? null;
+            $steamId64 = $userProfile['steam_id_64'] ?? null;
             $mainUsername = $userProfile['username'] ?? null;
             $mainEmail = $userProfile['email'] ?? null;
             // Initialize variables with defaults
@@ -71,6 +81,9 @@ try {
                 $userRoles = array_filter(getUserRoles($userProfile['steam_id_64']), function ($role) {
                     return !empty($role); // Filter out empty strings
                 });
+                if ($steamId64) {
+                    $playerBestTimes = getPlayerBestTimes($steamId64);
+                }
                 $permanentPackages = getPermanentPackages($userProfile['steam_id_64']);
                 $associatedEmails = getAssociatedEmails($userProfile['steam_id_64']);
                 // Query the igfastdl_mybb database for additional usernames
@@ -103,11 +116,32 @@ try {
             }
         }
     }
+
+    if (!$profileExists) {  
+        $PAGE_TITLE = "Profile Not Found";
+        $META_DESC = "Sorry, the requested profile could not be found.";
+        $META_WORDS = "profile not found, user not found, invalid profile";
+    }
+
+    if ($ownsProfile) {
+        $META_IMAGE = htmlspecialchars($userProfile['avatar'] ? $GLOBALS['config']['avatar_url'] . '/' . $userProfile['avatar'] : $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']);
+        $PAGE_TITLE = "Your Profile";
+        $META_DESC = "View and edit your own profile on our website.";
+        $META_WORDS = "edit profile, $profile, user profile, profile data";
+    } else {
+        $META_IMAGE = htmlspecialchars($userProfile['avatar'] ? $GLOBALS['config']['avatar_url'] . '/' . $userProfile['avatar'] : $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']);
+        $PAGE_TITLE = "Profile " . htmlspecialchars($userProfile['username']);
+        $META_DESC = "View the profile of " . htmlspecialchars($userProfile['username']). ". Discover their stats, threads, posts, titles, and more.";
+    }
+
+
 } catch (Exception $e) {
     $GLOBALS['errors'][] = $e->getMessage();
 }
 
-function getPagination($page, $totalPages, $visiblePages = 10) {
+
+function getPagination($page, $totalPages, $visiblePages = 10)
+{
     $start = max($page - floor($visiblePages / 2), 1);
     $end = min($start + $visiblePages - 1, $totalPages);
 
@@ -458,6 +492,34 @@ function getForumAccountThreads($uid, $page, $pdoMyBB)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
+function getPlayerBestTimes($steamId)
+{
+    $pdo = DatabaseConnector::getExternalDatabase();
+
+    // First, get the best times and ranks
+    $stmt = $pdo->prepare('
+        SELECT pr.MapName, pr.FormattedTime,
+               FIND_IN_SET( pr.TimerTicks, (SELECT GROUP_CONCAT( TimerTicks ORDER BY TimerTicks ) FROM PlayerRecords WHERE MapName = pr.MapName)) AS Rank
+        FROM PlayerRecords pr
+        WHERE pr.SteamID = :steamId
+        ORDER BY pr.MapName');
+    $stmt->execute([':steamId' => $steamId]);
+    $bestTimesWithRank = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Then, get the total number of players for each map
+    $stmt = $pdo->prepare('SELECT MapName, COUNT(DISTINCT SteamID) AS TotalPlayers FROM PlayerRecords GROUP BY MapName');
+    $stmt->execute();
+    $totalPlayersPerMap = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+    // Merge the total players data into the best times with rank data
+    foreach ($bestTimesWithRank as $key => $record) {
+        $mapName = $record['MapName'];
+        $bestTimesWithRank[$key]['TotalPlayers'] = $totalPlayersPerMap[$mapName] ?? 0;
+    }
+
+    return $bestTimesWithRank;
+}
 
 function getForumAccountInfo($associatedEmails, $pdoMyBB)
 {
