@@ -39,6 +39,14 @@ switch ($GLOBALS['url_loc'][1]) {
         $META_DESC = "Learn about Imperfect Gamers, our mission, our community, and how we are making a difference in the gaming and music world.";
         $META_WORDS = "about imperfect gamers, music gaming community, entertainment organization";
         break;
+    case "stats":
+        $PAGE_TITLE = "Stats";
+        $BACKEND = "stats";
+        $FRONTEND = "stats";
+        $HEADER = "subpage";
+        $META_DESC = "View the latest statistics and data from the Imperfect Gamers community.";
+        $META_WORDS = "stats, imperfect gamers, community statistics";
+        break;
     case "appeals":
         $PAGE_TITLE = "Appeals";
         $BACKEND = "appeals";

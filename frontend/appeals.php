@@ -1,4 +1,4 @@
-<div class="container mx-auto text-white bg-black">
+<div class="container mx-auto text-white">
     <div class="animate__animated animate__fadeIn animate__delay-0s">
         <?php
         // Display content based on context

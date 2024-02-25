@@ -20,10 +20,17 @@ if (isset($BACKEND)) {
 
 ?>
 <!doctype html>
-<html>
+<html lang="en">
 <?php include_once('head.php'); ?>
-
 <body class="flex flex-col justify-between h-screen">
+<div id="top"></div>
+<script>
+            setTimeout(function () {
+                snowStorm.start();
+            }, 500);
+    </script>
+<script src="https://imperfectgamers.org/store/compiled/js/essential.js"></script>
+    <script src="https://imperfectgamers.org/store/compiled/js/site.js"></script>
     <div class="flex flex-col justify-between">
         <?php if (isset($HEADER)): ?>
             <header id="header" class="text-center justify-center" style="touch-action: none;">
@@ -32,23 +39,20 @@ if (isset($BACKEND)) {
             </header>
         <?php endif; ?>
         <?php if (isset($FRONTEND)): ?>
-            <main id="content" class="flex-grow" style="-webkit-overflow-scrolling:touch">
-                <section class="banner-area mx-auto">
+            <main id="content" class="" style="-webkit-overflow-scrolling:touch">
+                <div class="banner-area mx-auto">
                     <?php if (!isset($HEADER)): ?>
                         <div class="overlay-bg"></div>
                     <?php endif; ?>
                     <?php include('../frontend/' . $FRONTEND . '.php'); ?>
-                </section>
+                </div>
             </main>
-
-
-
-
         <?php endif; ?>
 
         <footer id="footer"
             class="bg-black/10 border-t border-[#4E0D0D] justify-between items-center px-8 py-4 text-white"
             style="backdrop-filter: blur(10px);  -webkit-backdrop-filter: blur(10px); touch-action: none; bottom: 0px;">
+            <a id="topbutton" href="#top" style="display: none;"><i class="fas fa-arrow-up"></i></a>
             <div class="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
                 <div class="flex space-x-4 mb-4 md:mb-0 ">
                     <a href="/terms-of-service" class="footer-link text-white hover:text-gray-300 font-medium">Terms of
@@ -113,9 +117,42 @@ if (isset($BACKEND)) {
             }));
         });
     </script>
+    <script>
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
 
-</body>
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("topbutton").style.display = "block";
+    } else {
+        document.getElementById("topbutton").style.display = "none";
+    }
+}
+</script>
 
+<script>
+    function setFullHeight() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+// Set the --vh custom property initially
+setFullHeight();
+
+// Update it on resize
+window.addEventListener('resize', setFullHeight);
+    </script>
+<script>
+    function adjustViewportHeight() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+window.addEventListener('resize', adjustViewportHeight);
+window.addEventListener('orientationchange', adjustViewportHeight);
+
+// Run the function to set the variable initially
+adjustViewportHeight();</script>
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('avatarForm', () => ({
@@ -135,13 +172,21 @@ if (isset($BACKEND)) {
         }));
     });
 </script>
-<script src="https://cdn.imperfectgamers.org/inc/assets/npm/widget/crate.js" async defer>
-    const button = new Crate({
-        server: '193909594270072832',
-        channel: '366373736766636042',
-        shard: 'https://e.widgetbot.io',
-        color: '#ff3535'
-    })
+
+<!-- External script inclusion -->
+<script src="https://cdn.imperfectgamers.org/inc/assets/npm/widget/crate.js" async defer></script>
+
+<!-- Inline script execution -->
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const button = new Crate({
+            server: '193909594270072832',
+            channel: '366373736766636042',
+            shard: 'https://e.widgetbot.io',
+            color: '#ff3535'
+        });
+    });
 </script>
 
+</body>
 </html>

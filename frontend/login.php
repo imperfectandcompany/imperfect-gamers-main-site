@@ -1,12 +1,11 @@
 <section class="mx-auto">
-    <div>
         <div class="flex flex-col fullscreen justify-content-center align-items-center">
             <div class="mb-8 mt-4 text-center animate__animated animate__fadeIn animate__delay-1s ">
                 <h1 class="text-white text-6xl font-bold">
-                    <?php echo (!isset($success)) ? "Login" : "Welcome back"; ?><br />
+                    <?php echo (!isset($success)) ? "Login" : "Welcome back"; ?>
                 </h1>
                 <div class="text-white">
-                <?php
+                    <?php
                     // Check if the $success variable is set to indicate a successful sign-up
                     if (isset($success)) {
                         // Use an HTML meta tag to refresh the page after 2 seconds
@@ -27,14 +26,14 @@
                                     for="emailoruser">Email / Username</label>
                                 <input type="text" tabindex="1" id="emailoruser" name="login_emailoruser" value="" class="
 bg-red-900 bg-opacity-40 shadow-xl px-3 py-3 text-base focus:outline-none pb-3 w-full rounded-lg my-auto ring-2 ring-offset-2 ring-offset-red-800 ring-red-700 mt-5 cursor-pointer focus:bg-red-900 hover:bg-red-800 focus:bg-opacity-100 transition
-" autofocus />
+" autofocus>
                             </div>
                             <div class="selection:bg-red-300 selection:text-red-900">
                                 <label class="text-uppercase font-medium text-gray-200 focus:text-gray-100"
                                     for="password">Password</label>
                                 <input type="password" tabindex="2" id="password" name="login_password" value="" class="
         bg-red-900 bg-opacity-40 shadow-xl px-3 py-3 text-base focus:outline-none pb-3 w-full rounded-lg my-auto ring-2 ring-offset-2 ring-offset-red-800 ring-red-700 mt-5 cursor-pointer focus:bg-red-900 hover:bg-red-800  focus:bg-opacity-100  transition
-" />
+">
                             </div>
                         </div>
                         <!-- not developed yet 

@@ -1,43 +1,114 @@
-html, body {
-    height: 100%;
+html,
+body {
     margin: 0;
     height: -webkit-fill-available;
 
     padding: 0;
     display: flex;
     flex-direction: column;
-  }
-  
-  /* Change the background color of selected text */
+}
+
+html {
+    scroll-behavior: smooth;
+    height: calc(var(--vh, 1vh) * 100);
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #a83232;
+    border-radius: 20px;
+    border: 3px solid #111;
+}
+
+
+/* Change the background color of selected text */
 ::selection {
-    background: #ff0000; /* red */
-    color: white; /* optional: change text color to white when selected */
-  }
+    background: #ff0000;
+    /* red */
+    color: white;
+    /* optional: change text color to white when selected */
+}
 
-  /* Removing focus outline */
-a:focus, button:focus, input:focus, textarea:focus {
-    outline: none; /* Removes the outline */
+/* Removing focus outline */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+    outline: none;
+    font-size: 16px;
+    /* minimum size to prevent zoom on iOS Safari */
+    /* Removes the outline */
     /* Optional: add a different focus style, like a border or background change */
-    background-color: rgba(255, 0, 0, 0.1); /* subtle red background */
-  }
+    background-color: rgba(255, 0, 0, 0.1);
+    /* subtle red background */
+}
 
-  body > #content {
+
+/* Inline style block or in your external stylesheet */
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+body>#content {
     flex: 1;
-  }
-  
-  #content {
-    flex-grow: 1;
-  }
+}
 
-  main {
+#content {
+    flex-grow: 1;
+}
+
+main {
     min-height: 80vh;
-    display: flex;
     flex-direction: column;
 }
-  
-  #footer {
-    flex-shrink: 0; /* Prevents the footer from shrinking */
-  }
+
+#footer {
+    flex-shrink: 0;
+    position: relative;
+    margin-top: 16px;
+
+    /* Prevents the footer from shrinking */
+}
+
+#topbutton {
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    /* Changed from fixed to absolute */
+    left: 50%;
+    /* Center horizontally */
+    bottom: 95%;
+    /* Position at the bottom of the footer */
+    transform: translateX(-50%);
+    /* Adjust horizontal position to the exact center */
+    z-index: 99;
+    border: none;
+    outline: none;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    background-color: rgba(255, 0, 0, 0.536);
+    border-radius: 20px;
+    /* Circular shape */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    /* Smooth transition for hover effect */
+}
+
+#topbutton:hover {
+    transform: translateX(-50%) translateY(-10px);
+    /* Move up on hover */
+    background-color: #55555536;
+    /* Color change on hover */
+}
 
 a,
 a:focus,
@@ -50,15 +121,16 @@ a:hover {
 
 .overlay-bg {
     background: url(https://cdn.imperfectgamers.org/inc/assets/img/background.png);
-    min-height: 100%;
-    min-width: 100%;
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
-    height: auto;
+    height: calc(var(--vh, 1vh) * 100);
     position: fixed;
+    margin: 0 auto;
+    /* centers the button horizontally */
     top: 0;
-    left: 0
+    left: 0;
+    z-index: -1;
 }
 
 .primary-btn {
@@ -84,15 +156,18 @@ a:hover {
     text-decoration: none;
 }
 
-.card:hover, .card:focus {
+.card:hover,
+.card:focus {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .container {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern and clean font */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Modern and clean font */
     margin: 20px auto;
-    padding: 20px; /* Default padding */
+    padding: 20px;
+    /* Default padding */
     border-radius: 8px;
 }
 
@@ -118,21 +193,36 @@ a:hover {
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) { /* Mobile: Adjust the breakpoint if needed */
+@media (max-width: 600px) {
+
+    /* Mobile: Adjust the breakpoint if needed */
     .container {
-        padding: 10px; /* Less padding on smaller screens */
+        padding: 10px;
+        /* Less padding on smaller screens */
+    }
+
+    .sidebar-maps-list {
+        max-height: 100px !important;
+        /* Adjust this value to fit 3-4 map names */
+        overflow-y: scroll;
     }
 }
 
-@media (min-width: 601px) and (max-width: 1024px) { /* Tablets: Adjust the breakpoints if needed */
+@media (min-width: 601px) and (max-width: 1024px) {
+
+    /* Tablets: Adjust the breakpoints if needed */
     .container {
-        padding: 15px; /* Slightly more padding than mobile */
+        padding: 15px;
+        /* Slightly more padding than mobile */
     }
 }
 
-@media (min-width: 1025px) { /* Desktop and up: Adjust the breakpoint if needed */
+@media (min-width: 1025px) {
+
+    /* Desktop and up: Adjust the breakpoint if needed */
     .container {
-        padding: 20px; /* Default padding for larger screens */
+        padding: 20px;
+        /* Default padding for larger screens */
     }
 }
 
@@ -145,9 +235,12 @@ a:hover {
 
 
 .section-header {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Make the line more visible */
-    padding-bottom: 15px; /* Increase padding for visual comfort */
-    margin-bottom: 25px; /* Increase margin for more space */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    /* Make the line more visible */
+    padding-bottom: 15px;
+    /* Increase padding for visual comfort */
+    margin-bottom: 25px;
+    /* Increase margin for more space */
 }
 
 .thread-item {
@@ -206,29 +299,37 @@ a:hover {
 
 /* Pagination: Make it more thumb-friendly on mobile */
 .page-item a.page-link {
-    padding: 10px 15px; /* Larger area for mobile users */
-    background-color: #444444; /* Distinct background */
-    color: #FFFFFF; /* High contrast for readability */
-    border-radius: 20px; /* More pronounced rounded corners */
-    border: none; /* Remove border */
-    transition: background-color 0.3s; /* Smooth background transition */
+    padding: 10px 15px;
+    /* Larger area for mobile users */
+    background-color: #444444;
+    /* Distinct background */
+    color: #FFFFFF;
+    /* High contrast for readability */
+    border-radius: 20px;
+    /* More pronounced rounded corners */
+    border: none;
+    /* Remove border */
+    transition: background-color 0.3s;
+    /* Smooth background transition */
 }
 
 .page-item.active a.page-link,
 .page-item a.page-link:hover {
-    background-color: #FF6347; /* Vibrant color for active/hover state */
+    background-color: #FF6347;
+    /* Vibrant color for active/hover state */
 }
 
 .page-item.disabled a.page-link {
     pointer-events: none;
     opacity: 0.5;
-    cursor: not-allowed;    
-}   
+    cursor: not-allowed;
+}
 
-.page-item.disabled a.page-link, .page-item.active a.page-link {
+.page-item.disabled a.page-link,
+.page-item.active a.page-link {
     pointer-events: none;
     opacity: 0.5;
-    cursor: not-allowed;     
+    cursor: not-allowed;
 }
 
 /* Disabled page numbers style */
@@ -253,6 +354,7 @@ a.thread-item,
     transition: background-color 0.3s ease;
     /* Smooth transition for hover effect */
 }
+
 /* UGIFYAEWIGFBGFOHBGUFGEUBEFR */
 
 .profile-section {
@@ -367,4 +469,134 @@ a.thread-item,
 
 
 
-/* store css */
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    /* 14px */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* add vendor prefix for Safari */
+    background-color: rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.cta-button:hover {
+    background-color: rgba(255, 255, 255, 0.123);
+}
+
+.cta-button .icon {
+    margin-left: 1rem;
+}
+
+/* Touch devices with hover capability */
+@media (hover: hover) and (pointer: fine) {
+    .cta-button:hover {
+        background-color: rgba(255, 255, 255, 0.123);
+    }
+}
+
+/* Touch devices without hover capability */
+@media (hover: none) {
+    .cta-button:active {
+        background-color: rgba(255, 255, 255, 0.123);
+    }
+}
+
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 10px 0;
+}
+
+
+/* Logo Styles */
+.nav-logo img {
+    max-width: 120px;
+    z-index: 2;
+}
+
+/* Navigation Links */
+.nav-links {
+    display: flex;
+    z-index: 2;
+    position: relative;
+}
+
+.nav-links a {
+    color: #fff;
+    padding: 0 15px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    color: #ddd;
+}
+
+/* Bottom border under navbar */
+.navbar:after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: red;
+    z-index: 3;
+}
+
+/* Remove the individual gradients since we're using an overlay for both sides */
+.navbar::before,
+.navbar::after {
+    display: none;
+}
+
+/* Add border to both ends */
+.navbar {
+    background: linear-gradient(to right, rgb(169 42 42 / 79%), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4), rgb(169 42 42 / 79%));
+    border-bottom: 1px solid red;
+    /* Adjust the color and thickness as needed */
+}
+
+.ig_logo {
+    --animate-duration: 0.3s;
+}
+
+.search-input {
+    background-color: #121212;
+    /* Dark gray background */
+    border: 1px solid #333;
+    /* Dark gray border */
+}
+
+.bonus-button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #333;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.bonus-button:hover {
+    background-color: #555;
+}
+
+.bonus-button.active {
+    background-color: #f00;
+}
+
