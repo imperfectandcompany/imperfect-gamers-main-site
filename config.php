@@ -31,6 +31,29 @@ switch ($GLOBALS['url_loc'][1]) {
         $META_DESC = "Apply to be a part of the Imperfect Gamers team and contribute to our thriving music and gaming community.";
         $META_WORDS = "imperfect gamers applications, community involvement, team application";
         break;
+    case "admin":
+        $PAGE_TITLE = "Admin";
+        $BACKEND = "admin";
+        $FRONTEND = "admin";
+        $HEADER = "subpage";
+        $META_DESC = "";
+        $META_WORDS = "";
+        break;
+        case "bans":
+            $PAGE_TITLE = "Bans";
+            $BACKEND = "bans";
+            $FRONTEND = "bans";
+            $HEADER = "subpage";
+            $META_DESC = "";
+            $META_WORDS = "";
+            break;        
+            case "infractions":
+                $PAGE_TITLE = "Infractions";
+                $BACKEND = "infractions";
+                $FRONTEND = "infractions";
+                $META_DESC = "";
+                $META_WORDS = "";
+                break;               
     case "about":
         $PAGE_TITLE = "About Us";
         $BACKEND = "about";

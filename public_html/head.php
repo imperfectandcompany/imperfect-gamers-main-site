@@ -12,7 +12,7 @@
     <meta property="og:url" content="https://imperfectgamers.org">
     <title><?php echo isset($PAGE_TITLE) ? $PAGE_TITLE . ' | Imperfect Gamers' : 'Underground Entertainment | Imperfect Gamers'; ?></title>
     <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css">
@@ -20,6 +20,6 @@
     <link rel="stylesheet" href="<?php echo $GLOBALS['config']['url'] ?? 'default.css'; ?>/css/main.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://use.fontawesome.com/cdebacd051.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
 </head>

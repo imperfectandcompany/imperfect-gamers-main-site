@@ -59,5 +59,6 @@ include_once("../classes/class.user.php");
 include_once("../classes/class.database.php");		
 include_once("../classes/class.general.php");	
 include_once("../classes/class.settings.php");	
+include_once("../classes/class.PermissionUtil.php");	
 include_once("../classes/class.forum.php");	
 include_once("../functions/functions.sitemap.php");

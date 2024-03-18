@@ -449,10 +449,36 @@ if (!$errorFlag) {
     // Construct the map identifier for map-specific searches
     $mapIdentifier = $mapName ? $mapName . ($bonusNumber ? "_bonus{$bonusNumber}" : '') : null;
 
-    $playersPerPage = 10; // Set how many players we want per page
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Handle form submission for player search
+        if (isset($_POST['playerSearch'])) {
+            $searchTerm = $_POST['playerSearch'];
+            $current_page = 1; // Reset the page number to 1 after a search
+        }
+    }
+
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['playersPerPage'])) {
+        $requestedPerPage = intval($_POST['playersPerPage']);
+        // Define allowed values for 'playersPerPage'
+        $allowedPerPage = [10, 15, 20, 50, 100, 200];
+        
+        // Check if the requested value is in the allowed options
+        if (in_array($requestedPerPage, $allowedPerPage)) {
+            $playersPerPage = $requestedPerPage;
+        } else {
+            // If not, default to 10
+            $playersPerPage = 10;
+        }
+    } else {
+        // Default to 10 if not a POST request or if 'playersPerPage' is not set
+        $playersPerPage = 10;
+    }
+
 
 // Initialize breadcrumbs
-$breadcrumbs = [];
+$breadcrumbs = []; 
 
 // Base URL for breadcrumb links
 $baseBreadcrumbUrl = '/stats';

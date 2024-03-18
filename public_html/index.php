@@ -22,15 +22,16 @@ if (isset($BACKEND)) {
 <!doctype html>
 <html lang="en">
 <?php include_once('head.php'); ?>
+
 <body class="flex flex-col justify-between h-screen">
-<div id="top"></div>
-<script>
-            setTimeout(function () {
-                snowStorm.start();
-            }, 500);
+    <div id="top"></div>
+    <script>
+        setTimeout(function () {
+            snowStorm.start();
+        }, 500);
     </script>
-<script src="https://imperfectgamers.org/store/compiled/js/essential.js"></script>
-    <script src="https://imperfectgamers.org/store/compiled/js/site.js"></script>
+    <script src="./snowstorm.js"></script>
+
     <div class="flex flex-col justify-between">
         <?php if (isset($HEADER)): ?>
             <header id="header" class="text-center justify-center" style="touch-action: none;">
@@ -97,6 +98,7 @@ if (isset($BACKEND)) {
 
 
 
+
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('avatarForm', () => ({
@@ -118,75 +120,76 @@ if (isset($BACKEND)) {
         });
     </script>
     <script>
-// When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function() {scrollFunction()};
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () { scrollFunction() };
 
-function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById("topbutton").style.display = "block";
-    } else {
-        document.getElementById("topbutton").style.display = "none";
-    }
-}
-</script>
-
-<script>
-    function setFullHeight() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-}
-
-// Set the --vh custom property initially
-setFullHeight();
-
-// Update it on resize
-window.addEventListener('resize', setFullHeight);
-    </script>
-<script>
-    function adjustViewportHeight() {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-}
-
-window.addEventListener('resize', adjustViewportHeight);
-window.addEventListener('orientationchange', adjustViewportHeight);
-
-// Run the function to set the variable initially
-adjustViewportHeight();</script>
-<script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('avatarForm', () => ({
-            avatarChanged: false,
-            avatarPreview: '<?php echo $userAvatarUrl ?? $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']; ?>',
-            fileChosen(event) {
-                const input = event.target;
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        this.avatarPreview = e.target.result;
-                        this.avatarChanged = true;
-                    }.bind(this); // Use .bind(this) to refer to the Alpine component
-                    reader.readAsDataURL(input.files[0]);
-                }
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("topbutton").style.display = "block";
+            } else {
+                document.getElementById("topbutton").style.display = "none";
             }
-        }));
-    });
-</script>
+        }
+    </script>
 
-<!-- External script inclusion -->
-<script src="https://cdn.imperfectgamers.org/inc/assets/npm/widget/crate.js" async defer></script>
+    <script>
+        function setFullHeight() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
 
-<!-- Inline script execution -->
-<script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const button = new Crate({
-            server: '193909594270072832',
-            channel: '366373736766636042',
-            shard: 'https://e.widgetbot.io',
-            color: '#ff3535'
+        // Set the --vh custom property initially
+        setFullHeight();
+
+        // Update it on resize
+        window.addEventListener('resize', setFullHeight);
+    </script>
+    <script>
+        function adjustViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        window.addEventListener('resize', adjustViewportHeight);
+        window.addEventListener('orientationchange', adjustViewportHeight);
+
+        // Run the function to set the variable initially
+        adjustViewportHeight();</script>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('avatarForm', () => ({
+                avatarChanged: false,
+                avatarPreview: '<?php echo $userAvatarUrl ?? $GLOBALS['config']['avatar_url'] . '/' . $GLOBALS['config']['default_avatar']; ?>',
+                fileChosen(event) {
+                    const input = event.target;
+                    if (input.files && input.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            this.avatarPreview = e.target.result;
+                            this.avatarChanged = true;
+                        }.bind(this); // Use .bind(this) to refer to the Alpine component
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+            }));
         });
-    });
-</script>
+    </script>
+
+    <!-- External script inclusion -->
+    <script src="https://cdn.imperfectgamers.org/inc/assets/npm/widget/crate.js" async defer></script>
+
+    <!-- Inline script execution -->
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const button = new Crate({
+                server: '193909594270072832',
+                channel: '366373736766636042',
+                shard: 'https://e.widgetbot.io',
+                color: '#ff3535'
+            });
+        });
+    </script>
 
 </body>
+
 </html>

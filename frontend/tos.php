@@ -22,6 +22,15 @@
                 <p>"Us", "We", "Our", "IG", "The community" all refers to Imperfect Gamers as a group, as a community.
                     We are not responsible for any mistakes you may have made with our service.</p>
             </div>
+            <!-- Tebex Partnership Section -->
+            <div
+                class="mb-12 card flex flex-col justify-between rounded-lg p-6 bg-red-900/10 border-red-600/50 text-white">
+                <h2 class="text-3xl font-bold mb-4">Tebex Terms & Conditions
+</h2>
+                <p>
+            We partner with Tebex Limited (www.tebex.io), who are the official merchant of digital content produced by us. If you wish to purchase licenses to use digital content we produce, you must do so through Tebex as our licensed reseller and merchant of record. In order to make any such purchase from Tebex, you must agree to their terms, available at https://checkout.tebex.io/terms. If you have any queries about a purchase made through Tebex, including but not limited to refund requests, technical issues or billing enquiries, you should contact Tebex support at https://www.tebex.io/contact/checkout in the first instance.
+</p>
+        </div>
             <!-- Refunds Section -->
             <div
                 class="mb-12 card flex flex-col justify-between rounded-lg p-6 bg-red-900/10 border-red-600/50 text-white">
@@ -49,7 +58,10 @@
                 <p>You hereby agree that by viewing this TOS, you acknowledge that your contract with
                     imperfectgamers.org also correlates to the server and any service that is owned by us.</p>
             </div>
-        </div>
+
+
+
+
         <div class="text-sm mt-4">
             <p>If you have any questions about these Terms of Service, please contact us at:
                 policies@imperfectgamers.org</p>

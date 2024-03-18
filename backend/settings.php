@@ -59,10 +59,6 @@ if ($_POST && $_SERVER['REQUEST_METHOD'] == 'POST') {
             case "change_username":
                 // Handle username change logic here
                 $newUsername = $_POST['new_username'];
-                echo "AWDE";
-                // Perform your checks and throw exceptions as needed
-                // ...
-
                 // If all checks pass, update the username
                 DatabaseConnector::updateData(
                     "profiles",

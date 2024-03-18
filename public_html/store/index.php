@@ -314,12 +314,8 @@ try {
                                             </div>
                                             <!-- More benefits... -->
                                         </div>
-                                        <div class="mt-8 text-center">
-                                            <a href="/store/store.php?page=purchase&type=pkg&pid=19"" class="
-                                                primary-btn animate__animated animate__zoomIn">
-                                                Become a VIP
-                                            </a>
-                                        </div>
+<button onclick="alertMessage()" class="primary-btn animate__animated animate__zoomIn items-center text-center mx-auto">Become a VIP</button>
+
                                     </div>
                                     <h2 class="text-3xl font-bold text-center mb-6 pt-12">What you get</h2>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
@@ -573,5 +569,11 @@ try {
     echo "<script type='text/javascript'>console.log('TOS has been agreed. You now have access to purchasing packages, if for some reason there is an issue please come on the discord for immediate assistance. Thank you!');</script>";
 
 } ?>
+
+<script>
+function alertMessage() {
+    alert("To become a VIP, please DM Low on the Imperfect Gamers Discord. Ensure you're only ever sending payment to the email 'hazzzzzzmat@gmail.com'.");
+}
+</script>
 
 <?php include('inc/footer.php'); ?>

@@ -588,7 +588,7 @@ class dashboard
 
     public static function getRecentPurchases() {
         global $db;
-        $apiKey = 'EDITED4GITHUB'; // Your Steam API key
+        $apiKey = '52A66B13219F645834149F1A1180770A'; // Your Steam API key
         $recentPurchasesData = $db->getAll("SELECT p.id, p.name AS p_name, t.package, t.price, t.credits, t.currency, t.timestamp, t.uid FROM transactions t JOIN players p ON t.uid = p.uid WHERE t.price IS NOT NULL AND t.txn_id != 'Assigned by Admin' AND t.txn_id != 'Assigned from advent calendar' ORDER BY t.id DESC LIMIT 4");
     
         $recentPurchases = [];

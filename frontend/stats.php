@@ -26,8 +26,8 @@ TODO: FIX GLITCH WHERE THE MAP IS SELECTED BUT IF GLOBAL IS CLICKED, IT STILL SH
                 <div class="text-white">
                     <label class="flex flex-col relative group">
                         <input type="text" x-model="search" @focus="focused = true" @blur="focused = false"
-                        placeholder=" "
-                        class="border-2 border-black bg-black/20 pl-4 pr-10 py-2 text-white w-full rounded-md focus:outline-none transition"
+                            placeholder=" "
+                            class="border-2 border-black bg-black/20 pl-4 pr-10 py-2 text-white w-full rounded-md focus:outline-none transition"
                             placeholder=" ">
                         <span x-show="!search && !focused" x-transition:leave="transition ease-in duration-200"
                             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
@@ -50,13 +50,12 @@ TODO: FIX GLITCH WHERE THE MAP IS SELECTED BUT IF GLOBAL IS CLICKED, IT STILL SH
 
                 <!-- Maps list -->
                 <div class="flex flex-col overflow-y-auto sidebar-maps-list" style="max-height: 80vh;">
-    <template x-for="map in sortedAndFilteredMaps" :key="map">
-        <a :href="`/stats/map/${encodeURI(map)}`"
-           :class="mapClass(map, currentMap)"
-           x-html="highlight(map, search)">
-        </a>
-    </template>
-</div>
+                    <template x-for="map in sortedAndFilteredMaps" :key="map">
+                        <a :href="`/stats/map/${encodeURI(map)}`" :class="mapClass(map, currentMap)"
+                            x-html="highlight(map, search)">
+                        </a>
+                    </template>
+                </div>
             </div>
 
             <!-- Global Options List -->
@@ -286,7 +285,149 @@ TODO: FIX GLITCH WHERE THE MAP IS SELECTED BUT IF GLOBAL IS CLICKED, IT STILL SH
                 ?>
             </div>
 
+
+
+            <style>
+                /* Add styles to ensure sufficient contrast and readability */
+                .dropdown-text {
+                    color: #1a202c;
+                    /* This is a dark gray color, adjust as needed */
+                }
+
+
+                /* Ensure the dropdown and options are easily tappable on a mobile device */
+                .tappable {
+                    padding: 12px 16px;
+                    /* Increases touch area */
+                }
+
+
+                /* Container styles for dropdown */
+                /* Container styles for dropdown */
+                .dropdown-container {
+                    /* Adjust the width as needed to fit your layout */
+                    width: 125px;
+                    /* Example width */
+                    /* You may need to adjust the right positioning */
+                    right: 0px;
+                    bottom: 0px;
+                    /* Adjust this to move the dropdown up or down */
+                    z-index: 10;
+                    /* Ensure it's above other elements */
+                }
+
+                /* Dropdown styles */
+                .dropdown {
+                    width: 100%;
+                    /* Dropdown takes the full width of the container */
+                    /* Other styles remain the same */
+                }
+
+                .rotate-180 {
+                    transform: rotate(180deg);
+                }
+
+                /* Ensure the custom scrollbar is applied only to the dropdown options */
+                .dropdown-options {
+                    /* For Firefox */
+                    scrollbar-color: #888 transparent;
+                    /* Adjust as needed */
+                    overflow-y: auto;
+                }
+
+
+
+
+
+
+
+                   /* Ensures sufficient contrast and readability */
+    .dropdown-text {
+        color: #f9f9f9; /* Changed to a light color for readability on dark backgrounds */
+    }
+
+    /* Enhances touch area for mobile devices */
+    .tappable {
+        padding: 12px 16px; /* Existing good touch area */
+        cursor: pointer; /* To indicate tappable areas */
+    }
+
+    /* Styles for the dropdown container */
+    .dropdown-container {
+        width: 150px; /* Adjusted width */
+        position: relative; /* To position the dropdown inside */
+        z-index: 10; /* Ensures it's above other elements */
+    }
+
+    /* Styles for the dropdown */
+    .dropdown {
+        width: 100%;
+        background: rgba(0,0,0,0.8); /* Dark background for the dropdown */
+        color: #fff; /* Light text color */
+        padding: 12px 16px;
+        border-radius: 8px; /* Rounded corners */
+        border: none; /* Remove default border */
+    }
+
+    .dropdown:hover {
+        background: rgba(0,0,0,1); /* Dark background for the dropdown */
+    }
+
+    /* Rotates the icon on toggle */
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
+    /* Custom scrollbar for the options */
+    .dropdown-options {
+        scrollbar-width: thin;
+        scrollbar-color: #888 #333; /* Scroll thumb and track */
+        max-height: 200px; /* Limit height */
+        overflow-y: auto;
+        background: rgba(0,0,0,1); /* Dark background for the dropdown */
+        border-radius: 8px; /* Match dropdown border-radius */
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Slight shadow for depth */
+    }
+
+    /* Hover effect for options */
+    .dropdown-option:hover {
+        background: rgba(0,0,0,1); /* Dark background for the dropdown */
+    }
+            </style>
+
+            <?php
+            $selectedValue = isset($_POST['playersPerPage']) ? $_POST['playersPerPage'] : '10';
+            ?>
             <div>
+            <div class="dropdown-container select-none mt-2">
+    <div x-data="{ open: false, selected: '<?= $selectedValue ?>', options: { '10': '10', '15': '15', '20': '20', '50': '50', '100': '100', '200': '200' } }"
+        @click.away="open = false" class="relative">
+        <form method="POST" action="" id="form">
+            <input type="hidden" name="playersPerPage" :value="selected">
+            <div @click="open = !open"
+                class="dropdown tappable">
+                <div class="dropdown-text">
+                <?php echo $playersPerPage; ?>
+                </div>
+                <div class="absolute right-0 top-0 h-full px-4 flex items-center">
+                    <svg :class="{'rotate-180': open}" class="fill-current h-4 w-4 transition-transform"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                </div>
+            </div>
+            <div x-show="open"
+                class="dropdown-options absolute mt-1 my-0">
+                <template x-for="(label, value) in options" :key="value">
+                    <div class="dropdown-option tappable"
+                        @click="selected = value; open = false; $nextTick(() => { document.getElementById('form').submit(); })"
+                        x-text="label"></div>
+                </template>
+            </div>
+        </form>
+    </div>
+</div>
+
                 <?php
                 if (!$errorFlag && isset($totalPages) && isset($totalRecords)) {
                     $window = 2;
@@ -361,43 +502,43 @@ TODO: FIX GLITCH WHERE THE MAP IS SELECTED BUT IF GLOBAL IS CLICKED, IT STILL SH
                 }
             }
         </script>
-<script>
-    function mapSearch() {
-        return {
-            tab: '<?= (isset($GLOBALS['url_loc'][2]) && $GLOBALS['url_loc'][2] === 'map') ? 'maps' : 'global' ?>',
-            currentMap: '<?= $GLOBALS['url_loc'][3] ?? '' ?>', // This should be the map name from the URL
-            search: '',
-            focused: false,
-            maps: <?php echo json_encode(array_column($maps, 'MapName')); ?>,
-            get sortedAndFilteredMaps() {
-                const searchLower = this.search.toLowerCase();
-                return this.maps.sort((a, b) => {
-                    const aIncludes = a.toLowerCase().includes(searchLower);
-                    const bIncludes = b.toLowerCase().includes(searchLower);
-                    if (aIncludes && !bIncludes) return -1;
-                    if (!aIncludes && bIncludes) return 1;
-                    return a.localeCompare(b);
-                });
-            },
-            mapClass(map, currentMap) {
-                const isActive = map === currentMap;
-                const isMatched = map.toLowerCase().includes(this.search.toLowerCase());
+        <script>
+            function mapSearch() {
                 return {
-                    'block py-2 px-4 transition-all transform cursor-pointer': true,
-                    'bg-black/50 text-red-600 hover:opacity-20': isActive,
-                    'opacity-75': !isActive,
-                    'font-bold': this.search !== '' && isMatched,
-                    'opacity-25': this.search !== '' && !isMatched,
+                    tab: '<?= (isset($GLOBALS['url_loc'][2]) && $GLOBALS['url_loc'][2] === 'map') ? 'maps' : 'global' ?>',
+                    currentMap: '<?= $GLOBALS['url_loc'][3] ?? '' ?>', // This should be the map name from the URL
+                    search: '',
+                    focused: false,
+                    maps: <?php echo json_encode(array_column($maps, 'MapName')); ?>,
+                    get sortedAndFilteredMaps() {
+                        const searchLower = this.search.toLowerCase();
+                        return this.maps.sort((a, b) => {
+                            const aIncludes = a.toLowerCase().includes(searchLower);
+                            const bIncludes = b.toLowerCase().includes(searchLower);
+                            if (aIncludes && !bIncludes) return -1;
+                            if (!aIncludes && bIncludes) return 1;
+                            return a.localeCompare(b);
+                        });
+                    },
+                    mapClass(map, currentMap) {
+                        const isActive = map === currentMap;
+                        const isMatched = map.toLowerCase().includes(this.search.toLowerCase());
+                        return {
+                            'block py-2 px-4 transition-all transform cursor-pointer': true,
+                            'bg-black/50 text-red-600 hover:opacity-20': isActive,
+                            'opacity-75': !isActive,
+                            'font-bold': this.search !== '' && isMatched,
+                            'opacity-25': this.search !== '' && !isMatched,
+                        };
+                    },
+                    highlight(map, search) {
+                        if (!search) return map;
+                        const re = new RegExp(search, 'gi');
+                        return map.replace(re, match => `<span class="bg-yellow-400/50">${match}</span>`);
+                    },
                 };
-            },
-            highlight(map, search) {
-                if (!search) return map;
-                const re = new RegExp(search, 'gi');
-                return map.replace(re, match => `<span class="bg-yellow-400/50">${match}</span>`);
-            },
-        };
-    }
-</script>
+            }
+        </script>
 
     </div>
 </section>
