@@ -1,170 +1,298 @@
 <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-        body {
-            font-family: 'Roboto', sans-serif;
+    .search-user-input label {
+        color: white;
+        margin-bottom: .5rem;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    .border-card {
+        border: 1px solid #ff0000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    .search-user-input input {
+        width: 100%;
+        background-color: rgba(255, 0, 0, 0.05);
+        border: 1px solid #ff0000;
+        color: white;
+        padding: 10px;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+    }
+
+    .search-user-input .dropdown {
+        position: absolute;
+        z-index: 50;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        border: 1px solid #ff0000;
+        border-top: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        color: white;
+        top: 100%;
+        left: 0;
+        right: 0;
+        overflow-y: auto;
+        max-height: 200px;
+    }
+
+
+
+    .no-users-found {
+        color: #ff0000;
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    .border-connect-dropdown {
+        border-bottom: none;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .dropdown-enter-active,
+    .dropdown-leave-active {
+        transition: opacity 0.5s;
+    }
+
+    .dropdown-option:focus,
+    .dropdown-option:hover {
+        outline: none;
+        background-color: rgba(255, 69, 0, 0.2);
+    }
+
+    .dropdown-enter,
+    .dropdown-leave-to {
+        opacity: 0;
+    }
+
+    /* Styling for the navigation tabs */
+    nav button {
+        transition: background-color 0.3s ease;
+    }
+
+    /* Update to the navigation buttons for better visibility and interaction feedback */
+    nav button:hover {
+        background-color: rgba(255, 255, 255, 0.25);
+        color: #FFF;
+    }
+
+    .icon-box {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 0.25rem;
+    }
+
+    nav button.active {
+        background-color: rgba(255, 0, 0, 0.5);
+        border: 1px solid red;
+    }
+
+    .skeleton {
+        animation: skeleton-loading 1s linear infinite alternate;
+    }
+
+    @keyframes skeleton-loading {
+        0% {
+            background-color: hsl(200, 20%, 70%);
         }
 
-        .search-user-input label {
-            color: white;
-            margin-bottom: .5rem;
+        100% {
+            background-color: hsl(200, 20%, 95%);
         }
+    }
 
-        [x-cloak] {
-            display: none !important;
-        }
+    .infraction-ban {
+        color: #ef4444;
+    }
 
-        .border-card {
+    .infraction-mute {
+        color: #facc15;
+    }
+
+    .infraction-gag {
+        color: #22c55e;
+    }
+
+    .expired {
+        text-decoration: line-through;
+    }
+
+    .pagination {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+        gap: 0.5rem;
+    }
+
+    .pagination li {
+        margin: 0;
+    }
+
+    .pagination li a {
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ffffff50;
+        border-radius: 5px;
+    }
+
+    .pagination li a:hover,
+    .pagination li a.active {
+        background-color: #ffffff50;
+    }
+
+
+
+
+    .entries-dropdown {
+            position: absolute;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.9);
             border: 1px solid #ff0000;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             border-radius: 5px;
-            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            top: 100%;
+            left: 0;
+            overflow-y: auto;
+            max-height: 200px;
+            min-width: 150px; /* Adjust as needed to match button's width */
         }
 
-        .search-user-input input {
-            width: 100%;
+.show-entries-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+
+        .show-entries-button {
             background-color: rgba(255, 0, 0, 0.05);
             border: 1px solid #ff0000;
             color: white;
             padding: 10px;
             margin-bottom: 1rem;
             border-radius: 5px;
+            transition: all 0.3s ease-in-out; /* Smooth transition for dropdown */
         }
 
-        .search-user-input .dropdown {
-            position: absolute;
-            z-index: 50;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #ff0000;
-            border-top: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            color: white;
-            top: 100%;
-            left: 0;
-            right: 0;
-            overflow-y: auto;
-            max-height: 200px;
+        .show-entries-button:hover {
+            background-color: rgba(255, 0, 0, 0.1); /* Slightly darker on hover */
         }
 
-        .no-users-found {
-            color: #ff0000;
-            padding: 0.5rem;
-            text-align: center;
-        }
-
-        .border-connect-dropdown {
-            border-bottom: none;
-            border-bottom-left-radius: 0 !important;
-            border-bottom-right-radius: 0 !important;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .dropdown-enter-active,
-        .dropdown-leave-active {
-            transition: opacity 0.5s;
-        }
-
-        .dropdown-option:focus,
-        .dropdown-option:hover {
+        .show-entries-button:focus {
             outline: none;
-            background-color: rgba(255, 69, 0, 0.2);
+            border-color: #ff0000;
+            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.5);
         }
 
-        .dropdown-enter,
-        .dropdown-leave-to {
-            opacity: 0;
+        .show-entries-button .fa-chevron-down {
+            transition: transform 0.3s ease-in-out; /* Smooth rotation for caret */
         }
 
-        /* Styling for the navigation tabs */
-        nav button {
-            transition: background-color 0.3s ease;
+        .show-entries-button.open .fa-chevron-down {
+            transform: rotate(180deg); /* Rotate caret when dropdown is open */
         }
 
-        /* Update to the navigation buttons for better visibility and interaction feedback */
-        nav button:hover {
-            background-color: rgba(255, 255, 255, 0.25);
-            color: #FFF;
+        .entries-dropdown-option:hover,
+        .entries-dropdown-option.active {
+            background-color: rgba(255, 69, 0, 0.2); /* Highlight for active/selected option */
         }
 
-        .icon-box {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 0.25rem;
+    /* Responsive styling for the navigation tabs */
+    @media (max-width: 768px) {
+        .tab-nav {
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
-        nav button.active {
-            background-color: rgba(255, 0, 0, 0.5);
-            border: 1px solid red;
+        .tab-nav button {
+            flex: 0 0 auto;
         }
-
-        .skeleton {
-            animation: skeleton-loading 1s linear infinite alternate;
-        }
-
-        @keyframes skeleton-loading {
-            0% {
-                background-color: hsl(200, 20%, 70%);
-            }
-
-            100% {
-                background-color: hsl(200, 20%, 95%);
-            }
-        }
-
-        .infraction-ban {
-            color: #ef4444;
-        }
-
-        .infraction-mute {
-            color: #facc15;
-        }
-
-        .infraction-gag {
-            color: #22c55e;
-        }
-
-        .expired {
-            text-decoration: line-through;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-        }
-
-        .pagination li {
-            margin: 0 5px;
-        }
-
-        .pagination li a {
-            color: white;
-            text-decoration: none;
-            padding: 5px 10px;
-            border: 1px solid #ffffff50;
-            border-radius: 5px;
-        }
-
-        .pagination li a:hover,
-        .pagination li a.active {
-            background-color: #ffffff50;
-        }
-    </style>
+    }
+</style>
 
 
-<div x-cloak x-data="{ showModal: false, modalTitle: '', modalContent: '' }"
-@keydown.window.escape="showModal = false"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div x-cloak x-data="{ showModal: false, modalTitle: '', modalContent: '' }" @keydown.window.escape="showModal = false"
     class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white/85">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Header -->
     <header class="flex justify-between items-center py-6">
         <div class="flex items-center space-x-4">
@@ -206,7 +334,8 @@
                             <span class="mx-2">></span>
                         </li>
                         <li class="flex items-center">
-                            <a href="https://imperfectgamers.org/infractions" class="text-gray-400 hover:text-white" aria-current="page">Infractions</a>
+                            <a href="https://imperfectgamers.org/infractions" class="text-gray-400 hover:text-white"
+                                aria-current="page">Infractions</a>
                         </li>
                     </ol>
                 </nav>
@@ -219,38 +348,37 @@
                 <div class="relative -mb-px h-px w-full bg-gradient-to-r from-transparent via-red-600 to-transparent">
                 </div>
                 <!-- Tabs for navigation -->
-                <nav class="flex space-x-1 bg-black/30 p-2 rounded">
-    <button class="px-3 py-1 rounded text-white active select-none">Overview</button>
-    
-    <button class="px-3 py-1 rounded text-white" @click="showModal = true; modalTitle = 'Bans - Under Construction'; modalContent = 'Our ban review feature is hammering out some final details. Stay tuned for updates!'">Bans</button>
-    
-    <button class="px-3 py-1 rounded text-white" @click="showModal = true; modalTitle = 'Mutes - On Mute for Now'; modalContent = 'We\'re fine-tuning the strings to ensure everything sounds right. Check back later!'">Mutes</button>
-    
-    <button class="px-3 py-1 rounded text-white" @click="showModal = true; modalTitle = 'Gags - Sealed Lips for a Bit'; modalContent = 'This feature is zipped up tight as we\'re adding the finishing touches. We appreciate your patience!'">Gags</button>
-    
-    <button class="px-3 py-1 rounded text-white" @click="showModal = true; modalTitle = 'Appeals - Need Help?'; modalContent = 'For now, head over to our <a href=\'https://imperfectgamers.org/discord/\' class=\'text-blue-400 hover:text-blue-600\'>Discord</a> or directly to the <a href=\'https://discord.com/channels/193909594270072832/641373370944061451\' class=\'text-blue-400 hover:text-blue-600\'>#ban-appeals</a> channel to sort out appeals. We\'re working on bringing this feature directly to you here, so stay tuned!'">Appeal</button>
-</nav>
-
+                <nav class="flex overflow-x-auto space-x-1 bg-black/30 p-2 rounded">
+                    <button class="px-3 py-1 rounded text-white active select-none whitespace-nowrap">Overview</button>
+                    <button class="px-3 py-1 rounded text-white whitespace-nowrap"
+                        @click="showModal = true; modalTitle = 'Bans - Under Construction'; modalContent = 'Our ban review feature is hammering out some final details. Stay tuned for updates!'">Bans</button>
+                    <button class="px-3 py-1 rounded text-white whitespace-nowrap"
+                        @click="showModal = true; modalTitle = 'Mutes - On Mute for Now'; modalContent = 'We\'re fine-tuning the strings to ensure everything sounds right. Check back later!'">Mutes</button>
+                    <button class="px-3 py-1 rounded text-white whitespace-nowrap"
+                        @click="showModal = true; modalTitle = 'Gags - Sealed Lips for a Bit'; modalContent = 'This feature is zipped up tight as we\'re adding the finishing touches. We appreciate your patience!'">Gags</button>
+                    <button class="px-3 py-1 rounded text-white whitespace-nowrap"
+                        @click="showModal = true; modalTitle = 'Appeals - Need Help?'; modalContent = 'For now, head over to our <a href=\'https://imperfectgamers.org/discord/\' class=\'text-blue-400 hover:text-blue-600\'>Discord</a> or directly to the <a href=\'https://discord.com/channels/193909594270072832/641373370944061451\' class=\'text-blue-400 hover:text-blue-600\'>#ban-appeals</a> channel to sort out appeals. We\'re working on bringing this feature directly to you here, so stay tuned!'">Appeal</button>
+                </nav>
                 <div
                     class="relative -mb-px h-px w-full bg-gradient-to-r from-transparent via-red-600/20 to-transparent">
                 </div>
 
                 <div class="flex space-x-4 mt-6">
                     <div class="w-full">
-                        <div x-data="searchUserApp()" class="search-user-input bg-black/50 p-4 rounded">
+                        <div x-data="searchUserApp()" class="search-user-input bg-black/50 p-1 rounded">
                             <!-- Input for reported user's name with search functionality -->
                             <div @click.away="handleClickAway($event)" class="relative mb-4">
                                 <label for="searchedUsers" class="block text-sm font-medium text-white">Search by
                                     SteamID
                                     or
                                     Name</label>
-                                    <input type="text" id="searchedUsers" name="searchedUsers" x-model="searchQuery"
-       @focus="handleFocus"
-       class="mt-1 block w-full rounded-md bg-black/60 border-gray-700 text-white"
-       :class="{'border-connect-dropdown': showDropdown}"
-       placeholder="Search for a user..."
-       @click="showModal = true; modalTitle = 'Feature Coming Soon'; modalContent = 'This feature is currently under development. Thank you for your patience.';"
-       readonly>
+                                <input type="text" id="searchedUsers" name="searchedUsers" x-model="searchQuery"
+                                    @focus="handleFocus"
+                                    class="mt-1 block w-full rounded-md bg-black/60 border-gray-700 text-white"
+                                    :class="{'border-connect-dropdown': showDropdown}"
+                                    placeholder="Search for a user..."
+                                    @click="showModal = true; modalTitle = 'Feature Coming Soon'; modalContent = 'This feature is currently under development. Thank you for your patience.';"
+                                    readonly>
 
 
                                 <div x-show="showDropdown" class="dropdown" x-transition>
@@ -266,25 +394,30 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Infractions Table -->
-                <div class="overflow-x-auto text-red-500!">
-                    <div x-data>
-                        <table class="w-full text-left">
-                            <thead class="text-white bg-black/10">
+                <div class="border-t-[1px] border-[#323232] mt-1 pt-2 text-sm mb-3">
+                    <div class="overflow-x-auto bg-[#242424]/60 rounded-md">
+                        <table
+                            class="w-full table-auto whitespace-nowrap bg-[#242424]/60 overflow-hidden overflow-x-auto m-0">
+                            <thead>
                                 <tr>
-                                    <th class="px-4 py-2">user</th>
-                                    <th class="px-4 py-2">Admin</th>
-                                    <th class="px-4 py-2">Reason</th>
-                                    <th class="px-4 py-2">Type</th>
-                                    <th class="px-4 py-2">Status</th>
-                                    <th class="px-4 py-2">Ends</th>
+                                    <th class="text-left text-white px-4 py-2">User</th>
+                                    <th class="text-left text-white px-4 py-2">Admin</th>
+                                    <th class="text-left text-white px-4 py-2">Reason</th>
+                                    <th class="text-left text-white px-4 py-2">Type</th>
+                                    <th class="text-left text-white px-4 py-2">Status</th>
+                                    <th class="text-left text-white px-4 py-2">Ends</th>
                                 </tr>
                             </thead>
                             <tbody id="infractions-table-body">
+                                <!-- Dynamic rows will be inserted here -->
                                 <template x-for="i in 10" :key="i">
-                                    <tr class="bg-black border-b border-gray-700">
+                                    <tr
+                                        class="bg-opacity-45 hover:brightness-125 transition duration-300 cursor-pointer">
                                         <template x-for="j in 6" :key="j">
-                                            <td class="px-4 py-3">
+                                            <td class="text-left text-slate-200 px-4 py-2">
+                                                <!-- Your dynamic cell content goes here -->
                                                 <div class="h-4 bg-slate-700 animate-pulse rounded"></div>
                                             </td>
                                         </template>
@@ -311,16 +444,33 @@
                     </nav>
                 </div>
 
-                <!-- Show Entries Dropdown -->
-                <div class="my-4">
-                    <label for="show-entries" class="text-gray-400 mr-2">Show entries:</label>
-                    <select id="show-entries"
-                        class="bg-black/30 text-white border border-gray-700 rounded px-2 py-1 focus:border-red-500">
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
+                <div x-data="{ open: false, selected: 10 }" class="show-entries-container relative my-4">
+                    <label for="show-entries-button" class="text-gray-400 mr-2">Show entries:</label>
+                    <div class="relative flex flex-col">
+                    <button @click="open = !open" id="show-entries-button"
+                        class="show-entries-button focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        <span x-text="selected"></span>
+                        <i class="fas fa-chevron-down ml-2" :class="{ 'open': open }"></i>
+                    </button>
+                    <div x-show="open" @click.away="open = false" x-cloak class="entries-dropdown"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95" style="display: none;">
+                        <ul>
+                            <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 10 }"
+                                @click="selected = 10; open = false; $dispatch('entries-changed', 10)">10</li>
+                            <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 20 }"
+                                @click="selected = 20; open = false; $dispatch('entries-changed', 20)">20</li>
+                            <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 50 }"
+                                @click="selected = 50; open = false; $dispatch('entries-changed', 50)">50</li>
+                            <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 100 }"
+                                @click="selected = 100; open = false; $dispatch('entries-changed', 100)">100</li>
+                        </ul>
+                    </div>
+</div>
                 </div>
 
 
@@ -401,22 +551,19 @@
             x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
             class="fixed text-white/95 inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex justify-center items-center">
-            <div @click.away="showModal = false" class="bg-black/50 border-card rounded-lg shadow-lg p-5 w-full max-w-md mx-4 md:mx-0">
+            <div @click.away="showModal = false"
+                class="bg-black/50 border-card rounded-lg shadow-lg p-5 w-full max-w-md mx-4 md:mx-0">
                 <h2 x-text="modalTitle" class="text-xl font-bold"></h2>
-                <p x-text="modalContent" class="mt-4"></p>
+                <p x-text="modalContent" x-html="modalContent" class="mt-4"></p>
                 <div class="mt-5 flex justify-end">
-                <button @click="showModal = false" class="transition-all px-2 py-1 text-sm bg-gray-500 border-card text-white rounded hover:bg-red-800 sm:px-4 sm:py-2 sm:text-base">
-Close</button>
+                    <button @click="showModal = false"
+                        class="transition-all px-2 py-1 text-sm bg-gray-500 border-card text-white rounded hover:bg-red-800 sm:px-4 sm:py-2 sm:text-base">
+                        Close</button>
                 </div>
             </div>
         </div>
 
     </main>
-
-    <!-- Footer -->
-    <footer class="py-6 text-center text-gray-500">
-        <p>© 2024 Imperfect Gamers. All rights reserved.</p>
-    </footer>
 </div>
 
 <script>
@@ -458,7 +605,7 @@ Close</button>
                         const tr = document.createElement('tr');
                         tr.classList.add('bg-black/50', 'border-b', '!text-gray-100', 'border-gray-700');
                         tr.innerHTML = `
-                                <td class="px-4 py-3 ${infraction.status === 'EXPIRED' ? 'expired' : 'r'}">${infraction.current_user_name}</td>
+                                <td class="px-4 py-3 ${infraction.status === 'EXPIRED' ? 'expired' : 'r'}">${infraction.current_player_name}</td>
                                 <td class="px-4 py-3 ${infraction.status === 'EXPIRED' ? 'expired' : ''}">${infraction.current_admin_name}</td>
                                 <td class="px-4 py-3 ${infraction.status === 'EXPIRED' ? 'expired' : ''}">${infraction.reason}</td>
                                 <td class="px-4 py-3">
@@ -484,13 +631,6 @@ Close</button>
                     recordsStart.textContent = (page - 1) * data.pagination.perPage + 1;
                     recordsEnd.textContent = Math.min(page * data.pagination.perPage, data.pagination.totalItems);
                     recordsTotal.textContent = data.pagination.totalItems;
-
-                    // Update show entries options based on total records
-                    const showEntriesOptions = document.getElementById('show-entries').options;
-                    for (let option of showEntriesOptions) {
-                        option.disabled = data.pagination.totalRecords < option.value;
-                    }
-
                 }
             })
             .catch(error => {
@@ -501,17 +641,16 @@ Close</button>
             });
     }
 
-    // Handle show entries change
-    document.getElementById('show-entries').addEventListener('change', function () {
-        const perPage = this.value;
-        // Calculate the new total pages based on the total records and perPage
+    // Listen for custom 'entries-changed' event from the Alpine.js dropdown
+    document.addEventListener('entries-changed', function (event) {
+        const perPage = event.detail;
         const newTotalPages = Math.ceil(parseInt(document.getElementById('records-total').textContent) / perPage);
-        // If the current page is greater than the new total pages, set it to the last page
         if (currentPage > newTotalPages) {
             currentPage = newTotalPages;
         }
         fetchInfractions(currentPage, perPage);
     });
+
 
 
     // Fetch infraction counts and update the infraction count card
@@ -550,134 +689,6 @@ Close</button>
     fetchInfractionCounts();
 </script>
 <script>
-    function searchuserApp() {
-        return {
-            showDropdown: false,
-            searchQuery: '',
-            filteredUsers: [],
-            disableCursorPointer: true,
-            searchCache: new Map(), // Cache to store previous search results
-            debounceTimeout: null, // To store the debounce timeout
-
-            searchusersDebounced() {
-                clearTimeout(this.debounceTimeout);
-                this.debounceTimeout = setTimeout(() => this.searchusers(), 300); // Debounce for 300ms
-            },
-
-            async searchusers() {
-                // Assuming this.searchQuery is your search input
-                if (!this.searchQuery.trim()) {
-                    this.showPrompt(); // Show a prompt like "Start typing to search..."
-                    return;
-                }
-
-                const query = this.searchQuery.toLowerCase();
-
-                // Use cached result if available to avoid unnecessary API calls
-                if (this.searchCache.has(query)) {
-                    this.filteredUsers = this.searchCache.get(query);
-                    this.showDropdown = true;
-                    return;
-                }
-
-                try {
-                    const response = await fetch(`https://api.imperfectgamers.org/infractions/search/${encodeURIComponent(query)}`);
-                    const data = await response.json();
-                    if (data.status === 'success' && data.results.data.length > 0) {
-                        this.processResults(data.results.data, query);
-                    } else {
-                        this.noResultsFound();
-                    }
-                } catch (error) {
-                    console.error('Fetch error:', error);
-                    this.noResultsFound();
-                }
-            }
-
-        
-    processResults(data, query) {
-                let names = new Map();
-
-                data.forEach(item => {
-                    const userName = item.current_user_name?.toLowerCase();
-                    const adminName = item.current_admin_name?.toLowerCase();
-
-                    // Check if the query matches the user name or admin name
-                    if (userName && userName.includes(query)) {
-                        names.set(item.current_user_name, true);
-                    } else if (adminName && adminName.includes(query)) {
-                        names.set(item.current_admin_name, true);
-                    }
-                });
-
-                this.filteredUsers = Array.from(names.keys()).map(name => ({ name }));
-                this.searchCache.set(query, this.filteredUsers);
-                this.disableCursorPointer = false;
-                this.showDropdown = true;
-            }
-
-
-        processResults(data, query) {
-                let names = new Map();
-
-                data.forEach(item => {
-                    const userName = item.current_user_name?.toLowerCase();
-                    const adminName = item.current_admin_name?.toLowerCase();
-
-                    // Check if the query matches the user name or admin name
-                    if (userName && userName.includes(query)) {
-                        names.set(item.current_user_name, true);
-                    } else if (adminName && adminName.includes(query)) {
-                        names.set(item.current_admin_name, true);
-                    }
-                });
-
-                this.filteredUsers = Array.from(names.keys()).map(name => ({ name }));
-                this.searchCache.set(query, this.filteredUsers);
-                this.disableCursorPointer = false;
-                this.showDropdown = true;
-            },
-
-            noResultsFound() {
-                this.filteredUsers = [{ message: 'No results found.' }];
-                this.searchCache.set(this.searchQuery.toLowerCase(), this.filteredUsers);
-                this.disableCursorPointer = true;
-                this.showDropdown = true;
-            },
-
-            showPrompt() {
-                this.filteredUsers = [{ message: 'Start typing to search...' }];
-                this.showDropdown = true;
-            },
-
-            selectUser(user) {
-                if (!user.message) {
-                    this.searchQuery = user.name;
-                    this.showDropdown = false;
-                }
-            },
-
-            handleFocus() {
-                this.searchusersDebounced();
-            },
-
-            closeDropdown() {
-                this.showDropdown = false;
-            },
-
-            resetDropdown() {
-                if (this.searchQuery === '') {
-                    this.filteredUsers = [];
-                    // Optionally, clear the cache when input is cleared if you prefer not to use old searches
-                    this.showDropdown = false;
-                }
-            }
-        };
-    }
-</script>
-
-
-<script>
     function searchUserApp() {
         return {
             showDropdown: false,
@@ -686,7 +697,7 @@ Close</button>
             allUsers: ['User 1', 'User 2', 'User 3', 'User 4'],
             searchedUser: '',
             disableCursorPointer: true,
-            tabPressed: false, // Add this new property
+            tabPressed: false,
 
             init() {
                 this.handleKeyDown = (event) => {
@@ -705,25 +716,9 @@ Close</button>
                     }
                 };
                 window.addEventListener('keydown', this.handleKeyDown);
-                // Initialize the breadcrumb when the component is created
-                countE = $refs.countEvidence.value.length;
-                countR = $refs.countReason.value.length;
             },
             destroy() {
                 window.removeEventListener('keydown', this.handleKeyDown);
-            },
-            toggleEvidenceField() {
-                if (this.showEvidenceField) {
-                    this.evidence = ''; // Clear the evidence when hiding the field
-                }
-                this.showEvidenceField = !this.showEvidenceField;
-            },
-            isFormReady() {
-                const searchedUserValid = this.searchedUser.trim() !== '';
-                const reasonValid = this.reason.trim() !== '' && this.reason.trim().length <= 36;
-                const evidenceValid = !this.showEvidenceField || (this.evidence.trim().length <= 280 && this.evidence.trim() !== '');
-
-                return searchedUserValid && reasonValid && evidenceValid;
             },
             filteredUsers() {
                 if (!this.searchQuery) {
