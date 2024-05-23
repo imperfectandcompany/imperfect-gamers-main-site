@@ -1,17 +1,16 @@
 <?php
 ob_start(); // Turn on output buffering
-
 include("../loader.php");
 
 include('../config.php');
 
-if (isset($_GET['sitemap'])) {
-    include_once('./sitemap_gen.php');
-    ob_end_flush(); // Send the output buffer and turn off output buffering
-    exit; // Stop further processing
-}
+// if (isset($_GET['sitemap'])) {
+//     include_once('./sitemap_gen.php');
+//     ob_end_flush(); // Send the output buffer and turn off output buffering
+//     exit; // Stop further processing
+// }
 
-ob_end_clean(); // Clear the output buffer and turn off output buffering
+// ob_end_clean(); // Clear the output buffer and turn off output buffering
 
 
 if (isset($BACKEND)) {
@@ -30,8 +29,11 @@ if (isset($BACKEND)) {
             snowStorm.start();
         }, 500);
     </script>
+    <?if ($FRONTEND !== 'store'):?>
     <script src="./snowstorm.js"></script>
-
+    <? else: ?>
+    <script src="../snowstorm.js"></script>
+    <?endif;?>
     <div class="flex flex-col justify-between">
         <?php if (isset($HEADER)): ?>
             <header id="header" class="text-center justify-center" style="touch-action: none;">

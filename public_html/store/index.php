@@ -1,579 +1,1520 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
 
-session_start();
-
-$page = 'home';
-$page_title = 'Store';
-
-try {
-    require_once('inc/functions.php');
-
-    if (isset($_GET['newlicense'])) {
-        cache::clear();
-
-        if (!prometheus::licenseCheck()) {
-            setSetting($_GET['newlicense'], 'api_key', 'value', false);
-
-            cache::clear();
-        }
-    }
-
-    if (!prometheus::loggedIn()) {
-        include('inc/login.php');
-    } else {
-        $UID = $_SESSION['uid'];
-    }
-
-    if (!getSetting('installed', 'value2')) {
-        cache::clear();
-        util::redirect('install.php');
-    }
-
-    if (prometheus::loggedIn() && !actions::delivered() && $page != 'required') {
-        util::redirect('store.php?page=required');
-    }
-
-    if (prometheus::loggedIn() && is_numeric(actions::delivered('customjob', $_SESSION['uid'])) && $_GET['page'] !== 'customjob') {
-        util::redirect('store.php?page=customjob&pid=' . actions::delivered('customjob', $_SESSION['uid']));
-    }
-} catch (PDOException $e) {
-    util::redirect('install.php');
-}
-
-?>
-
-<?php include('inc/header.php'); ?>
-
-<style>
-    /* Base styles */
-    .card {
-        flex-direction: column;
-        /* Stack elements vertically */
-    }
-
-    /* Small screens (mobile devices) */
-    @media (max-width: 600px) {
-        .grid-cols-3 {
-            grid-template-columns: 1fr;
-            /* Stack grid items vertically */
-        }
-    }
-
-    /* Medium screens (tablets) */
-    @media (min-width: 601px) and (max-width: 1024px) {
-        .grid-cols-3 {
-            grid-template-columns: repeat(2, 1fr);
-            /* 2 columns for grid */
-        }
-    }
-
-    /* Large screens (desktops) */
-    @media (min-width: 1025px) {
-        .grid-cols-3 {
-            grid-template-columns: repeat(3, 1fr);
-            /* 3 columns for grid */
-        }
-    }
-
-
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    @media (max-width: 600px) {
-        h2 {
-            font-size: 1.5rem;
-            /* Smaller titles for small screens */
-        }
-    }
-
-    .card {
-        flex-direction: column;
-        /* Stack card content vertically */
-    }
-
-    /* Responsive grid layout */
-    @media (max-width: 768px) {
-
-        /* On smaller screens, use a single column layout */
-        .grid-cols-3 {
-            grid-template-columns: 1fr;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Join the Pro VIP Store and gain access to exclusive membership tiers with special benefits.">
+    <meta name="keywords" content="Pro VIP Store, membership, exclusive, benefits, gaming, community, VIP, PRO">
+    <title>Membership Club - Imperfect Gamers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+            height: calc(var(--vh, 1vh) * 100);
         }
 
-        /* Adjust the padding and margin for smaller screens */
-        .mx-auto.px-4.py-4 {
-            padding: 2rem 1rem;
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 12px;
         }
 
-        /* Adjust the font size for smaller screens */
-        .text-2xl {
-            font-size: 1.5rem;
-            /* Smaller titles for small screens */
+        ::-webkit-scrollbar-track {
+            background: #111;
         }
 
-        /* Adjust card spacing */
-        .gap-8 {
-            gap: 0.5rem;
+        ::-webkit-scrollbar-thumb {
+            background-color: #a83232;
+            border-radius: 20px;
+            border: 3px solid #111;
         }
 
-        /* Full width buttons */
-        #button {
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            height: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .bg-grid-pattern {
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cg%3E%3Cline stroke="%23ffffff" stroke-width="0.5" y2="100" x2="100" y1="100" x1="0" stroke-dasharray="4, 4"/%3E%3Cline stroke="%23ffffff" stroke-width="0.5" y2="100" x2="0" y1="0" x1="0" stroke-dasharray="4, 4"/%3E%3C/g%3E%3C/svg%3E') !important;
+            background-size: 100px 100px;
+        }
+
+
+        .background-svg {
+            background-image: url('https://imperfectgamers.org/assets/store/bg.svg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutDown {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        @keyframes fadeOutIn {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #aaa;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+
+        .tooltip-content {
+            position: absolute;
+            bottom: 105px;
+            /* Increased to create more separation from the card */
+            left: 20%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            /* Semi-transparent dark background for contrast */
+            color: #fff;
+            /* White text for readability */
+            padding: 8px 16px;
+            /* A bit more padding for a roomier feel */
+            border-radius: 8px;
+            /* Rounded corners for a modern look */
+            font-size: 15px;
+            /* Slightly larger font for clarity */
+            font-weight: 500;
+            /* Medium font weight for a touch of boldness */
+            white-space: nowrap;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            /* More pronounced shadow for depth */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            /* Smooth transition for both opacity and a slight movement */
+            transform: translate(-50%, 10px);
+            /* Initial transform state for animation */
+        }
+
+        .membership-card:hover .tooltip-content {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .membership-card {
+            width: 384px;
+            height: 224px;
+            background: #000;
+            border-radius: 20px;
+            color: #fff;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 0 100px rgba(255, 255, 255, 0.3);
+            transform: perspective(1000px) rotateY(10deg);
+            transition: transform 0.5s, box-shadow 0.5s, background 0.5s, background-color 1s ease-in-out;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            background-size: 200% 200%;
+            animation: shimmer-effect 8s ease infinite;
+        }
+
+        .membership-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+            animation: shimmer 2s infinite;
+            background-repeat: no-repeat;
+            background-size: 200% 100%;
+            z-index: 1;
+            border-radius: 20px;
+        }
+
+        .membership-card:hover {
+            transform: perspective(1000px) rotateY(0deg);
+            background: linear-gradient(145deg, #640000, #ae0000);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+
+
+        @keyframes shimmer-effect {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+
+
+        .membership-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 1;
+            transition: opacity 0.5s, transform 0.5s;
+            border-radius: 20px;
+        }
+
+        .membership-card:hover::after {
+            opacity: 0;
+        }
+
+        .spinback-effect {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+            border-radius: 50%;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-blend-mode: overlay;
+            backdrop-filter: blur(5px);
+        }
+
+        .spinback-effect::before,
+        .spinback-effect::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            bottom: 10%;
+            border-radius: 50%;
+        }
+
+        .spinback-effect::before {
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+        }
+
+        .spinback-effect::after {
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(0deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: spin-disk 5s linear infinite;
+        }
+
+        @keyframes spin-disk {
+            100% {
+                transform: rotate(1turn);
+            }
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+        }
+
+        .membership-tier {
+            position: absolute;
+            top: 72.5%;
+            left: 13.75%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+        }
+
+        #showMask {
+            transition: opacity 300ms;
+        }
+
+        .membership-tier:hover #showMask {
+            opacity: 0.5;
+        }
+
+        .card-price {
+            font-size: 0.725rem;
+            color: #aaa;
+        }
+
+        .card-price-change {
+            animation: fadeOutIn 0.8s ease forwards;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+        }
+
+        input:checked+.slider {
+            background-color: #7f1d1d;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #7f1d1d;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .price-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .price-label {
+            color: #fff;
+            font-size: 0.9rem;
+            margin: 0 10px;
+        }
+
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            25%,
+            75% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes hoverInEffect {
+            from {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            to {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        @keyframes hoverOutEffect {
+            from {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+        }
+
+        .animate-heartbeat {
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .heart:hover {
+            animation: hoverInEffect 0.5s forwards;
+        }
+
+        .button {
+            background: linear-gradient(145deg, #640000, #ae0000);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button:hover {
+            background: linear-gradient(145deg, #ae0000, #640000);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ae0000;
+        }
+
+        .button i {
+            margin-right: 8px;
+        }
+
+        .button span {
+            position: relative;
+            top: 1px;
+        }
+
+        .button:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 70%, rgba(255, 255, 255, 0) 100%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s;
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .button:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .button:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .button:hover:after {
+            opacity: 1;
+        }
+
+        .button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            opacity: 5%;
+            left: 0;
             width: 100%;
-            margin-top: 1rem;
+            height: 100vh;
+            background: linear-gradient(45deg, #640000, #ae0000, #640000, #ae0000);
+            background-size: 400% 400%;
+            animation: moveBackground 10s ease infinite;
+            z-index: -1;
         }
-    }
 
-    @media (min-width: 769px) and (max-width: 1024px) {
+        @keyframes moveBackground {
+            0% {
+                background-position: 0% 50%;
+            }
 
-        /* On medium screens, use a two column layout */
-        .grid-cols-3 {
-            grid-template-columns: repeat(2, 1fr);
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
-    }
-</style>
+
+        /* FAQ Section Styles */
+        .faq-section {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .faq-title {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .faq-item {
+            background: #202020;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: #333333;
+        }
+
+        .faq-question {
+            font-size: 1.25rem;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            padding-right: 2rem;
+        }
+
+        .faq-question:hover {
+            color: #ccc;
+            /* Slight color shift to indicate interactivity */
+        }
+
+        .faq-question::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: #aaa;
+            margin-top: 0.5rem;
+            padding: 0 1rem;
+            transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            /* Start with the answer fully transparent */
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+            /* Arbitrary large height for smooth animation */
+            padding: 1rem;
+            opacity: 1;
+            /* Fade in the answer text */
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .contact-form-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 40px;
+            width: 384px;
+            box-shadow: 0 0 100px rgba(255, 255, 255, 0.3);
+            transition: all 0.5s ease-in-out;
+            overflow: hidden;
+        }
+
+        .contact-section-transition {
+            transition: all 0.5s ease-in-out;
+        }
+
+        .luxury-input:focus {
+            background-color: #1a202c;
+            color: #f3d9e0;
+        }
+
+        .luxury-input:invalid:hover,
+        .luxury-input:invalid:focus {
+            border-color: #e3342f;
+        }
+
+        .luxury-input:valid:hover,
+        .luxury-input:valid:focus {
+            border-color: #38c172;
+        }
+
+        .luxury-input::placeholder {
+            color: #cbd5e0;
+        }
+
+        .luxury-label {
+            letter-spacing: 0.05em;
+            color: #f3d9e0;
+        }
+
+        .luxury-title {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #f7fafc;
+        }
+
+        .luxury-label.focused {
+            color: #f6ad55;
+        }
+
+        .contact-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 40px;
+            width: 384px;
+            box-shadow: 0 0 100px rgba(255, 255, 255, 0.3);
+        }
+
+        .contact-section h2 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .contact-section p {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        .contact-section button {
+            background: linear-gradient(145deg, #640000, #ae0000);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .contact-section button:hover {
+            background: linear-gradient(145deg, #ae0000, #640000);
+        }
+
+        .hidden {
+            display: none;
+        }
 
 
-<div class="mb-5">
-    <div class="mx-auto p-6 md:p-0 md:container">
-        <div class="row ">
-            <div class="col-xs-12">
-                <?php if (tos::getLast() < getSetting('tos_lastedited', 'value3') && prometheus::loggedin()) { ?>
-                    <div class="info-box">
-                        <form method="POST" style="width: 40%;">
-                            <input type="hidden" name="csrf_token" value="<?= csrf_token(); ?>">
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .faq-section {
+                padding: 0 1rem;
+            }
 
-                            <style>
-                                .yeeta {
-                                    display: flex;
-                                }
+            .faq-title {
+                font-size: 1.5rem;
+            }
 
-                                .yeetup display: flex;
-                                justify-content: flex-end;
-                                }
-                            </style>
+            .faq-question {
+                font-size: 1rem;
+            }
+        }
 
-                            <div class="yeeta">
-                                <h2>
-                                    <?= lang('tos'); ?>
-                                </h2>
-                                <div class="yeetup">
-                                    <div class="infoelez">
-                                        <a href="tos.php"><i class="fa fa-info-circle" style="font-size:18px;"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <?= lang('tos_edited'); ?><br>
-                            <input type="submit" class="btn btn-prom" value="<?= lang('tos_accept'); ?>" name="tos_submit"
-                                style="margin-top: 10px;">
-                        </form>
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .faq-section {
+                padding: 0 1rem;
+            }
 
+            .faq-title {
+                font-size: 1.5rem;
+            }
+
+            .faq-question {
+                font-size: 1rem;
+            }
+
+            .button {
+                padding: 8px 16px;
+            }
+
+            .main {
+                padding: 0 4px;
+            }
+
+            .nav {
+                display: block;
+            }
+
+            .nav a {
+                display: block;
+                margin: 5px 0;
+            }
+
+            .container {
+                padding: 0 4px;
+            }
+
+            .price-toggle {
+                flex-direction: column;
+                padding-top: 12px;
+                align-items: center;
+            }
+
+            .price-toggle .price-label {
+                margin: 0;
+            }
+
+            .switch {
+                margin: 10px 0;
+            }
+
+            .faq-section {
+                width: 100%;
+                padding: 0;
+            }
+
+            .faq-item {
+                padding: 0.5rem;
+            }
+
+            .faq-question {
+                padding-right: 1rem;
+            }
+
+            .membership-card .spinback-effect {
+                display: none;
+            }
+
+            .testimonial {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-item {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .event {
+                grid-template-columns: 1fr;
+            }
+
+            .event-item {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .footer {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer .footer-section {
+                margin-bottom: 1rem;
+            }
+
+            .footer .footer-section a {
+                margin: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-black text-white relative flex flex-col background-svg px-4 sm:px-8 md:px-12">
+    <div class="background-animation"></div>
+    <header class="text-center mt-8">
+        <nav class="flex space-x-4 text-sm mb-6 items-center" aria-label="Main navigation">
+            <a href="https://imperfectgamers.org" class="cursor-pointer">
+                <div class="mx-auto text-center ig_logo animate__animated animate__slideInDown ">
+                    <object data="https://cdn.imperfectgamers.org/inc/assets/img/logo.svg" class="pointer-events-none"
+                        type="image/svg+xml" height="48" width="48"></object>
+                </div>
+            </a>
+            <a class="text-gray-400 hover:text-white" href="#" aria-label="Home">HOME</a>
+            <a class="text-gray-400 hover:text-white" href="#" aria-label="Store">CLUB</a>
+            <a class="text-gray-400 hover:text-white" href="#" aria-label="Community">COMMUNITY</a>
+        </nav>
+    </header>
+    <main class="md:mx-72 space-y-24 md:space-y-12">
+        <section class="hidden">
+            <div>
+                <div class="flex justify-between items-center flex-col md:flex-row">
+                    <div class="mb-4">
+                        <img src="https://imperfectgamers.org/assets/store/pageheader.svg" class="hidden"
+                            alt="PRO VIP Store logo">
                     </div>
-                <?php } ?>
-            </div>
-        </div>
-
-        <div class="row ">
-            <div class="col-12">
-                <div class="justify-content-center text-center">
-                    <?php if (!prometheus::loggedInIG()): ?>
-                        <div class="text-center mt-8 mb-12">
-                            <h1 class="text-6xl font-bold text-white">LOGIN</h1>
-                            <p class="text-xl text-gray-300 mt-6 ">You need to <a href="/login"><span
-                                        class="text-underline font-underline text-red-600 cursor-pointer">login</span></a>
-                                first in order to buy any packages
+                    <div class="flex flex-wrap justify-between">
+                        <div class="text-left mr-8 mb-4">
+                            <p class="text-4xl font-bold">
+                                20%
+                            </p>
+                            <p>
+                                MEMBERSHIP IN
+                                <br>
+                                GLOBAL RECORDS
                             </p>
                         </div>
-                    <?php elseif (!prometheus::loggedin()): ?>
-                        <div class="text-center mt-8 mb-12">
-                            <h1 class="text-6xl font-bold text-white">LINK STEAM</h1>
-                            <p class="text-xl text-gray-300 mt-6 ">
-                                You need to link your steam in <a href="/settings"><span
-                                        class="text-underline font-underline text-red-600 cursor-pointer">settings</span></a>
-                                first in order to buy any packages
+                        <div class="text-left mr-8 mb-4">
+                            <p class="text-4xl font-bold">
+                                100
+                            </p>
+                            <p>
+                                NEW MEMBERS IN
+                                <br>
+                                THE PAST WEEK
                             </p>
                         </div>
-                    <?php else: ?>
-                        <div class="text-center mt-8 mb-6">
-                            <h1 class="text-6xl font-bold text-white">STORE</h1>
-                            <p class="text-xl text-gray-300 mt-6 ">Welcome to the store!</p>
+                        <div class="text-left mr-8 mb-4">
+                            <p class="text-4xl font-bold">
+                                13.5 K
+                            </p>
+                            <p>
+                                VISITORS IN THE
+                                <br>
+                                LAST MONTH
+                            </p>
                         </div>
-                    <?php endif; ?>
-
-
-                    <div class=" mx-auto px-4 py-4">
-                        <div class="grid grid-cols-3 gap-8 p-4 bg-black/50 border-t border-[#4E0D0D]">
-                            <!-- Repeat this block for each card -->
-                            <div
-                                class="card flex flex-col justify-between rounded-lg p-6 bg-red-900/10 border-red-600/50 text-white">
-                                <div class="flex justify-between items-center mb-4">
-                                    <i class="fas fa-credit-card text-2xl"></i>
-                                </div>
-                                <h2 id="title" class="min-h-64 text-2xl font-semibold mb-2 flex-grow">Can I use
-                                    something other than paypal?</h2>
-                                <p id="text" class=" flex-1 mb-6 flex-grow">You can use the debit / credit card options
-                                    that are used inside of paypal as a guest account.</p>
-                                <a id="button" target="_blank"
-                                    href="https://www.paypal.com/us/enterprise/payment-processing"
-                                    class="self-end bg-red-600/50 hover:bg-red-700 transition hover:text-red-500/50 duration-300 rounded py-2 px-4 self-start mt-auto">Learn
-                                    More</a>
-                            </div>
-                            <!-- Repeat for each card -->
-
-
-
-                            <!-- Repeat this block for each card -->
-                            <div class="rounded-lg bg-dark-card p-6 max-w-sm w-full mx-auto">
-                                <h3 class="text-2xl text-white font-bold mb-4">Coming Soon</h3>
-                                <p class="text-gray-400">Get ready for the next big update in CS2 - more features, more
-                                    fun!</p>
-                            </div>
-
-
-                            <!-- Repeat for each card -->
-
-                            <!-- Repeat this block for each card -->
-                            <div
-                                class="card flex flex-col justify-between rounded-lg p-6 bg-red-900/10 border-1 border-red-600/50 text-white">
-                                <div class="flex justify-between items-center mb-4">
-                                    <i class="fas fa-question-circle text-2xl"></i>
-                                </div>
-                                <h2 id="title" class="min-h-64 text-2xl font-semibold mb-2 flex-grow">Have any
-                                    questions?</h2>
-                                <p id="text" class=" flex-1 mb-6 flex-grow">Do not hesitate to reach out to us on
-                                    discord. We have a team ready to assist.</p>
-                                <a id="button" target="popup" href="https://imperfectgamers.org/discord"
-                                    class="self-end bg-red-600/50 hover:bg-red-700 transition hover:text-red-500/50 duration-300 rounded py-2 px-4 self-start mt-auto">Discord</a>
-                            </div>
-                            <!-- Repeat for each card -->
+                        <div class="text-left mb-4">
+                            <p class="text-4xl font-bold">
+                                100K
+                            </p>
+                            <p>
+                                USERS OVER IN
+                                <br>
+                                THE PAST MONTH
+                            </p>
                         </div>
-
-
-                        <div class="py-6 bg-black/50 text-white border-1 border-red-600/50">
-                            <h2 class="text-2xl font-bold mb-4">
-                                Recent Purchases
-                            </h2>
-                            <div class="space-y-4">
-                                <div class="md:col-span-2 p-4">
-                                    <div class="flex justify-between flex-wrap gap-4">
-                                        <?php
-                                        $recentPurchases = dashboard::getRecentPurchases();
-                                        foreach ($recentPurchases as $purchase): ?>
-                                            <div class="flex items-center">
-                                                <img alt="Avatar of <?= htmlspecialchars($purchase['name']) ?>"
-                                                    class="rounded-full" height="50" width="50"
-                                                    src="<?= htmlspecialchars($purchase['avatarUrl']) ?>">
-                                                <a href="<?= htmlspecialchars($purchase['profileUrl']) ?>" class="ml-2">
-                                                    <?= htmlspecialchars($purchase['name']) ?>
-                                                </a>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col bg-black/50 ">
-                            <div
-                                class="card flex flex-col justify-between rounded-lg p-6 bg-red-900/20 border-1 border-red-600/50 text-white">
-                                <div class="bg-dark-background text-white p-6">
-                                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                                        <h2 class="text-4xl font-bold text-center mb-6">Lifetime VIP Benefits</h2>
-                                        <p class="text-center mb-8">As a Lifetime VIP, you get exclusive access to
-                                            features that enhance your experience and increase your visibility within
-                                            our community.</p>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            <div class="benefit-card bg-dark-secondary rounded-lg p-4 text-center">
-                                                <i class="fas fa-crown fa-3x mb-3"></i>
-                                                <h3 class="text-2xl font-semibold mb-2">Custom VIP Title</h3>
-                                                <p>Stand out in the community with a unique title displayed next to your
-                                                    name.</p>
-                                            </div>
-                                            <!-- Profile Customization Card -->
-                                            <div class="benefit-card bg-dark-secondary rounded-lg p-4 text-center">
-                                                <i class="fas fa-user-edit fa-3x mb-3"></i>
-                                                <h3 class="text-2xl font-semibold mb-2">Profile Customization</h3>
-                                                <p>Personalize your profile with bios, social links, and more to connect
-                                                    with others.</p>
-                                            </div>
-                                            <div class="flex flex-col items-center p-4 bg-dark-secondary rounded-lg">
-                                                <i class="fas fa-infinity fa-3x mb-2"></i>
-                                                <h3 class="text-2xl font-semibold">Unlimited Access</h3>
-                                                <p>Enjoy unlimited access to all VIP areas and features.</p>
-                                            </div>
-                                            <div class="flex flex-col items-center p-4 bg-dark-secondary rounded-lg">
-                                                <i class="fas fa-user-shield fa-3x mb-2"></i>
-                                                <h3 class="text-2xl font-semibold">Priority Support</h3>
-                                                <p>Get priority assistance from support with any issues or
-                                                    questions.</p>
-                                            </div>
-                                            <div class="flex flex-col items-center p-4 bg-dark-secondary rounded-lg">
-                                                <i class="fas fa-gifts fa-3x mb-2"></i>
-                                                <h3 class="text-2xl font-semibold">Exclusive Deals</h3>
-                                                <p>Receive special offers and discounts only available to VIP
-                                                    members.</p>
-                                            </div>
-                                            <!-- More benefits... -->
-                                        </div>
-<button onclick="alertMessage()" class="primary-btn animate__animated animate__zoomIn items-center text-center mx-auto">Become a VIP</button>
-
-                                    </div>
-                                    <h2 class="text-3xl font-bold text-center mb-6 pt-12">What you get</h2>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                                        <!-- Commands Column -->
-                                        <div class="bg-dark-secondary rounded-lg py-4 px-4">
-                                            <h3 class="text-2xl font-semibold mb-2">Commands</h3>
-                                            <ul class="list-none space-y-2">
-                                                <li class="flex justify-between items-center">VIP Mute [!vmute] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">VIP Menu [!vip] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Vote Extend [!ve] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Noclip [!nc] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                            </ul>
-                                        </div>
-
-                                        <!-- Aesthetics Column -->
-                                        <div class="bg-dark-secondary rounded-lg py-4 px-4">
-                                            <h3 class="text-2xl font-semibold mb-2">Aesthetics</h3>
-                                            <ul class="list-none space-y-2">
-                                                <li class="flex justify-between items-center">Name colors <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Message Colors <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Voice/Scoreboard/Chat Tag
-                                                    [VIP] <i class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Paint [+paint,
-                                                    !paintcolor, !paintsize] <i class="fas fa-check text-green-500"></i>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <!-- VIP Exclusive Store Column -->
-                                        <div class="bg-dark-secondary rounded-lg py-4 px-4">
-                                            <h3 class="text-2xl font-semibold mb-2">VIP Exclusive Store</h3>
-                                            <ul class="list-none space-y-2">
-                                                <li class="flex justify-between items-center">Models: [ALL] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Pets: [ALL] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Hats: [ALL] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Eyewear: [ALL] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Tracers: [ALL] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Auras: [ALL] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                                <li class="flex justify-between items-center">Sprays: [ALL] <i
-                                                        class="fas fa-check text-green-500"></i></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="py-12 bg-red-900/20">
-                            <div class="flex flex-wrap justify-between items-center px-4 md:px-8 py-4">
-                                <div class="flex items-center text-white mb-4 md:mb-0">
-                                    <i class="text-red-400 fas fa-user-plus mr-2"></i>
-                                    <span class="text-sm md:text-base">Be able to join the rap server while full</span>
-                                    <span
-                                        class="ml-2 bg-red-600/25 px-2 py-1 rounded text-xs md:text-sm text-red-200">[IG]
-                                        24/7 Rap Surf Server - Easy Beginner</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="bg-red-600/25 px-3 md:px-4 py-1 md:py-2 rounded mr-2 md:mr-4">
-                                        <span class="text-white font-bold text-xs md:text-base">44 / 44</span>
-                                        <span class="text-white ml-2 text-xs md:text-sm">[+1 VIP slot]</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <section class="py-12 px-6 rounded-lg bg-black/50 text-white">
-                            <!-- Server Rental Header -->
-                            <div class="text-center mb-6">
-                                <h2 class="text-4xl font-bold">Private Server Rental</h2>
-                                <p class="text-xl">Enjoy a private space with full IG experience, admin access, and no
-                                    ads.</p>
-                            </div>
-                            <div class="flex-col justify-between rounded-lg p-6 text-white">
-
-                                <!-- Rental Steps -->
-                                <div class="flex flex-col md:flex-row justify-around items-center mb-6">
-                                    <!-- Step 1 -->
-                                    <div class="flex flex-col items-center mb-4 md:mb-0">
-                                        <div
-                                            class="w-16 h-16 bg-red-900/10  rounded-full flex items-center justify-center mb-2">
-                                            <span class="text-2xl font-bold">1</span>
-                                        </div>
-                                        <p class="text-center">Check Availability</p>
-                                    </div>
-
-                                    <!-- Step 2 -->
-                                    <div class="flex flex-col items-center mb-4 md:mb-0 ">
-                                        <div
-                                            class="w-16 h-16 bg-red-900/10 border-1 border-red-600/50 rounded-full flex items-center justify-center mb-2">
-                                            <span class="text-2xl font-bold">2</span>
-                                        </div>
-                                        <p class="text-center">Choose Your Package</p>
-                                    </div>
-
-                                    <!-- Step 3 -->
-                                    <div class="flex flex-col items-center mb-4 md:mb-0">
-                                        <div
-                                            class="w-16 h-16 bg-red-900/10 border-1 border-red-600/50 rounded-full flex items-center justify-center mb-2">
-                                            <span class="text-2xl font-bold">3</span>
-                                        </div>
-                                        <p class="text-center">Complete Payment</p>
-                                    </div>
-
-
-                                    <!-- Step 4 -->
-                                    <div class="flex flex-col items-center mb-4 md:mb-0">
-                                        <div
-                                            class="w-16 h-16 bg-red-900/10 border-1 border-red-600/50 rounded-full flex items-center justify-center mb-2">
-                                            <span class="text-2xl font-bold">4</span>
-                                        </div>
-                                        <p class="text-center">Start Surfing</p>
-                                    </div>
-                                </div>
-
-
-                                <!-- Rental Packages -->
-
-                                <div class="mx-auto py-6 mb-4">
-                                    <div class="grid grid-cols-3 gap-8">
-                                        <div
-                                            class="card flex flex-col justify-between rounded-lg p-6 bg-red-900/10 border-red-600/50 text-white">
-                                            <h4 class="text-xl font-bold text-white mb-2">Package 1</h4>
-                                            <p class="mb-4">Ideal for casual surfers wanting a private area to play
-                                                with the full IG experience.</p>
-
-                                            <ul class="mb-4 text-gray-300">
-                                                <li>Full server setup with all standard IG network plugins</li>
-                                                <li>Password-protected access</li>
-                                                <li>Full support/updates</li>
-                                                <li>Includes all maps on our network</li>
-                                                <li>20 player capacity</li>
-                                                <li>102.4 tick rate</li>
-                                                <li>Admin Access with limited commands</li>
-                                                <li>No Server Advertisements</li>
-                                                <li>Choose optional plugins: !store !ws !gloves</li>
-                                            </ul>
-                                            <div class="text-center">
-                                                <span class="text-2xl font-bold text-white">$60</span>/month
-                                            </div>
-                                        </div>
-
-
-                                        <div
-                                            class="card flex flex-col justify-between rounded-lg p-6 bg-black/40 border-red-900/20 text-white select-none opacity-50">
-                                            <div class="">
-                                                <h4 class="text-xl font-bold text-white mb-2">Sold Out</h4>
-                                                <p class="mb-4">Perfect for surfers wanting the full gamut of the IG
-                                                    experience</p>
-                                                <ul class="mb-4 text-gray-300">
-                                                    <li>10 player capacity</li>
-                                                    <li>102.4 Tick Rate</li>
-                                                    <li>Admin Access with limited commands</li>
-                                                    <li>All maps on IG Network</li>
-                                                    <li>Choose optional plugins: !store !ws !gloves</li>
-                                                </ul>
-
-                                            </div>
-                                        </div>
-
-
-                                        <div
-                                            class="card flex flex-col justify-between rounded-lg p-6 bg-black/40 border-red-900/20 text-white select-none opacity-50">
-                                            <div class="">
-                                                <h4 class="text-xl font-bold text-white mb-2">Not Available</h4>
-                                                <p class="mb-4">Your very own blank-slate surf server! (pricing
-                                                    determined by a sliding scale based on desired player capacity and
-                                                    tick rate)</p>
-                                                <ul class="mb-4 text-gray-300">
-                                                    <li>Up to 40 player capacity</li>
-                                                    <li>Choose your tickrate</li>
-                                                    <li>Admin Access with limited commands</li>
-                                                    <li>All maps on IG Network</li>
-                                                    <li>Choose optional plugins: !store !ws !gloves</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Server Rental Disclaimer -->
-                                    <div class="mt-8">
-                                        <h3 class="text-2xl font-bold mb-2">How To Order</h3>
-                                        <p>Please contact our staff via discord or email at <a
-                                                href="mailto:rentals@imperfectgamers.org"
-                                                class="text-red-400">rentals@imperfectgamers.org</a> to check
-                                            availability. We will do our best to accommodate all requests.</p>
-                                    </div>
-
-                                </div>
-
-                                <!-- Server Rental Information -->
-
-
-                                <div class="border-t border-[#4E0D0D] pt-10 pb-4">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div class="text-sm">
-                                            <h4 class="font-bold mb-2">Server Rental Information</h4>
-                                            <p>All IG servers restart at 5:00AM PST (8:00AM EST) to ensure stable
-                                                reliability and performance (restarts take less than 1 minute).</p>
-                                            <p class="mt-2">Turn-around time for server setup is anywhere from 1-7 days.
-                                                We have
-                                                limited availability and it is first-come, first-serve.</p>
-                                            <p class="mt-2">Terms are subject to
-                                                change; we
-                                                will honor a set agreement for 1 year (12 full months).</p>
-                                        </div>
-                                        <div class="text-sm">
-                                            <h4 class="font-bold mb-2">Our guarantee</h4>
-                                            <p>Maximized uptime per our host provider's standards (essentially 24/7
-                                                uptime)</p>
-                                            <p>Reliable service and support</p>
-                                            <p>DDoS protection</p>
-                                        </div>
-                                    </div>
-                        </section>
-                        <div class="border-t border-[#4E0D0D] pt-10 pb-4 text-white">
-                            We reserve the right to refuse service to anyone.
-
-                            By using our services you agree to our
-                            <a href="https://imperfectgamers.org/terms-of-service" class="text-red-400"
-                                target="_blank">terms of service</a> and
-                            <a href="https://imperfectgamers.org/privacy-policy" class="text-red-400"
-                                target="_blank">privacy policy</a> located on our website.
-
-                            Please contact our staff on discord or email
-                            <a href="mailto:support@imperfectgamers.org"
-                                class="text-red-400">support@imperfectgamers.org</a>
-                            in case something was left out or to be corrected or inquiries.
-                        </div>
-
                     </div>
                 </div>
             </div>
+        </section>
+        <section>
+            <div>
+                <div class="container">
+                    <h1 class="title">Imperfect Gamers Club</h1>
+                    <p class="subtitle">Join now through the exclusive access member pass</p>
+                    <div class="membership-card mx-auto hover:cursor-pointer">
+                        <div class="tooltip-content">Click to view membership rewards</div>
+                        <div class="flex flex-col items-start justify-between h-full">
+                            <img class="logo-image"
+                                src="https://cdn.imperfectgamers.org/inc/assets/logo/isometric-mark-text.png"
+                                alt="Membership Logo">
+                            <div>
+                                <h1 class="text-2xl font-bold">
+                                    <svg viewBox="0 0 100 10" class="membership-tier">
+                                        <filter id="gooey" x="-50%" y="-50%" width="200%" height="200%">
+                                            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+                                            <feColorMatrix in="blur" mode="matrix" values="
+                                            1 0 0 0 0
+                                            0 1 0 0 0
+                                            0 0 1 0 0
+                                            0 0 0 18 -7" result="gooey" />
+                                            <feBlend in="SourceGraphic" in2="gooey" />
+                                        </filter>
+                                        <mask id="m" filter="url(#gooey)">
+                                        </mask>
+                                        <g mask="url(#m)">
+                                            <rect id="showMask" height="100" width="100" fill="#919895" opacity="0" />
+                                            <text x="50" y="6" fill="rgba(255,255,255,0.5)" text-anchor="middle"
+                                                dominant-baseline="middle" font-size="10" font-family="monospace">
+                                                PREMIUM
+                                            </text>
+                                        </g>
+                                    </svg>
+                                </h1>
+                                <p class="card-price mt-2">$20/month</p>
+                            </div>
+                        </div>
+                        <div class="spinback-effect"></div>
+                    </div>
+                    <div class="price-toggle">
+                        <span class="price-label">Monthly</span>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="price-label">Annually</span>
+                    </div>
+                    <div class="flex justify-center fade-down">
+                        <button class="button outline-none">
+                            <span>Join Now</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+        <section>
+            <div>
+                <div class="flex justify-end">
+                    <div class="flex justify-end">
+                        <div class="flex-col text-white">
+                            <div>
+                                <p class="text-red-400 text-2xl mb-2 text-right">
+                                    20% OFF ON FIRST MONTH
+                                </p>
+                            </div>
+                            <div class="flex sm:items-center">
+                                <div class="mr-8 mb-4">
+                                    <img src="https://imperfectgamers.org/assets/store/heart.png"
+                                        class="animate-heartbeat heart" alt="Heart">
+                                </div>
+                                <div>
+                                    <h2 class="text-4xl font-bold mb-4 text-right">
+                                        Special Perks you'd really love
+                                    </h2>
+                                    <p class="text-right text-gray-400">
+                                        With the highest consideration of a matrix between an enhanced surfing and
+                                        musical
+                                        experience.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="membershipTiers" class="relative">
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                    class="absolute left-4 top-4 z-0 h-36 w-36 -translate-x-1/2 -translate-y-1/2 text-white/[0.085]">
+                    <path
+                        d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.734 1.734 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"
+                        fill="currentColor"></path>
+                </svg>
+                <div class="mb-6 flex flex-col gap-2 lg:mb-12">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl"> Available <span
+                            class="text-red-400">Membership</span> Tiers </h2>
+                    <p class="block font-display text-white/60">Premium is currently in <span
+                            class="text-white/65">BETA</span></p>
+                </div>
+
+                <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 justify-center">
+                    <div class="w-full max-w-md py-10 px-8 bg-black bg-opacity-50 rounded-md border border-gray-700/50
+                    flex flex-col">
+                        <div class="mb-3">
+                            <span class="text-xs p-1.5 bg-gray-400 bg-opacity-35 white rounded">Free plan with
+                                limitations</span>
+                        </div>
+                        <h3
+                            class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-gray-200 via-gray-200 to-gray-300">
+                            Basic
+                        </h3>
+                        <div class="flex-1 mt-6 flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <div
+                                    class="flex items-center gap-2 group cursor-pointer transition duration-150 ease-in-out">
+                                    <i
+                                        class="fas fa-check text-gray-400 transition filter group-hover:brightness-150 group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]"></i>
+                                    <span class="text-white group-hover:text-gray-400">Access to all public
+                                        servers</span>
+                                </div>
+
+                            </div>
+                            <div class="mt-10 text-xs text-gray-500">
+                                Imperfect Basic membership offers limited access to community servers. Upgrade to
+                                Premium
+                                for
+                                full benefits.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div
+                            class="relative -mb-px h-px w-full bg-gradient-to-r from-transparent via-rose-300 to-transparent">
+                        </div>
+                        <div
+                            class="w-full max-w-md py-10 px-8 bg-black bg-opacity-50 rounded-md border border-gray-700/50 flex flex-col">
+                            <div class="mb-3">
+                                <span class="text-xs p-1.5 bg-red-200 bg-opacity-20 text-red-400 rounded">Free trial
+                                    for
+                                    7
+                                    days</span>
+                            </div>
+                            <h3
+                                class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-gray-200 via-red-200 to-red-300">
+                                Premium
+                            </h3>
+                            <div class="flex-1 mt-6 flex flex-col justify-between">
+                                <div class="space-y-4">
+                                    <div
+                                        class="flex items-center gap-2 group cursor-pointer transition duration-150 ease-in-out">
+                                        <i
+                                            class="fas fa-check text-red-400 transition filter group-hover:brightness-150 group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]"></i>
+                                        <span class="text-white group-hover:text-red-400">Access to all public
+                                            servers</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 group cursor-pointer transition duration-150 ease-in-out">
+                                        <i
+                                            class="fas fa-check text-red-400 transition filter group-hover:brightness-150 group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]"></i>
+                                        <span class="text-white group-hover:text-red-400">Access to Premium
+                                            Servers</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 group cursor-pointer transition duration-150 ease-in-out">
+                                        <i
+                                            class="fas fa-check text-red-400 transition filter group-hover:brightness-150 group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]"></i>
+                                        <span class="text-white group-hover:text-red-400">Slot Reservation</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 group cursor-pointer transition duration-150 ease-in-out">
+                                        <i
+                                            class="fas fa-check text-red-400 transition filter group-hover:brightness-150 group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]"></i>
+                                        <span class="text-white group-hover:text-red-400">Custom HUD</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 group cursor-pointer transition duration-150 ease-in-out">
+                                        <i
+                                            class="fas fa-check text-red-400 transition filter group-hover:brightness-150 group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]"></i>
+                                        <span class="text-white group-hover:text-red-400">Custom Premium Tag</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 group cursor-pointer transition duration-150 ease-in-out">
+                                        <i
+                                            class="fas fa-check text-red-400 transition filter group-hover:brightness-150 group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]"></i>
+                                        <span class="text-white group-hover:text-red-400">Custom Text/Name
+                                            Color</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 group cursor-pointer transition duration-150 ease-in-out">
+                                        <i class="fas fa-times text-red-400"></i>
+                                        <span class="flex-1 flex items-center gap-1.5">
+                                            Personal IG Server
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+                                                data-tooltip-id="description" data-tooltip-content="Your Summoner Page">
+                                                <path fill="#758592" fill-rule="evenodd"
+                                                    d="M1.667 10a8.333 8.333 0 1 0 16.666 0 8.333 8.333 0 0 0-16.666 0Zm15.416 0a7.083 7.083 0 1 1-14.166 0 7.083 7.083 0 0 1 14.166 0Zm-6.25 1.667V5.833H9.167v5.834h1.666Zm0 .833v1.667H9.167V12.5h1.666Z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-10 text-xs text-gray-500">
+                                    Enjoy a elegant experience with Premium membership. Full access to all servers and
+                                    additional
+                                    perks.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Section: Testimonials -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-8">What Our Members Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Testimonial 1 -->
+                    <div
+                        class="bg-gradient-to-br from-black/50 to-red-900/20 p-6 rounded-lg shadow-xl transform transition duration-500 hover:scale-105">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/100x100" alt="Portrait of John Doe"
+                                class="w-16 h-16 rounded-full mr-4 border-2 border-red-500">
+                            <div>
+                                <p class="font-bold">John Doe</p>
+                                <p class="text-sm text-gray-400">Skill Surfer</p>
+                            </div>
+                        </div>
+                        <blockquote class="text-gray-400">
+                            "Joining the club through premium has been a game-changer. The exclusive servers and
+                            community events have made my gaming experience so much better!"
+                        </blockquote>
+                    </div>
+                    <!-- Testimonial 2 -->
+                    <div
+                        class="bg-gradient-to-br from-red-900/50 to-black/20 p-6 rounded-lg shadow-xl transform transition duration-500 hover:scale-105">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/100x100" alt="Portrait of John Doe"
+                                class="w-16 h-16 rounded-full mr-4 border-2 border-red-500">
+                            <div>
+                                <p class="font-bold">Joe Mama</p>
+                                <p class="text-sm text-gray-400">Freestyle Listener</p>
+                            </div>
+                        </div>
+                        <blockquote class="text-gray-400">
+                            "The premium membership perks are incredible. I love the custom HUD and the priority
+                            support. It's worth every penny!"
+                        </blockquote>
+                    </div>
+                    <!-- Testimonial 3 -->
+                    <div
+                        class="bg-gradient-to-br from-black/50 to-red-900/20 p-6 rounded-lg shadow-xl transform transition duration-500 hover:scale-105">
+                        <div class="flex items-center mb-4">
+                            <img src="https://placehold.co/100x100" alt="Portrait of John Doe"
+                                class="w-16 h-16 rounded-full mr-4 border-2 border-red-500">
+                            <div>
+                                <p class="font-bold">Granny Apple</p>
+                                <p class="text-sm text-gray-400">Rapper</p>
+                            </div>
+                        </div>
+                        <blockquote class="text-gray-400">
+                            "I've been a member for over a year now, and the community has been incredibly welcoming.
+                            The slot reservation feature is a lifesaver during peak hours."
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2 class="faq-title">Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <div class="faq-question">What does the Premium membership include?</div>
+                    <div class="faq-answer">
+                        <p>You may view above to take a look at the rewards offered for being a premium member on
+                            Imperfect Gamers, but if you'd like to speak to someone, you can do so on our <a
+                                href="https://imperfectgamers.org/discord" target="_blank"><span
+                                    class="text-red-400 hover:underline font-medium">Discord</span></a>.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How can I cancel my membership?</div>
+                    <div class="faq-answer">
+                        <p>You can cancel your membership at any time through your account settings or by contacting
+                            customer support.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Are there any hidden fees?</div>
+                    <div class="faq-answer">
+                        <p>There are no hidden fees. The price you see is the price you pay.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Are there any discounts for long-term subscriptions?</div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer discounts for annual subscriptions. Please contact us for more details.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I get a refund if I'm not satisfied?</div>
+                    <div class="faq-answer">
+                        <p>We offer a satisfaction guarantee. If you're not happy with your membership, contact us
+                            within the first 30 days for a full refund.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Section: Exclusive Events -->
+        <section class="py-12 bg-black bg-opacity-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-8 text-white/90">
+                    <span
+                        class="inline-block p-2 bg-black bg-opacity-50 rounded-full transform transition duration-500 hover:scale-110">
+                        Exclusive Events
+                    </span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Event 1 -->
+                    <div
+                        class="bg-gradient-to-br from-white/40 to-black/30 p-6 rounded-lg shadow-xl transform transition duration-500 hover:scale-105">
+                        <h3 class="text-xl font-bold mb-3">Premium Surfing and Rap Battle Tournaments</h3>
+                        <p class="text-gray-400 mb-4">Join our monthly Premium-only surfing and rap battle tournaments
+                            with big prizes and bragging rights.</p>
+                        <a href="#" class="text-rose-600 hover:text-rose-400">Learn More</a>
+                    </div>
+                    <!-- Event 2 -->
+                    <div
+                        class="bg-gradient-to-br from-black/40 to-white/30 p-6 rounded-lg shadow-xl transform transition duration-500 hover:scale-105">
+                        <h3 class="text-xl font-bold mb-3">Members-Only Livestream</h3>
+                        <p class="text-gray-400 mb-4">Get exclusive access to our members-only livestreams with special
+                            guests and Q&A sessions.</p>
+                        <a href="#" class="text-rose-600 hover:text-rose-400">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div>
+                <div class="flex flex-col lg:flex-row items-center justify-between">
+                    <div class="lg:w-1/2 flex justify-center lg:justify-start mb-8 lg:mb-0">
+                        <img src="https://imperfectgamers.org/assets/store/tebex_logo.svg" alt="Tebex logo"
+                            class="h-32 lg:h-32 xl:h-48">
+                    </div>
+                    <div class="lg:w-1/2 text-center lg:text-right">
+                        <h3 class="text-3xl font-bold mb-4">
+                            We are trusted
+                        </h3>
+                        <p class="text-gray-400 text-sm">
+                            Proud partners of Tebex, we were the first to launch with them in CS:GO. Piloting their
+                            initial
+                            launch in the new CS2 space. You can read more about it
+                            <a class="text-red-600" href="#">
+                                here
+                            </a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mb-12">
+            <div>
+                <div class="flex justify-center md:justify-end">
+                    <div class="contact-section contact-section-transition" id="contactSection">
+                        <h2>Contact Us or Sign In</h2>
+                        <p>For exclusive access to premium membership inquiries, please sign in to create a ticket or
+                            contact us for assistance from email.</p>
+                        <button id="signInBtn" onclick="location.href='/login';">Sign In</button>
+                        <button id="contactUsBtn">Contact Us</button>
+                    </div>
+                </div>
+
+
+                <div id="contactFormSection" class="py-12 bg-black bg-opacity-50 hidden">
+                    <div class="container mx-auto px-4">
+                        <h2 class="text-3xl font-bold text-center mb-8 font-playfair-display luxury-title">Contact Us
+                        </h2>
+                        <div class="max-w-xl mx-auto">
+                            <form id="contactForm" class="flex flex-col space-y-4">
+                                <div class="group">
+                                    <label for="name" class="text-sm luxury-label" id="nameLabel">Name</label>
+                                    <input type="text" id="name" name="name" placeholder="Your Name"
+                                        class="w-full p-2 rounded bg-white/5 text-white border border-white/30 focus:outline-none transition-all duration-300 ease-in-out luxury-input"
+                                        required />
+                                    <p class="hidden text-red-500 text-xs mt-1" id="nameError">
+                                        Please enter your name.
+                                    </p>
+                                </div>
+                                <div class="group">
+                                    <label for="email" class="text-sm luxury-label" id="emailLabel">Email</label>
+                                    <input type="email" id="email" name="email" placeholder="Your Email"
+                                        class="w-full p-2 rounded bg-white/5 text-white border border-white/30 focus:outline-none transition-all duration-300 ease-in-out luxury-input"
+                                        required />
+                                    <p class="hidden text-red-500 text-xs mt-1" id="emailError">
+                                        Please enter a valid email.
+                                    </p>
+                                </div>
+                                <div class="group">
+                                    <label for="message" class="text-sm luxury-label" id="messageLabel">Message</label>
+                                    <textarea id="message" name="message" rows="4" placeholder="Your Message"
+                                        class="w-full p-2 rounded bg-white/5 text-white border border-white/30 focus:outline-none transition-all duration-300 ease-in-out luxury-input"
+                                        required></textarea>
+                                    <p class="hidden text-red-500 text-xs mt-1" id="messageError">
+                                        Please enter a message.
+                                    </p>
+                                </div>
+                                <div class="text-center">
+                                <button type="submit" class="button px-6 py-2 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-all duration-300 ease-in-out">
+                                        Send Message
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="mt-8 text-center">
+                                <p class="text-gray-400">Alternatively, you can</p>
+                                <button onclick="location.href='/login';"
+                                class="mt-2 px-6 py-2 bg-white/5 rounded focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-all duration-300 ease-in-out">
+                                    Sign In & Create a Ticket
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+    </main>
+    <footer class="text-sm mt-24">
+        <div class="max-w-screen-xl mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left text-gray-400">
+                    <p>2024 © Imperfect Gamers - All rights Reserved</p>
+                    <p class="mt-2 md:mt-0">We are not affiliated with Valve</p>
+                </div>
+                <div class="flex justify-center mt-4 md:mt-0">
+                    <a href="https://imperfectgamers.org/discord/" target="_blank"
+                        class="text-gray-400 hover:text-white">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+                <div class="text-center md:text-right md:flex md:items-center mt-4 md:mt-0">
+                    <p class="text-gray-400">Imperfect and Company</p>
+                    <a href="https://imperfectandcompany.com" target="_blank" class="md:ml-4 hover:text-white">
+                        <img src="https://imperfectdesignsystem.com/assets/img/imperfectandcompany/umbrella.png"
+                            alt="parent company logo" class="h-5 inline md:block">
+                    </a>
+                </div>
+            </div>
         </div>
-
+    </footer>
+    <div class="px-4 py-4 border-t border-gray-700">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <a href="#" class="text-gray-400 hover:text-white mr-4">
+                <img src="https://example.tebex.io/assets/img/tebex.png" alt="Tebex logo" class="h-5 hidden md:block">
+            </a>
+            <p class="text-gray-400 text-xs text-center md:text-left">This website and its checkout process is owned &
+                operated by Tebex Limited, who handle product fulfilment, billing support and refunds.</p>
+            <div class="flex flex-col text-sm md:flex-row items-center mt-4 md:mt-0">
+                <a href="https://imperfectgamers.org/imprint"
+                    class="text-gray-400 hover:text-white underline mb-2 md:mb-0 md:mr-4">Impressum</a>
+                <a href="https://imperfectgamers.org/terms-of-service"
+                    class="text-gray-400 hover:text-white underline mb-2 md:mb-0 md:mr-4">Terms & Conditions</a>
+                <a href="https://imperfectgamers.org/privacy-policy"
+                    class="text-gray-400 hover:text-white underline">Privacy Policy</a>
+            </div>
+        </div>
     </div>
-</div>
+    <script>
+        const randInt = (min, max) => {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        for (let i = 0; i < 150; i++) {
+            let beg = randInt(-15000, 0);
+            let dur = randInt(7500, 15000);
+            document.querySelector('#m').innerHTML += `<circle cx="${randInt(20, 80)}" cy="40" r="${randInt(10, 30) / 10}" fill="#fff">
+            <animate attributeName="opacity" values="1;0" dur="${dur}ms" begin="${beg}ms" repeatCount="indefinite" />
+            <animate attributeName="cy" values="20; -10" dur="${dur}ms" begin="${beg}ms" repeatCount="indefinite" />
+        </circle>`;
+        }
+    </script>
+    <script>
+        // Toggle the pricing on switch
+        const priceToggle = document.querySelector('.switch input');
+        const priceLabel = document.querySelector('.card-price');
+        priceToggle.addEventListener('change', function () {
+            if (this.checked) {
+                priceLabel.textContent = '$200/year';
+            } else {
+                priceLabel.textContent = '$20/month';
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Assuming your membership card has the class 'membership-card'
+            const membershipCard = document.querySelector('.membership-card');
 
-<?php if (isset($_GET['tos']) && $_GET['tos'] == 1) {
-    echo "<script type='text/javascript'>console.log('TOS has been agreed. You now have access to purchasing packages, if for some reason there is an issue please come on the discord for immediate assistance. Thank you!');</script>";
+            membershipCard.addEventListener('click', function () {
+                // Scroll to the membership tiers section
+                document.getElementById('membershipTiers').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+    <script>
+        document.querySelector('.heart').addEventListener('mouseenter', function () {
+            this.style.animation = 'hoverInEffect 0.5s forwards';
+        });
 
-} ?>
+        document.querySelector('.heart').addEventListener('mouseleave', function () {
+            this.style.animation = 'hoverOutEffect 0.5s forwards, heartbeat 2s infinite 0.5s';
+        });
+    </script>
+    <script>
+        // FAQ Accordion Interaction
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const wasActive = question.parentElement.classList.contains('active');
 
-<script>
-function alertMessage() {
-    alert("To become a VIP, please DM Low on the Imperfect Gamers Discord. Ensure you're only ever sending payment to the email 'hazzzzzzmat@gmail.com'.");
-}
-</script>
+                // Close all FAQ items
+                faqQuestions.forEach(q => q.parentElement.classList.remove('active'));
 
-<?php include('inc/footer.php'); ?>
+                // Toggle the clicked FAQ item based on previous state
+                if (!wasActive) {
+                    question.parentElement.classList.add('active');
+                }
+            });
+        });
+    </script>
+    <script>
+        document.querySelector('.switch input').addEventListener('change', function () {
+            const priceLabel = document.querySelector('.card-price');
+            // Determine the new price based on whether the switch is checked
+            const newPriceText = this.checked ? '$200/year' : '$20/month';
+
+            // Apply the fade-out-in animation
+            priceLabel.classList.add('card-price-change');
+
+            // Listen for the end of the animation to update the text
+            priceLabel.addEventListener('animationend', () => {
+                priceLabel.textContent = newPriceText;
+                // Remove the animation class so it can be reapplied if the price changes again
+                priceLabel.classList.remove('card-price-change');
+            }, { once: true }); // Ensure the listener is removed after firing
+        });
+    </script>
+    <script>
+        /* add a class for animating the switch */
+        document.querySelector('.switch input').addEventListener('change', function () {
+            this.nextSibling.classList.add('flip');
+            setTimeout(() => this.nextSibling.classList.remove('flip'), 450);
+        });
+    </script>
+    <script>
+        /* subtle heart beat on scroll */
+        window.addEventListener('scroll', function () {
+            const tiersSection = document.getElementById('membershipTiers');
+            const cards = document.querySelectorAll('.membership-card');
+            if (window.scrollY + window.innerHeight > tiersSection.offsetTop) {
+                cards.forEach(card => card.classList.add('animate-heartbeat'));
+            } else {
+                cards.forEach(card => card.classList.remove('animate-heartbeat'));
+            }
+        });
+    </script>
+    <script>
+        // Toggle contact form visibility
+        document.getElementById('contactUsBtn').addEventListener('click', function () {
+            const contactSection = document.getElementById('contactSection');
+            const contactFormSection = document.getElementById('contactFormSection');
+
+            if (contactFormSection.classList.contains('hidden')) {
+                contactSection.style.height = `${contactSection.offsetHeight}px`;
+                contactSection.style.overflow = 'hidden';
+
+                contactSection.style.animation = 'fadeOutDown 0.5s ease forwards';
+
+                setTimeout(() => {
+                    contactSection.classList.add('hidden');
+                    contactFormSection.style.display = 'block';
+                    contactFormSection.style.animation = 'fadeInUp 0.5s ease forwards';
+                    contactFormSection.style.height = '0';
+                    contactFormSection.style.overflow = 'hidden';
+
+                    setTimeout(() => {
+                        contactFormSection.style.height = `${contactSection.offsetHeight}px`;
+                    }, 10);
+
+                    setTimeout(() => {
+                        contactFormSection.style.height = 'auto';
+                        contactFormSection.style.overflow = 'visible';
+                    }, 500);
+                }, 500);
+            }
+        });
+    </script>
+</body>

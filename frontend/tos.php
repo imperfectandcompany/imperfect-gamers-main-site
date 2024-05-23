@@ -31,6 +31,16 @@
             We partner with Tebex Limited (www.tebex.io), who are the official merchant of digital content produced by us. If you wish to purchase licenses to use digital content we produce, you must do so through Tebex as our licensed reseller and merchant of record. In order to make any such purchase from Tebex, you must agree to their terms, available at https://checkout.tebex.io/terms. If you have any queries about a purchase made through Tebex, including but not limited to refund requests, technical issues or billing enquiries, you should contact Tebex support at https://www.tebex.io/contact/checkout in the first instance.
 </p>
         </div>
+
+<!-- Data Collection Section -->
+<div
+    class="mb-12 card flex flex-col justify-between rounded-lg p-6 bg-red-900/10 border-red-600/50 text-white">
+    <h2 class="text-3xl font-bold mb-4">Data Collection and Usage
+</h2>
+    <p>
+By using this Site you agree that we, Microsoft (through Microsoft Clarity), and Google (through Google Analytics) can collect and use your data to improve our products and advertising. For more details, please refer to our <a href="https://imperfectgamers.org/privacy-policy" class="text-red-400"   >Privacy Policy</a>.
+</p>
+</div>
             <!-- Refunds Section -->
             <div
                 class="mb-12 card flex flex-col justify-between rounded-lg p-6 bg-red-900/10 border-red-600/50 text-white">

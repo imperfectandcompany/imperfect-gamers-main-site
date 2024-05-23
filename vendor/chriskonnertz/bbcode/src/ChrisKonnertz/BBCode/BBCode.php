@@ -301,13 +301,34 @@ class BBCode
                     $dateline = $matches[3] ?? 'unknown';  // Default if not provided
 
                     // Convert the Unix timestamp to a human-readable format if necessary
-                    $date = date('Y-m-d H:i:s', $dateline);
+                    $date = date('Y-m-d H:i:s', (int) $dateline);
+
 
                     // Create the quote header with the author's name, post ID, and dateline.
                     $quoteHeader = htmlspecialchars("{$author} wrote (Post ID: $pid, Date: $date):");
-                    $code = '<blockquote class="card justify-between rounded-lg bg-red-900/10 border-red-600/50 text-white
-                    post-content
-                    "><span class="whitespace-normal text-xs sm:text-sm md:text-md antialiased break-all md:break-words sm:subpixel-antialiased md:antialiased"><small class="text-gray-400">'.$quoteHeader.'</small><p>';
+                    
+                    // Check if all necessary details are available
+                    if (isset($matches[1], $matches[2], $matches[3])) {
+                        $author = $matches[1];
+                        $pid = $matches[2];
+                        $dateline = $matches[3];
+
+                        // Convert the Unix timestamp to a human-readable format if necessary
+                        $date = date('Y-m-d H:i:s', (int) $dateline);
+
+                        // Create the quote header with the author's name, post ID, and dateline
+                        $quoteHeader = htmlspecialchars("{$author} wrote (Post ID: $pid, Date: $date):");
+
+                        // Append the header to the quote block
+                        $code = '<blockquote class="card justify-between rounded-lg bg-red-900/10 border-red-600/50 text-white
+                        post-content
+                        "><span class="whitespace-normal text-xs sm:text-sm md:text-md antialiased break-all md:break-words sm:subpixel-antialiased md:antialiased"><small class="text-gray-400">' . $quoteHeader . '</small><p>';
+                    } else {
+                        // Header details are missing, so start the blockquote without the header
+                        $code = '<blockquote class="card justify-between rounded-lg bg-red-900/10 border-red-600/50 text-white
+                        post-content
+                        "><span class="whitespace-normal text-xs sm:text-sm md:text-md antialiased break-all md:break-words sm:subpixel-antialiased md:antialiased"><p>';
+                    }
                 } else {
                     // Close the paragraph and blockquote tags.
                     $code = '</p></span></blockquote>';
@@ -490,7 +511,12 @@ class BBCode
             case self::TAG_NAME_COLOR:
                 if ($tag->opening) {
                     if ($tag->property) {
-                        $code = '<span style="color: ' . $tag->property . '">';
+                        // Check if the specified color is 'black'
+                        if (strtolower($tag->property) === 'black' || strtolower($tag->property) === '#000000') {
+                            $code = '<span style="color: white;">';
+                        } else {
+                            $code = '<span style="color: ' . $tag->property . ';">';
+                        }
                     }
                 } else {
                     $code = '</span>';

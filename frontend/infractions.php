@@ -164,59 +164,87 @@
 
 
     .entries-dropdown {
-            position: absolute;
-            z-index: 50;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid #ff0000;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            color: white;
-            top: 100%;
-            left: 0;
-            overflow-y: auto;
-            max-height: 200px;
-            min-width: 150px; /* Adjust as needed to match button's width */
-        }
+        position: absolute;
+        z-index: 50;
+        background: rgba(0, 0, 0, 0.9);
+        border: 1px solid #ff0000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        color: white;
+        top: 100%;
+        left: 0;
+        overflow-y: auto;
+        max-height: 200px;
+        min-width: 150px;
+        /* Adjust as needed to match button's width */
+    }
 
-.show-entries-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
+    .show-entries-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
 
+    .show-entries-button {
+        background-color: rgba(255, 0, 0, 0.05);
+        border: 1px solid #ff0000;
+        color: white;
+        padding: 6px 10px;
+        /* Reduced padding for a smaller button */
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+        /* Smooth transition for dropdown */
+        font-size: 0.875rem;
+        /* Smaller font size for a more "chill" appearance */
+        display: flex;
+        /* Align the text and icon */
+        align-items: center;
+        /* Center the content vertically */
+        justify-content: space-between;
+        /* Space between text and icon */
+        width: auto;
+        /* Auto width to fit content */
+    }
 
-        .show-entries-button {
-            background-color: rgba(255, 0, 0, 0.05);
-            border: 1px solid #ff0000;
-            color: white;
-            padding: 10px;
-            margin-bottom: 1rem;
-            border-radius: 5px;
-            transition: all 0.3s ease-in-out; /* Smooth transition for dropdown */
-        }
+    .show-entries-button:hover {
+        background-color: rgba(255, 0, 0, 0.1);
+        /* Slightly darker on hover */
+    }
 
-        .show-entries-button:hover {
-            background-color: rgba(255, 0, 0, 0.1); /* Slightly darker on hover */
-        }
+    .show-entries-button:focus {
+        outline: none;
+        border-color: #ff0000;
+        box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.5);
+    }
 
-        .show-entries-button:focus {
-            outline: none;
-            border-color: #ff0000;
-            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.5);
-        }
+    .entries-dropdown-option {
+        cursor: pointer;
+        /* Ensure cursor pointer is default for all options */
+    }
 
-        .show-entries-button .fa-chevron-down {
-            transition: transform 0.3s ease-in-out; /* Smooth rotation for caret */
-        }
+    .show-entries-button .fa-chevron-down {
+        transition: transform 0.3s ease-in-out;
+        /* Smooth rotation for caret */
+    }
 
-        .show-entries-button.open .fa-chevron-down {
-            transform: rotate(180deg); /* Rotate caret when dropdown is open */
-        }
+    
+    .show-entries-button.open .fa-chevron-down {
+        transform: rotate(180deg);
+        /* Rotate caret when dropdown is open */
+    }
 
-        .entries-dropdown-option:hover,
-        .entries-dropdown-option.active {
-            background-color: rgba(255, 69, 0, 0.2); /* Highlight for active/selected option */
-        }
+    .entries-dropdown-option:hover {
+        background-color: rgba(255, 69, 0, 0.2);
+        /* Highlight for hover */
+    }
+
+    .entries-dropdown-option.active {
+        background-color: rgba(255, 69, 0, 0.4);
+        /* Different highlight for active/selected option */
+        cursor: default;
+        /* Ensure cursor pointer is default for all options */
+    }
 
     /* Responsive styling for the navigation tabs */
     @media (max-width: 768px) {
@@ -448,29 +476,29 @@
                     <label for="show-entries-button" class="text-gray-400 mr-2">Show entries:</label>
                     <div class="relative flex flex-col">
                     <button @click="open = !open" id="show-entries-button"
-                        class="show-entries-button focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                        <span x-text="selected"></span>
-                        <i class="fas fa-chevron-down ml-2" :class="{ 'open': open }"></i>
-                    </button>
-                    <div x-show="open" @click.away="open = false" x-cloak class="entries-dropdown"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 transform scale-95"
-                        x-transition:enter-end="opacity-100 transform scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 transform scale-100"
-                        x-transition:leave-end="opacity-0 transform scale-95" style="display: none;">
-                        <ul>
-                            <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 10 }"
-                                @click="selected = 10; open = false; $dispatch('entries-changed', 10)">10</li>
-                            <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 20 }"
-                                @click="selected = 20; open = false; $dispatch('entries-changed', 20)">20</li>
-                            <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 50 }"
-                                @click="selected = 50; open = false; $dispatch('entries-changed', 50)">50</li>
-                            <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 100 }"
-                                @click="selected = 100; open = false; $dispatch('entries-changed', 100)">100</li>
-                        </ul>
+                class="show-entries-button focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500" :class="{ 'open': open }">
+                <span x-text="selected"></span>
+                <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+                        <div x-show="open" @click.away="open = false" x-cloak class="entries-dropdown"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 transform scale-95"
+                            x-transition:enter-end="opacity-100 transform scale-100"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 transform scale-100"
+                            x-transition:leave-end="opacity-0 transform scale-95" style="display: none;">
+                            <ul>
+                                <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 10 }"
+                                    @click="selected = 10; open = false; $dispatch('entries-changed', 10)">10</li>
+                                <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 20 }"
+                                    @click="selected = 20; open = false; $dispatch('entries-changed', 20)">20</li>
+                                <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 50 }"
+                                    @click="selected = 50; open = false; $dispatch('entries-changed', 50)">50</li>
+                                <li class="px-4 py-1 entries-dropdown-option" :class="{ 'active': selected === 100 }"
+                                    @click="selected = 100; open = false; $dispatch('entries-changed', 100)">100</li>
+                            </ul>
+                        </div>
                     </div>
-</div>
                 </div>
 
 

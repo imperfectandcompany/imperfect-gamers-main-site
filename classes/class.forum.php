@@ -147,10 +147,11 @@ class Forum
     }
 
 // Fetch posts for a specific thread ordered by creation date
-public static function fetchPostsByThreadId($threadId) {
-    $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
-    $stmt = $pdoMyBB->prepare("SELECT * FROM mybb_posts WHERE tid = :tid ORDER BY dateline ASC");
-    $stmt->execute([':tid' => $threadId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    public static function fetchPostsByThreadId($threadId) {
+        $pdoMyBB = DatabaseConnector::getDatabase("igfastdl_mybb");
+        $stmt = $pdoMyBB->prepare("SELECT *, CAST(dateline AS UNSIGNED) as dateline FROM mybb_posts WHERE tid = :tid ORDER BY dateline ASC");
+        $stmt->execute([':tid' => $threadId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

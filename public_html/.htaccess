@@ -9,6 +9,9 @@ RewriteRule ^ https://imperfectgamers.org%{REQUEST_URI} [R=301,L,NE]
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://imperfectgamers.org%{REQUEST_URI} [R=301,L,NE]
 
+# Exclude requests to the images directory
+RewriteCond %{REQUEST_URI} !^/assets/
+
 # Discord redirect
 RewriteRule ^discord/?$ https://discord.com/invite/yb524Ax [R=301,L,NE]
 

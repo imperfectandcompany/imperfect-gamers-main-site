@@ -28,7 +28,6 @@ if (isset($_POST['login'])) {
                 DatabaseConnector::query('INSERT INTO login_tokens (token, user_id) VALUES (:token, :user_id)', array(':token' => sha1($token), ':user_id' => $user_id));
 
                 // After password verification
-
                 $profileData = DatabaseConnector::query('SELECT p.*, u.email FROM profiles p INNER JOIN users u ON p.user_id = u.id WHERE p.user_id = :userId', array(':userId' => $user_id));
                 $userProfile = $profileData ? $profileData[0] : null; // Return the first row or null if no data
 
@@ -84,7 +83,6 @@ if (isset($_POST['login'])) {
                     DatabaseConnector::query('INSERT INTO login_tokens (token, user_id) VALUES (:token, :user_id)', array(':token' => sha1($token), ':user_id' => $user_id));
 
                     // After password verification
-
                     $profileData = DatabaseConnector::query('SELECT p.*, u.email FROM profiles p INNER JOIN users u ON p.user_id = u.id WHERE p.user_id = :userId', array(':userId' => $user_id));
                     $userProfile = $profileData ? $profileData[0] : null; // Return the first row or null if no data
 

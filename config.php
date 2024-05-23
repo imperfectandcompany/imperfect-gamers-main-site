@@ -39,21 +39,27 @@ switch ($GLOBALS['url_loc'][1]) {
         $META_DESC = "";
         $META_WORDS = "";
         break;
-        case "bans":
-            $PAGE_TITLE = "Bans";
-            $BACKEND = "bans";
-            $FRONTEND = "bans";
-            $HEADER = "subpage";
-            $META_DESC = "";
-            $META_WORDS = "";
-            break;        
-            case "infractions":
-                $PAGE_TITLE = "Infractions";
-                $BACKEND = "infractions";
-                $FRONTEND = "infractions";
-                $META_DESC = "";
-                $META_WORDS = "";
-                break;               
+    case "newstore":
+        $PAGE_TITLE = "Store";
+        $FRONTEND = "newstore";
+        $META_DESC = "";
+        $META_WORDS = "";
+        break;
+    case "bans":
+        $PAGE_TITLE = "Bans";
+        $BACKEND = "bans";
+        $FRONTEND = "bans";
+        $HEADER = "subpage";
+        $META_DESC = "";
+        $META_WORDS = "";
+        break;
+    case "infractions":
+        $PAGE_TITLE = "Infractions";
+        $BACKEND = "infractions";
+        $FRONTEND = "infractions";
+        $META_DESC = "";
+        $META_WORDS = "";
+        break;
     case "about":
         $PAGE_TITLE = "About Us";
         $BACKEND = "about";
@@ -77,11 +83,10 @@ switch ($GLOBALS['url_loc'][1]) {
         $HEADER = "subpage";
         $META_DESC = "Submit an appeal for account-related issues within the Imperfect Gamers community.";
         $META_WORDS = "imperfect gamers appeals, account help, community support";
-        break;    case "stores":
-        header("location:../store");
         break;
-    case "shop":
-        header("location:../store");
+    case "store":
+        $PAGE_TITLE = "Stssore";
+        $FRONTEND = "store";
         break;
     case "login":
         $PAGE_TITLE = "Log In";
@@ -153,5 +158,5 @@ switch ($GLOBALS['url_loc'][1]) {
         $FRONTEND = "404";
         $HEADER = "subpage";
         $META_DESC = "Page not found. Discover Imperfect Gamers, where music and gaming unite.";
-        $META_WORDS = "404, not found, imperfect gamers, music gaming community";        
+        $META_WORDS = "404, not found, imperfect gamers, music gaming community";
 }
